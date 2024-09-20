@@ -5,11 +5,8 @@ import re
 import pandas as pd
 import numpy as np
 
-# Import paths from variables.py
-from paths import DATA_PATH, FILE_MODIFIED_NAME, FILE_NAME
-
-# CONSTANTS
-CLEANED_CSV_PATH = DATA_PATH + "welddb_cleaned.csv"
+# Import paths from paths.py
+from paths import DATA_PATH, FILE_MODIFIED_NAME, FILE_NAME, CLEANED_CSV_PATH
 
 @staticmethod
 def preprocess_text_file(input_file: str, output_file: str):
