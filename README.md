@@ -84,3 +84,29 @@ The tar file contains data for the chemical composition of the steels studied, a
 - **Column 41:** Acicular ferrite / %
 - **Column 42:** Martens
 
+
+# Objectif du projet
+
+L'objectif est d'évaluer la qualité des soudures en fonction de divers paramètres mécaniques et physiques. À première vue, les colonnes pertinentes pour cette évaluation incluent : *l'allongement (Elongation / %)*, *réduction de la zone (Reduction of Area / %)*, *résistance limite d'élasticité (Yield strength / MPa)*, *résistance à la traction (Ultimate tensile strength / MPa)*, *dureté (Hardness / kg mm^{-2})*, *ténacité Charpy (Charpy impact toughness / J)*, et *50% FATT* (température de transition de fracture).
+
+*// À compléter*
+
+# Valeurs manquantes
+
+## Section 2 de *missing_values.py* :
+
+Les valeurs manquantes sont traitées dans le fichier *missing_values.py*.  
+Le fichier *missing_percent.csv*, généré par *missing_values.py*, associe à chaque colonne son pourcentage de valeurs manquantes correspondant.
+
+## Section 2 de *missing_values.py* :
+
+Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq dernières colonnes sont des *MNAR (Missing Not At Random)* : en effet, les valeurs de ces colonnes sont systématiquement manquantes de manière conjointe. Après avoir calculé le coefficient de corrélation entre chacune de ces colonnes avec les colonnes relevant de la qualité des soudures, lorsque le nombre de données présentes le permet, nous remarquons qu'aucune de ces cinq colonnes comportant un nombre très important de valeurs manquantes n'est pertinente pour l'évaluation de la qualité des soudures.
+
+Nous décidons donc de supprimer du dataset les colonnes *Primary ferrite in microstructure*, *Ferrite with second phase*, *Acicular ferrite*, *Martensite*, et *Ferrite with carbide aggregate*, n'apportant aucune plus-value pour notre problématique.
+
+*S'agissant de la colonne 50% FATT qui comprend également un nombre important de valeurs manquantes, xxx*
+
+*// À compléter*
+
+
+
