@@ -100,7 +100,11 @@ Le fichier *missing_percent.csv*, généré par *missing_values.py*, associe à 
 
 ## Section 2 de *missing_values.py* :
 
-Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq dernières colonnes sont des *MNAR (Missing Not At Random)* : en effet, les valeurs de ces colonnes sont systématiquement manquantes de manière conjointe. Pour nous convaincre du fait que le peu de valeurs restantes sont inexploitables, nous avons calculé le coefficient de corrélation entre chacune de ces colonnes avec les colonnes relevant de la qualité des soudures, lorsque le nombre de données présentes le permet. Nous déduisons de ce calcul qu'aucune de ces cinq colonnes n'est pertinente pour l'évaluation de la qualité des soudures, nous décidons donc de les supprimer du dataset.
+Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe.
+
+Nous avons tenté de calculer le coefficient de corrélation entre chacune de ces colonnes et celles relatives à la qualité des soudures, mais il est extrêmement rare de disposer d'assez de données simultanément présentes dans deux colonnes pour effectuer ce calcul. Lors des quelques cas où cela est possible, l'une des colonnes présente généralement une variance nulle, ce qui rend la corrélation impossible ou nulle.
+
+De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'évaluation de la qualité des soudures et nous décidons de les supprimer du dataset. 
 
 *S'agissant de la colonne 50% FATT qui comprend également un nombre important de valeurs manquantes, xxx*
 
