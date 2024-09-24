@@ -87,7 +87,7 @@ The tar file contains data for the chemical composition of the steels studied, a
 
 # Objectif du projet
 
-L'objectif est d'évaluer la qualité des soudures en fonction de divers paramètres mécaniques et physiques. À première vue, les colonnes pertinentes pour cette évaluation incluent : *l'allongement (Elongation / %)*, *réduction de la zone (Reduction of Area / %)*, *résistance limite d'élasticité (Yield strength / MPa)*, *résistance à la traction (Ultimate tensile strength / MPa)*, *dureté (Hardness / kg mm^{-2})*, *ténacité Charpy (Charpy impact toughness / J)*, et *50% FATT* (température de transition de fracture).
+L'objectif est d'évaluer la qualité des soudures en fonction de divers paramètres mécaniques et physiques. À première vue, les colonnes pertinentes pour cette évaluation incluent : l'allongement *(Elongation / %)*, réduction de la zone *(Reduction of Area / %)*, résistance limite d'élasticité *(Yield strength / MPa)*, résistance à la traction *(Ultimate tensile strength / MPa)*, dureté *(Hardness / kg mm^{-2})*, ténacité Charpy *(Charpy impact toughness / J)*, et température de transition de fracture (*50% FATT*).
 
 *// À compléter*
 
