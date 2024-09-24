@@ -93,7 +93,7 @@ L'objectif est d'évaluer la qualité des soudures en fonction de divers paramè
 
 # Valeurs manquantes
 
-## Section 2 de *missing_values.py* :
+## Section 1 de *missing_values.py* :
 
 Les valeurs manquantes sont traitées dans le fichier *missing_values.py*.  
 Le fichier *missing_percent.csv*, généré par *missing_values.py*, associe à chaque colonne son pourcentage de valeurs manquantes correspondant.
