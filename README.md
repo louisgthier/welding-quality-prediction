@@ -100,9 +100,7 @@ Le fichier *missing_percent.csv*, généré par *missing_values.py*, associe à 
 
 ## Section 2 de *missing_values.py* :
 
-Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq dernières colonnes sont des *MNAR (Missing Not At Random)* : en effet, les valeurs de ces colonnes sont systématiquement manquantes de manière conjointe. Après avoir calculé le coefficient de corrélation entre chacune de ces colonnes avec les colonnes relevant de la qualité des soudures, lorsque le nombre de données présentes le permet, nous remarquons qu'aucune de ces cinq colonnes comportant un nombre très important de valeurs manquantes n'est pertinente pour l'évaluation de la qualité des soudures.
-
-Nous décidons donc de supprimer du dataset les colonnes *Primary ferrite in microstructure*, *Ferrite with second phase*, *Acicular ferrite*, *Martensite*, et *Ferrite with carbide aggregate*, n'apportant aucune plus-value pour notre problématique.
+Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq dernières colonnes sont des *MNAR (Missing Not At Random)* : en effet, les valeurs de ces colonnes sont systématiquement manquantes de manière conjointe. Pour nous convaincre du fait que le peu de valeurs restantes sont inexploitables, nous avons calculé le coefficient de corrélation entre chacune de ces colonnes avec les colonnes relevant de la qualité des soudures, lorsque le nombre de données présentes le permet. Nous déduisons de ce calcul qu'aucune de ces cinq colonnes n'est pertinente pour l'évaluation de la qualité des soudures, nous décidons donc de les supprimer du dataset.
 
 *S'agissant de la colonne 50% FATT qui comprend également un nombre important de valeurs manquantes, xxx*
 
