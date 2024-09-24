@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 # Import paths from paths.py
-from paths import DATA_PATH, FILE_MODIFIED_NAME, FILE_NAME, CLEANED_CSV_PATH
+from paths import FILE_MODIFIED_NAME, FILE_NAME, CLEANED_CSV_PATH
 
 @staticmethod
 def preprocess_text_file(input_file: str, output_file: str):
@@ -16,6 +16,7 @@ def preprocess_text_file(input_file: str, output_file: str):
     # TO DO THAT, WE WILL DEFINE A FUNCTION TO PREPROCESS THE DATA
 
     Removes trailing whitespaces from a file
+    Takes in a file and output it in ./data/ section
     """
     with open(input_file, 'r', encoding='utf-8') as file:
         lines = file.readlines()
@@ -27,7 +28,7 @@ def preprocess_text_file(input_file: str, output_file: str):
         file.writelines(processed_lines)
 
 
-def main():
+def data_import():
     """
     Produces the data Import
     - Removes unnecesary spaces
@@ -95,4 +96,4 @@ def main():
     basic_dataframe.head(5)
 
 if __name__ == "__main__":
-    main()
+    data_import()
