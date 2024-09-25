@@ -84,3 +84,31 @@ The tar file contains data for the chemical composition of the steels studied, a
 - **Column 41:** Acicular ferrite / %
 - **Column 42:** Martens
 
+
+# Objectif du projet
+
+L'objectif est d'évaluer la qualité des soudures en fonction de divers paramètres mécaniques et physiques. À première vue, les colonnes pertinentes pour cette évaluation incluent : l'allongement *(Elongation / %)*, réduction de la zone *(Reduction of Area / %)*, résistance limite d'élasticité *(Yield strength / MPa)*, résistance à la traction *(Ultimate tensile strength / MPa)*, dureté *(Hardness / kg mm^{-2})*, ténacité Charpy *(Charpy impact toughness / J)*, et température de transition de fracture (*50% FATT*).
+
+*// À compléter*
+
+# Valeurs manquantes
+
+## Section 1 de *missing_values.py* :
+
+Les valeurs manquantes sont traitées dans le fichier *missing_values.py*.  
+Le fichier *missing_percent.csv*, généré par *missing_values.py*, associe à chaque colonne son pourcentage de valeurs manquantes correspondant.
+
+## Section 2 de *missing_values.py* :
+
+Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe.
+
+Nous avons tenté de calculer le coefficient de corrélation entre chacune de ces colonnes et celles relatives à la qualité des soudures, mais il est extrêmement rare de disposer d'assez de données simultanément présentes dans deux colonnes pour effectuer ce calcul. Lors des quelques cas où cela est possible, l'une des colonnes présente généralement une variance nulle, ce qui rend la corrélation impossible ou nulle.
+
+De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'évaluation de la qualité des soudures et nous décidons de les supprimer du dataset. 
+
+*S'agissant de la colonne 50% FATT qui comprend également un nombre important de valeurs manquantes, xxx*
+
+*// À compléter*
+
+
+
