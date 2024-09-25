@@ -8,6 +8,13 @@ import matplotlib.pyplot as plt
 # Import paths from variables.py
 from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH
 
+def _get_dataframe(file_path: str):
+    """
+    returns the dataframe of the file
+    """
+    return pd.read_csv(file_path)
+
+
 @staticmethod
 def analyze_nan_in_csv(file_path: str):
     """
@@ -55,7 +62,7 @@ def print_missing_percentage(file_path: str):
     # Calculate the percentage of NaN per column
     nan_percentage_column = (df.isna().mean() * 100).round(2)
 
-    nan_percentage_column.to_csv(MISSING_PERCENTAGE_CSV_PATH)
+    nan_percentage_column.to_csv(MISSING_PERCENTAGE_CSV_PATH, index=False)
 
 
 def data_cleaning(file_path: str) -> pd.DataFrame:
@@ -79,19 +86,31 @@ def data_cleaning(file_path: str) -> pd.DataFrame:
 
     df = pd.read_csv(file_path)
 
-    # 1. Drop unnecessary columns (explained in the readme)
-    df = df.drop(columns=columns_to_drop)
+    try:
+        # 1. Drop unnecessary columns (explained in the readme)
+        df = df.drop(columns=columns_to_drop)
 
-    # 2. Replace the less than signs with the values without the sign
-    def replace_inferior_signs(value):
-        if isinstance(value, str):
-            return re.sub(r'<(\d+\.?\d*)', r'\1', value)
-        return value
+        # 2. Replace the less than signs with the values without the sign
+        def replace_inferior_signs(value):
+            if isinstance(value, str):
+                return re.sub(r'<(\d+\.?\d*)', r'\1', value)
+            return value
 
-    df = df.apply(lambda col: col.apply(replace_inferior_signs))
+        df = df.apply(lambda col: col.apply(replace_inferior_signs))
     
+    except Exception:
+        pass
+
     return df
 
+@staticmethod
+def change_inferior_signs(file_path: str):
+    """
+    Change the values with inferior signs in a csv
+    """
+    df = pd.read_csv(file_path)
+    df = data_cleaning(file_path)
+    df.to_csv(file_path, index=False)
 
 @staticmethod
 def print_correlation_matrix(file_path: str):
@@ -106,9 +125,23 @@ def print_correlation_matrix(file_path: str):
 
     print(correlation_matrix)
 
+@staticmethod
+def print_unique_values(file_path: str):
+    """
+    Prints the unique values of each column of a df
+    """
+
+    df = _get_dataframe(file_path)
+
+    for column in df.columns:
+        unique_values = df[column].unique()
+        print(f"Column '{column}' has {len(unique_values)} unique values:")
+        print(unique_values)
+        print("-" * 40)
 
 # Run the analysis
 if __name__ == "__main__":
     analyze_nan_in_csv(CLEANED_CSV_PATH)
     print_missing_percentage(CLEANED_CSV_PATH)
-    data_without_inferior_signs = data_cleaning(CLEANED_CSV_PATH)
+    change_inferior_signs(CLEANED_CSV_PATH)
+    print_unique_values(CLEANED_CSV_PATH)

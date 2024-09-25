@@ -143,7 +143,7 @@ def data_import():
     basic_dataframe.replace("N", np.nan, inplace=True)
 
     # Save the dataframe to a csv
-    basic_dataframe.to_csv(CLEANED_CSV_PATH)
+    basic_dataframe.to_csv(CLEANED_CSV_PATH, index=False)
     basic_dataframe.head(5)
 
 if __name__ == "__main__":

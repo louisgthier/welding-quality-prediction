@@ -110,5 +110,52 @@ De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'
 
 *// À compléter*
 
+## Section 3 de *missing_values.py* :
+
+Ensuite, nous avons repéré les valeurs qui ne sont pas au bon format, avec pour exemple la concentration en Nitrogène :
+
+```
+----------------------------------------
+Column 'Nitrogen concentration / parts per million by weight' has 162 unique values:
+[nan '72' '54' '57' '47' '44' '46' '68' '55' '53' '50' '48' '52' '89' '70'
+ '41' '38' '80' '49' '77' '94' '65' '67' '58' '60' '460' '480' '160' '155'
+ '67tot33res' '66totndres' '61tot34res' '54totndres' '54tot24res'
+ '52tot18res' '50tot17res' '48tot18res' '78' '88' '75' '84' '85' '79' '76'
+ '83' '92' '74' '86' '90' '110' '97' '99' '91' '105' '120' '150' '81' '87'
+ '93' '102' '96' '66' '73' '71' '82' '145' '148' '164' '166' '235' '226'
+ '243' '239' '253' '249' '240' '100' '143' '119' '539' '515' '494' '489'
+ '552' '517' '520' '544' '526' '537' '529' '509' '523' '107' '114' '106'
+ '117' '125' '95' '109' '64' '36' '63' '43' '39' '34' '69' '59' '37' '51'
+ '56' '140' '190' '170' '124' '133' '108' '61' '122' '121' '131' '101'
+ '103' '116' '138' '139' '62' '136' '540' '180' '450' '370' '250' '400'
+ '430' '420' '410' '390' '260' '340' '26' '22' '21' '35' '127' '156' '245'
+ '312' '266' '123' '236' '165' '113' '269' '45' '27' '42' '98' '373' '376'
+ '416' '398' '394']
+```
+Nous devions faire des recherches sur les significations de "tot" et "res", qui font penser à "total" et "résultat"/"résidus", des termes chimiques correspondants à la concentration.
+
+"nd" signifierait un manque de données.
+
+Nous avons aussi le cas de la colonne Dureté (Hardness) :
+
+```
+Column 'Hardness / kg mm^{-2}' has 97 unique values:
+[nan '257' '227' '224' '226' '234' '217' '213' '209' '259' '239' '223'
+ '230' '252' '241' '231' '229' '180' '174' '220' '184' '193' '189' '181'
+ '183' '194' '216' '191' '164' '154' '265' '225' '196' '202' '197' '172'
+ '158(Hv30)' '155(Hv30)' '153(Hv30)' '161(Hv30)' '168(Hv30)' '203(Hv30)'
+ '157(Hv30)' '174(Hv30)' '144(Hv30)' '143(Hv30)' '154(Hv30)' '170(Hv30)'
+ '459Hv10' '405Hv10' '451Hv10' '432Hv10' '264Hv10' '241Hv10' '251Hv10'
+ '225Hv10' '233Hv10' '208Hv10' '373Hv10' '224Hv10' '210Hv10' '212Hv10'
+ '202Hv10' '204Hv10' '201Hv10' '398Hv10' '249Hv10' '226Hv10' '234Hv10'
+ '219Hv10' '467Hv10' '277Hv10' '254Hv10' '263Hv10' '237Hv10' '362Hv10'
+ '291Hv10' '262Hv10' '266Hv10' '253Hv10' '257Hv10' '246Hv10' '264Hv5'
+ '269Hv5' '233Hv5' '226Hv5' '222' '205' '253' '219' '182' '199' '240'
+ '244' '247' '233' '212']
+ ```
+
+ Et nous devons faire des recherches sur l'éthimologie de Hv (Hardness Value?)
+
+ 
 
 
