@@ -3,6 +3,7 @@ Functions to work with Missing Values
 """
 import re
 import pandas as pd
+import numpy as np
 import matplotlib.pyplot as plt
 
 # Import paths from variables.py
@@ -16,7 +17,7 @@ def _get_dataframe(file_path: str):
 
 
 @staticmethod
-def analyze_nan_in_csv(file_path: str):
+def print_missing_values(file_path: str):
     """
     Analyzes the NaN values in a csv file passed in hyperparameter
     Produces graphs to show off the NaN values
@@ -52,7 +53,7 @@ def analyze_nan_in_csv(file_path: str):
     plt.show()
 
 @staticmethod
-def print_missing_percentage(file_path: str):
+def print_missing_percentage(file_path: str, destination_path: str):
     """
     Prints the % of missing values in columns
     """
@@ -62,7 +63,7 @@ def print_missing_percentage(file_path: str):
     # Calculate the percentage of NaN per column
     nan_percentage_column = (df.isna().mean() * 100).round(2)
 
-    nan_percentage_column.to_csv(MISSING_PERCENTAGE_CSV_PATH, index=False)
+    nan_percentage_column.to_csv(destination_path)
 
 
 def data_cleaning(file_path: str) -> pd.DataFrame:
@@ -139,9 +140,94 @@ def print_unique_values(file_path: str):
         print(unique_values)
         print("-" * 40)
 
+def process_nitrogen_column(file_path: str):
+    """
+    Traite une colonne du DataFrame pour extraire les valeurs avant "tot" 
+    et place les résidus (entre "tot" et "res") dans une nouvelle colonne.
+    Remplace "nd" par NaN dans la nouvelle colonne.
+
+    Args:
+        df (pd.DataFrame): Le DataFrame contenant la colonne à traiter.
+
+    Returns:
+        pd.DataFrame: Le DataFrame avec la colonne modifiée et une nouvelle colonne 'Nitrogen residual concentration'.
+    """
+    df = _get_dataframe(file_path)
+    column_name = 'Nitrogen concentration / parts per million by weight'
+    
+    # Fonction pour séparer les valeurs avec "tot" et créer une nouvelle colonne
+    def extract_values(val):
+        if isinstance(val, str) and 'tot' in val:
+            # Extraire la partie avant 'tot'
+            before_tot = val.split('tot')[0]
+            
+            # Extraire la partie entre 'tot' et 'res'
+            between_tot_res = val.split('tot')[1].split('res')[0]
+            
+            # Gérer le cas où 'nd' doit être converti en NaN
+            if between_tot_res == 'nd':
+                between_tot_res = np.nan
+            
+            return before_tot, between_tot_res
+        else:
+            # Si "tot" n'est pas présent, retourner la valeur originale et NaN pour la nouvelle colonne
+            return val, np.nan
+
+    # Appliquer la fonction sur la colonne et créer une nouvelle colonne 'Nitrogen residual concentration'
+    df[[column_name, 'Nitrogen residual concentration']] = df[column_name].apply(lambda x: extract_values(x)).apply(pd.Series)
+
+    # Convertir les colonnes en types numériques (ignorer les erreurs pour les valeurs non numériques)
+    df[column_name] = pd.to_numeric(df[column_name], errors='coerce')
+    df['Nitrogen residual concentration'] = pd.to_numeric(df['Nitrogen residual concentration'], errors='coerce')
+
+    df.to_csv(file_path, index = False)
+
+
+def process_hardness_column(file_path: str):
+    """
+    Traite une colonne du DataFrame pour extraire les valeurs avant les suffixes 'Hv5', 'Hv10', 'Hv30' 
+    et place les suffixes dans une nouvelle colonne 'Hardness scale'.
+
+    Args:
+        df (pd.DataFrame): Le DataFrame contenant la colonne à traiter.
+        column_name (str): Le nom de la colonne à traiter.
+
+    Returns:
+        pd.DataFrame: Le DataFrame avec la colonne modifiée et une nouvelle colonne 'Hardness scale'.
+    """
+
+    column_name = 'Hardness / kg mm^{-2}'
+    df = pd.read_csv(file_path)
+    
+    # Fonction pour extraire la valeur de dureté et le suffixe (échelle de dureté)
+    def extract_hardness(val):
+        if isinstance(val, str):
+            # Cherche les différents suffixes possibles (Hv5, Hv10, Hv30)
+            if 'Hv5' in val:
+                return val.replace('Hv5', ''), '5'
+            elif 'Hv10' in val:
+                return val.replace('Hv10', ''), '10'
+            elif '(Hv30)' in val:
+                return val.replace('(Hv30)', ''), '30'
+            else:
+                return val, np.nan
+        else:
+            return val, np.nan
+
+    # Appliquer la fonction sur la colonne et créer une nouvelle colonne 'Hardness scale'
+    df[[column_name, 'Hardness scale']] = df[column_name].apply(lambda x: extract_hardness(x)).apply(pd.Series)
+
+    # Convertir les colonnes en types numériques pour les valeurs de dureté
+    df[column_name] = pd.to_numeric(df[column_name], errors='coerce')
+
+    df.to_csv(file_path, index = False)
+
+
 # Run the analysis
 if __name__ == "__main__":
-    analyze_nan_in_csv(CLEANED_CSV_PATH)
-    print_missing_percentage(CLEANED_CSV_PATH)
+    print_missing_values(CLEANED_CSV_PATH)
     change_inferior_signs(CLEANED_CSV_PATH)
     print_unique_values(CLEANED_CSV_PATH)
+    process_nitrogen_column(CLEANED_CSV_PATH)
+    process_hardness_column(CLEANED_CSV_PATH)
+    print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)

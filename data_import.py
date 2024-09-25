@@ -6,7 +6,7 @@ import pandas as pd
 import numpy as np
 
 # Import paths from paths.py
-from paths import FILE_MODIFIED_NAME, FILE_NAME, CLEANED_CSV_PATH
+from paths import FILE_MODIFIED_NAME, FILE_NAME, ORIGINAL_DATA_PATH
 
 @staticmethod
 def preprocess_text_file(input_file: str, output_file: str):
@@ -28,7 +28,7 @@ def preprocess_text_file(input_file: str, output_file: str):
         file.writelines(processed_lines)
 
 
-def data_import():
+def data_import(file_path: str):
     """
     Produces the data Import
     - Removes unnecesary spaces
@@ -139,12 +139,13 @@ def data_import():
                                 na_values=["N"]
                                 )
 
-
+    # On remplace les valeurs 'N' par des NaN values
+    # Il s'agit d'une bonne pratique pour travailler avec pandas
     basic_dataframe.replace("N", np.nan, inplace=True)
 
     # Save the dataframe to a csv
-    basic_dataframe.to_csv(CLEANED_CSV_PATH, index=False)
+    basic_dataframe.to_csv(file_path, index=False)
     basic_dataframe.head(5)
 
 if __name__ == "__main__":
-    data_import()
+    data_import(ORIGINAL_DATA_PATH)

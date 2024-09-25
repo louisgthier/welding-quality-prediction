@@ -20,5 +20,6 @@ FILE_NAME = os.path.join(dirname, DATA_FILE)
 FILE_MODIFIED_NAME = os.path.join(dirname, DATA_FILE_MODIFIED)
 
 # CSV FILE
+ORIGINAL_DATA_PATH = DATA_PATH + "welddb_data.csv"
 CLEANED_CSV_PATH = DATA_PATH + "welddb_cleaned.csv"
 MISSING_PERCENTAGE_CSV_PATH = DATA_PATH + "missing_percent.csv"

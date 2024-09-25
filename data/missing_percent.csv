@@ -1,45 +1,45 @@
-0
-0.0
-0.0
-0.0
-0.24
-0.61
-57.81
-52.54
-52.0
-43.83
-65.01
-92.19
-95.46
-23.97
-43.4
-24.82
-45.22
-69.49
-54.48
-82.08
-85.84
-84.26
-15.01
-15.01
-13.01
-9.44
-0.0
-0.0
-0.0
-0.79
-0.79
-52.78
-55.33
-57.63
-57.32
-46.79
-46.79
-91.65
-98.12
-94.07
-94.55
-94.55
-94.61
-94.61
-0.0
+,0
+Carbon concentration / weight %,0.0
+Silicon concentration / weight %,0.0
+Manganese concentration / weight %,0.0
+Sulphur concentration / weight %,0.24
+Phosphorus concentration / weight %,0.61
+Nickel concentration / weight %,57.81
+Chromium concentration / weight %,52.54
+Molybdenum concentration / weight %,52.0
+Vanadium concentration / weight %,43.83
+Copper concentration / weight %,65.01
+Cobalt concentration / weight %,92.19
+Tungsten concentration / weight %,95.46
+Oxygen concentration / parts per million by weight,23.97
+Titanium concentration / parts per million by weight,43.4
+Nitrogen concentration / parts per million by weight,24.82
+Aluminium concentration / parts per million by weight,45.22
+Boron concentration / parts per million by weight,69.49
+Niobium concentration / parts per million by weight,54.48
+Tin concentration / parts per million by weight,82.08
+Arsenic concentration / parts per million by weight,85.84
+Antimony concentration / parts per million by weight,84.26
+Current / A,15.01
+Voltage / V,15.01
+AC or DC,13.01
+Electrode positive or negative,9.44
+Heat input / kJ mm^{-1},0.0
+Interpass temperature / °C,0.0
+Type of weld,0.0
+Post weld heat treatment temperature / °C,0.79
+Post weld heat treatment time / hours,0.79
+Yield strength / MPa,52.78
+Ultimate tensile strength / MPa,55.33
+Elongation / %,57.63
+Reduction of Area / %,57.32
+Charpy temperature / °C,46.79
+Charpy impact toughness / J,46.79
+Hardness / kg mm^{-2},91.65
+50% FATT,98.12
+Primary ferrite in microstructure / %,94.07
+Ferrite with second phase / %,94.55
+Acicular ferrite / %,94.55
+Martensite / %,94.61
+Ferrite with carbide aggregate / %,94.61
+Weld ID,0.0
