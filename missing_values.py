@@ -56,8 +56,9 @@ def print_missing_percentage(file_path: str):
     nan_percentage_column = (df.isna().mean() * 100).round(2)
 
     nan_percentage_column.to_csv(MISSING_PERCENTAGE_CSV_PATH)
-    
-def data_cleaning(file_path):
+
+
+def data_cleaning(file_path: str) -> pd.DataFrame:
     """
     Cleans the data in a DataFrame:
     1. Replaces values with less than signs ("<") by the values without the sign.
@@ -69,17 +70,17 @@ def data_cleaning(file_path):
     """
 
     # List of columns with many missing values that we want to analyze
-    many_nans_cols = [
-    'Primary ferrite in microstructure / %',
-    'Ferrite with second phase / %',
-    'Acicular ferrite / %',
-    'Martensite / %',
-    'Ferrite with carbide aggregate / %']
+    columns_to_drop = [
+        'Primary ferrite in microstructure / %',
+        'Ferrite with second phase / %',
+        'Acicular ferrite / %',
+        'Martensite / %',
+        'Ferrite with carbide aggregate / %']
 
     df = pd.read_csv(file_path)
 
     # 1. Drop unnecessary columns (explained in the readme)
-    df = df.drop(columns=many_nans_cols)
+    df = df.drop(columns=columns_to_drop)
 
     # 2. Replace the less than signs with the values without the sign
     def replace_inferior_signs(value):
@@ -110,4 +111,4 @@ def print_correlation_matrix(file_path: str):
 if __name__ == "__main__":
     analyze_nan_in_csv(CLEANED_CSV_PATH)
     print_missing_percentage(CLEANED_CSV_PATH)
-    df = data_cleaning(CLEANED_CSV_PATH)
+    data_without_inferior_signs = data_cleaning(CLEANED_CSV_PATH)
