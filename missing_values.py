@@ -1,9 +1,9 @@
 """
 Functions to work with Missing Values
 """
+import re
 import pandas as pd
 import matplotlib.pyplot as plt
-import re
 
 # Import paths from variables.py
 from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH
