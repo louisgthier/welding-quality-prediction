@@ -91,7 +91,7 @@ L'objectif est d'évaluer la qualité des soudures en fonction de divers paramè
 
 *// À compléter*
 
-# Valeurs manquantes
+# Valeurs manquantes et non typées
 
 ## Section 1 de *missing_values.py* :
 
@@ -156,6 +156,14 @@ Column 'Hardness / kg mm^{-2}' has 97 unique values:
 
  Et nous devons faire des recherches sur l'éthimologie de Hv (Hardness Value?)
 
- 
 
 
+# Analyse des variables
+
+## Variables qualitatives
+
+### A COMPLETER 
+
+//Mettre les variables et leurs descriptions
+
+## Variables quantitatives
