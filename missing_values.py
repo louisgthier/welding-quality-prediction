@@ -55,7 +55,22 @@ def print_missing_percentage(file_path: str):
 
     nan_percentage_column.to_csv(MISSING_PERCENTAGE_CSV_PATH)
 
+@staticmethod
+def print_correlation_matrix(file_path: str):
+    """
+    Prints the correlation matrix
+    """
+
+    # Load the CSV file into a DataFrame
+    df = pd.read_csv(file_path)
+
+    correlation_matrix = df.corr(method='pearson')
+
+    print(correlation_matrix)
+
+
 # Run the analysis
 if __name__ == "__main__":
     analyze_nan_in_csv(CLEANED_CSV_PATH)
     print_missing_percentage(CLEANED_CSV_PATH)
+    print_correlation_matrix(CLEANED_CSV_PATH)
