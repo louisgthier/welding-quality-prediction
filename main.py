@@ -1,3 +1,13 @@
+"""
+This file is the general script to obtain the final dataframes
+Used for Machine Learning Algorithms.
+
+welddb_data.csv is the original dataframe
+welddb_cleaned.csv is the cleaned dataframe
+"""
+
+import os
+
 # Import functions from files
 from data_import import data_import
 from missing_values import print_missing_values, change_inferior_signs, print_unique_values, process_hardness_column, process_nitrogen_column, print_missing_percentage
@@ -5,7 +15,19 @@ from missing_values import print_missing_values, change_inferior_signs, print_un
 # Import paths used to store data
 from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH, ORIGINAL_DATA_PATH
 
+
+@staticmethod
+def delete_if_exists(file_path: str):
+    if os.path.exists(file_path):
+        os.remove(file_path)
+
 if __name__ == "__main__":
+    
+    # Delete files to restart the process
+    delete_if_exists(CLEANED_CSV_PATH)
+    delete_if_exists(MISSING_PERCENTAGE_CSV_PATH)
+    delete_if_exists(ORIGINAL_DATA_PATH)
+
     # 1 - Import the data
     #   Remove trailing whitespace
     #   Remove double spaces messing with the import
@@ -34,7 +56,10 @@ if __name__ == "__main__":
 
     # 5 - We go back to our percentage now that the data is a bit more cleaned
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
-
+    # Same for our unique values
+    print_unique_values(CLEANED_CSV_PATH)
+    
+    
     # 6 - We delete / place apart useless columns for now
     ######
     # Delete new columns
