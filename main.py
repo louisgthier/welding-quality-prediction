@@ -75,6 +75,11 @@ if __name__ == "__main__":
     # Remove outliers?
     ######
 
-    # 9 - Create diff strategies pipelines
+    # 9 - Standardization ?
+    ######
+    #
+    ######
 
-    # 10 - Create sub datasets ?
+    # 10 - Create diff strategies pipelines
+
+    # 11 - Create sub datasets ?
