@@ -541,9 +541,11 @@ Column 'Hardness scale' has 4 unique values:
 
 ### AC or DC
 
-Outre les 13 % de valeurs manquantes, cette colonne ne contient que deux catégories de valeurs : AC et DC. Pour rendre ces données plus exploitables, nous avons décidé de transformer les valeurs de la colonne en valeurs binaires : 0 sera associé au mode AC et 1 sera associé au mode DC. 
+Outre les 13 % de valeurs manquantes, cette colonne contient uniquement deux catégories : AC et DC. Pour rendre ces données plus exploitables, nous avons décidé de convertir les valeurs en format binaire : 0 pour le mode AC et 1 pour le mode DC.
 
-Les valeurs manquantes semblent être des MAR, liées au type de WeldID. En effet, les valeurs manquantes apparaissent pour les types de WeldID comme p..-RR82011, RC81033, EvansLetter et Birmingham. Nous pouvons toutefois imputer des valeurs sans se tromper : si des signes + ou - sont explicitement indiqués pour l'électrode, il s'agit très probablement d'un mode DC, car le mode AC (courant alternatif) n'a pas de polarité fixe. Nous considérons donc qu'il s'agit d'un mode DC lorsque un type de polarité d'électrode est spécifié. Lorsque une instance a des valeurs manquantes pour ces deux colonnes, xxx. 
+Les valeurs manquantes semblent être des MAR (Missing At Random), liées au type de WeldID. En effet, les valeurs manquantes apparaissent pour des types de WeldID tels que p..-RR82011, RC81033, EvansLetter, et Birmingham. Nous pouvons imputer ces valeurs de manière fiable : lorsque la polarité de l'électrode est explicitement indiquée par un signe + ou -, il s'agit très probablement du mode DC, puisque le mode AC (courant alternatif) n'a pas de polarité fixe. Ainsi, lorsqu'une polarité d'électrode est spécifiée, nous imputons le mode DC.
+
+Cependant, il arrive parfois que des valeurs soient également manquantes dans la colonne indiquant la polarité de l'électrode. Dans ces cas, nous examinons les autres colonnes. Nous constatons que les dernières valeurs manquantes dans la colonne AC/DC sont présentes lorsque le type de soudure est MMA (Manual Metal Arc), un procédé utilisant un arc électrique qui ne peut être maintenu en mode AC, car cela entraînerait la rupture de l'arc. Par conséquent, nous remplaçons les valeurs manquantes par 1 (ie un mode DC).
 
 ### Electrode positive or negative
 
@@ -551,7 +553,10 @@ Nous avons identifié quatre types de valeurs possibles dans cette colonne : +, 
 
 Nous devons transformer les valeurs présentes afin qu'elles soient interprétables par les algorithmes de ML. Plutôt que d'effectuer un one-hot encoding en créant trois colonnes binaires distinctes, ce qui pourrait entraîner de la multicollinéarité et poser des problèmes pour certains algorithmes de ML, nous choisissons de diviser la colonne en seulement deux colonnes binaires : la première indiquera si l'électrode est positive (+), et la seconde si elle est négative (-). Si la valeur est 0, les deux colonnes afficheront 0.
 
-Ensuite, intéressons nous aux valeurs manquantes, qui sont des MAR liées au type de WeldID (manquantes pour les WeldID EvansLetter et Birmingham), xxx. 
+Les valeurs manquantes sont dès lors représentées par une valeur 0 à la colonne 'Electrode positive' et une valeur 0 à la colonne 'Electrode negative'.
+
+
+
 
 ## Variables quantitatives
 
