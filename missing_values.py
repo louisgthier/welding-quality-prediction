@@ -244,6 +244,9 @@ def process_ac_dc_column(file_path: str):
     # Remplacement de certaines valeurs manquantes (Si le signe de l'électrode est '+' ou '-', on impute la valeur 1 (DC))
     df.loc[missing_ac_dc & df[electrode_column].isin(['+', '-']), ac_dc_column] = 1
 
+    # Remplacement des dernières valeurs manquantes (alors que le type de soudure est MMA) par 1 (ie un mode DC)
+    df.loc[missing_ac_dc, ac_dc_column] = 1
+
     df.to_csv(file_path, index=False)
 
 def process_electrode_column(file_path: str):
