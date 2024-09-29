@@ -6,6 +6,7 @@ import os
 dirname = os.path.dirname(__file__)
 
 DATA_PATH = "./data/"
+WELD_TYPE_PATH = DATA_PATH + "weld_type_analysis/"
 
 # RAW FILE NAME
 DATA_OBJECT_NAME = "welddb.data"
@@ -23,3 +24,4 @@ FILE_MODIFIED_NAME = os.path.join(dirname, DATA_FILE_MODIFIED)
 ORIGINAL_DATA_PATH = DATA_PATH + "welddb_data.csv"
 CLEANED_CSV_PATH = DATA_PATH + "welddb_cleaned.csv"
 MISSING_PERCENTAGE_CSV_PATH = DATA_PATH + "missing_percent.csv"
+FCA_CSV_PATH = WELD_TYPE_PATH + "FCA_group.csv"
