@@ -83,7 +83,8 @@ def drop_unnecessary_columns(file_path: str) -> pd.DataFrame:
         'Ferrite with second phase / %',
         'Acicular ferrite / %',
         'Martensite / %',
-        'Ferrite with carbide aggregate / %']
+        'Ferrite with carbide aggregate / %', 
+        '50% FATT']
 
     df = pd.read_csv(file_path)
 
@@ -244,8 +245,12 @@ def process_ac_dc_column(file_path: str):
     # Remplacement de certaines valeurs manquantes (Si le signe de l'électrode est '+' ou '-', on impute la valeur 1 (DC))
     df.loc[missing_ac_dc & df[electrode_column].isin(['+', '-']), ac_dc_column] = 1
 
-    # Remplacement des dernières valeurs manquantes (alors que le type de soudure est MMA) par 1 (ie un mode DC)
-    df.loc[missing_ac_dc, ac_dc_column] = 1
+    proportion_dc = df[ac_dc_column].value_counts(normalize=True).get(1, 0)
+
+    print('proportion de DC', proportion_dc)
+    if proportion_dc > 0.9:
+        # Imputer les valeurs manquantes par DC si la proportion de DC est supérieure à 0.9 dans le dataset
+        df[ac_dc_column].fillna(1, inplace=True)
 
     df.to_csv(file_path, index=False)
 
@@ -267,9 +272,6 @@ def process_electrode_column(file_path: str):
     # Sauvegarder les modifications dans le fichier CSV
     df.to_csv(file_path, index=False)
 
-
-
-
 # Run the analysis
 if __name__ == "__main__":
     print_missing_values(CLEANED_CSV_PATH)
@@ -281,3 +283,6 @@ if __name__ == "__main__":
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
     process_ac_dc_column(CLEANED_CSV_PATH)
     process_electrode_column(CLEANED_CSV_PATH)
+
+
+    
