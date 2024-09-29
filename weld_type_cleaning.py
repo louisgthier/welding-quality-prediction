@@ -2,9 +2,9 @@
 import pandas as pd
 
 # Import paths used to store data
-from paths import CLEANED_CSV_PATH, DATA_PATH, FCA_CSV_PATH
+from paths import CLEANED_CSV_PATH, DATA_PATH
 from missing_values import print_missing_percentage
-from data_cleaning import clean_fca, update_csv
+from data_cleaning import fill_with_mean_strategy, update_csv
 
 WELD_TYPE_PATH = DATA_PATH + "weld_type_analysis/"
 WELD_TYPES: list[str] = ['MMA',
@@ -43,4 +43,8 @@ def divide_by_weld_type(file_path: str):
 
 if __name__ == "__main__":
     divide_by_weld_type(CLEANED_CSV_PATH)
-    update_csv(clean_fca(FCA_CSV_PATH), FCA_CSV_PATH)
+
+    for welding_type in WELD_TYPES:
+
+        SPEC_WELD_TYPE_PATH = WELD_TYPE_PATH + welding_type + '_group.csv'
+        update_csv(fill_with_mean_strategy(SPEC_WELD_TYPE_PATH), SPEC_WELD_TYPE_PATH)
