@@ -70,7 +70,7 @@ Nous avons tenté de calculer le coefficient de corrélation entre chacune de ce
 
 De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'évaluation de la qualité des soudures et nous décidons de les supprimer du dataset. 
 
-La colonne '50% FATT' manque aussi 98% de valeurs, ce qui nous indique son inutilité.
+La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. 
 
 ## Valeurs mal formattées :
 
