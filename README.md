@@ -39,12 +39,13 @@ L'objectif est d'évaluer la qualité des soudures en fonction de divers paramè
 
 # Valeurs manquantes et non typées
 
-## Section 1 de *missing_values.py* :
-
 Les valeurs manquantes sont traitées dans le fichier *missing_values.py*.  
+
+## Section 1 de *missing_values.py* : calcul du nombre de valeurs manquantes dans chaque colonne
+
 Le fichier *missing_percent.csv*, généré par *missing_values.py*, associe à chaque colonne son pourcentage de valeurs manquantes correspondant.
 
-## Section 2 de *missing_values.py* :
+## Section 2 de *missing_values.py* : suppression de quelques colonnes
 
 Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe.
 
@@ -56,9 +57,13 @@ De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'
 
 *// À compléter*
 
-## Section 3 de *missing_values.py* :
+## Section 3 de *missing_values.py* : reformattage des données
 
-Ensuite, nous avons repéré les valeurs qui ne sont pas au bon format, avec pour exemple la concentration en Nitrogène :
+Nous avons remarqué que certaines valeurs de notre dataset ne sont pas dans un format exploitable. 
+
+Premièrement, certaines incluent des signes de comparaison, comme par exemple "<0.5". Afin de résoudre ce problème, nous avons décidé de retirer les signes de comparaison et de remplacer ces valeurs par la borne supérieure qu'elles représentent. Concrètement, lorsqu'une valeur indique "<0.5", nous la remplacerons par "0.5", considérant ainsi que la vraie valeur est proche ou égale à la borne indiquée.
+
+Ensuite, dans la colonne de la concentration en Nitrogène :
 
 ```
 ----------------------------------------
@@ -80,7 +85,7 @@ Column 'Nitrogen concentration / parts per million by weight' has 162 unique val
 ```
 Nous devions faire des recherches sur les significations de "tot" et "res", qui font penser à "total" et "résultat"/"résidus", des termes chimiques correspondants à la concentration.
 
-"nd" signifierait un manque de données.
+"nd" signifierait un manque de données. Nous les remplaçons donc par des valeurs NaN. 
 
 Nous avons aussi le cas de la colonne Dureté (Hardness) :
 
@@ -99,6 +104,8 @@ Column 'Hardness / kg mm^{-2}' has 97 unique values:
  '269Hv5' '233Hv5' '226Hv5' '222' '205' '253' '219' '182' '199' '240'
  '244' '247' '233' '212']
  ```
+
+Ensuite, 
 
  Et nous devons faire des recherches sur l'éthimologie de Hv (Hardness Value?)
 
