@@ -59,7 +59,11 @@ De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'
 
 ## Section 3 de *missing_values.py* : reformattage des données
 
-Ensuite, nous avons repéré les valeurs qui ne sont pas au bon format, avec pour exemple la concentration en Nitrogène :
+Nous avons remarqué que certaines valeurs de notre dataset ne sont pas dans un format exploitable. 
+
+Premièrement, certaines incluent des signes de comparaison, comme par exemple "<0.5". Afin de résoudre ce problème, nous avons décidé de retirer les signes de comparaison et de remplacer ces valeurs par la borne supérieure qu'elles représentent. Concrètement, lorsqu'une valeur indique "<0.5", nous la remplacerons par "0.5", considérant ainsi que la vraie valeur est proche ou égale à la borne indiquée.
+
+Ensuite, dans la colonne de la concentration en Nitrogène :
 
 ```
 ----------------------------------------
