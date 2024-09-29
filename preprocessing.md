@@ -541,7 +541,7 @@ Column 'Hardness scale' has 4 unique values:
 
 ### AC or DC
 
-Outre les 13 % de valeurs manquantes, cette colonne ne contient que deux catégories de valeurs : AC et DC. Pour rendre ces données plus exploitables, nous avons décidé de transformer la colonne en deux colonnes distinctes : l'une intitulée AC, indiquant de manière binaire si le mode est AC (1 pour AC, 0 sinon), et l'autre intitulée DC, indiquant de manière binaire si le mode est DC (1 pour DC, 0 sinon). 
+Outre les 13 % de valeurs manquantes, cette colonne ne contient que deux catégories de valeurs : AC et DC. Pour rendre ces données plus exploitables, nous avons décidé de transformer les valeurs de la colonne en valeurs binaires : 0 sera associé au mode AC et 1 sera associé au mode DC. 
 
 Les valeurs manquantes semblent être des MAR, liées au type de WeldID. En effet, les valeurs manquantes apparaissent pour les types de WeldID comme p..-RR82011, RC81033, EvansLetter et Birmingham. Nous pouvons toutefois imputer des valeurs sans se tromper : si des signes + ou - sont explicitement indiqués pour l'électrode, il s'agit très probablement d'un mode DC, car le mode AC (courant alternatif) n'a pas de polarité fixe. Nous considérons donc qu'il s'agit d'un mode DC lorsque un type de polarité d'électrode est spécifié. Lorsque une instance a des valeurs manquantes pour ces deux colonnes, xxx. 
 
