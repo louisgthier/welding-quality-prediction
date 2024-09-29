@@ -226,6 +226,49 @@ def process_hardness_column(file_path: str):
 
     df.to_csv(file_path, index = False)
 
+def process_ac_dc_column(file_path: str):
+    """
+    Traite la colonne AC or DC en valeurs binaires exploitables (1 : DC et 0 : AC)
+    """
+    df = pd.read_csv(file_path)
+
+    ac_dc_column = 'AC or DC'
+    electrode_column = 'Electrode positive or negative'
+
+    # Binarisation des valeurs
+    df[ac_dc_column] = df[ac_dc_column].replace({'AC': 0, 'DC': 1})
+
+    # Identification des valeurs manquantes
+    missing_ac_dc = df[ac_dc_column].isna()
+
+    # Remplacement de certaines valeurs manquantes (Si le signe de l'électrode est '+' ou '-', on impute la valeur 1 (DC))
+    df.loc[missing_ac_dc & df[electrode_column].isin(['+', '-']), ac_dc_column] = 1
+
+    # Remplacement des dernières valeurs manquantes (alors que le type de soudure est MMA) par 1 (ie un mode DC)
+    df.loc[missing_ac_dc, ac_dc_column] = 1
+
+    df.to_csv(file_path, index=False)
+
+def process_electrode_column(file_path: str):
+    """
+    Traite la colonne Electrode positive or negative, en la divisant en deux colonnes de valeurs binaires -Electrode positive- et -Electrode negative-
+    """
+
+    df = pd.read_csv(file_path)
+
+    electrode_column = 'Electrode positive or negative'
+
+    # Créer les deux nouvelles colonnes de valeurs binaires 'Electrode Positive' et 'Electrode Negative'
+    df['Electrode Positive'] = df[electrode_column].apply(lambda x: 1 if x == '+' else 0)
+    df['Electrode Negative'] = df[electrode_column].apply(lambda x: 1 if x == '-' else 0)
+
+    df.drop(columns=[electrode_column], inplace=True)
+
+    # Sauvegarder les modifications dans le fichier CSV
+    df.to_csv(file_path, index=False)
+
+
+
 
 # Run the analysis
 if __name__ == "__main__":
@@ -236,3 +279,5 @@ if __name__ == "__main__":
     process_nitrogen_column(CLEANED_CSV_PATH)
     process_hardness_column(CLEANED_CSV_PATH)
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
+    process_ac_dc_column(CLEANED_CSV_PATH)
+    process_electrode_column(CLEANED_CSV_PATH)
