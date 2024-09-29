@@ -15,6 +15,7 @@ def _get_dataframe(file_path: str):
     """
     return pd.read_csv(file_path)
 
+## Section 1
 
 @staticmethod
 def print_missing_values(file_path: str):
@@ -65,19 +66,18 @@ def print_missing_percentage(file_path: str, destination_path: str):
 
     nan_percentage_column.to_csv(destination_path)
 
+## Section 2
 
-def data_cleaning(file_path: str) -> pd.DataFrame:
+@staticmethod
+def drop_unnecessary_columns(file_path: str) -> pd.DataFrame:
     """
-    Cleans the data in a DataFrame:
-    1. Replaces values with less than signs ("<") by the values without the sign.
-    2. Removes specified columns.
+    Supprime les colonnes non nécessaires d'un fichier CSV et retourne le DataFrame nettoyé.
     
-    :param file_path: The CSV file path to clean.
-    :param columns_to_drop: List of columns to drop from the DataFrame.
-    :return: The cleaned DataFrame.
+    :param file_path: Le chemin du fichier CSV à nettoyer.
+    :return: Le DataFrame nettoyé sans les colonnes spécifiées.
     """
 
-    # List of columns with many missing values that we want to analyze
+    # Liste des colonnes à supprimer
     columns_to_drop = [
         'Primary ferrite in microstructure / %',
         'Ferrite with second phase / %',
@@ -88,30 +88,34 @@ def data_cleaning(file_path: str) -> pd.DataFrame:
     df = pd.read_csv(file_path)
 
     try:
-        # 1. Drop unnecessary columns (explained in the readme)
+        # Suppression des colonnes
         df = df.drop(columns=columns_to_drop)
-
-        # 2. Replace the less than signs with the values without the sign
-        def replace_inferior_signs(value):
-            if isinstance(value, str):
-                return re.sub(r'<(\d+\.?\d*)', r'\1', value)
-            return value
-
-        df = df.apply(lambda col: col.apply(replace_inferior_signs))
+    except Exception as e:
+        print(f"Erreur lors de la suppression des colonnes : {e}")
     
-    except Exception:
-        pass
+    df.to_csv(file_path, index=False)
 
-    return df
+## Section 3
 
 @staticmethod
-def change_inferior_signs(file_path: str):
+def remove_inferior_signs(file_path: str) -> pd.DataFrame:
     """
-    Change the values with inferior signs in a csv
+    Remplace les valeurs contenant des signes "<" dans un fichier CSV et retourne le DataFrame modifié.
+    
+    :param file_path: Le chemin du fichier CSV à nettoyer.
+    :return: Le DataFrame avec les signes "<" supprimés des valeurs.
     """
+
     df = pd.read_csv(file_path)
-    df = data_cleaning(file_path)
+
+    try:
+        # Appliquer la transformation à tout le DataFrame
+        df = df.applymap(lambda value: re.sub(r'<(\d+\.?\d*)', r'\1', value) if isinstance(value, str) else value)
+    except Exception as e:
+        print(f"Erreur lors de la suppression des signes '<' : {e}")
+
     df.to_csv(file_path, index=False)
+
 
 @staticmethod
 def print_correlation_matrix(file_path: str):
@@ -226,7 +230,8 @@ def process_hardness_column(file_path: str):
 # Run the analysis
 if __name__ == "__main__":
     print_missing_values(CLEANED_CSV_PATH)
-    change_inferior_signs(CLEANED_CSV_PATH)
+    drop_unnecessary_columns(CLEANED_CSV_PATH)
+    remove_inferior_signs(CLEANED_CSV_PATH)
     print_unique_values(CLEANED_CSV_PATH)
     process_nitrogen_column(CLEANED_CSV_PATH)
     process_hardness_column(CLEANED_CSV_PATH)
