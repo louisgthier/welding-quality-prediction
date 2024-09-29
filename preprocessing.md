@@ -74,7 +74,7 @@ La colonne '50% FATT' manque aussi 98% de valeurs, ce qui nous indique son inuti
 
 ## Valeurs mal formattées :
 
-Le dataset contenait déjà des mauvaises valuers (doubles espaces, trailing space) avant même l'import.
+Le dataset contenait déjà des mauvaises valeurs (doubles espaces, trailing space) avant même l'import.
 Nous imprimons les différentes valeurs de chaque colonne afin de savoir à quelle catégorie appartiennent chacun des colonnes.
 Nous trouvons que dans certaines colonnes qui semblent être des variables quantitatives, on trouve des valeurs qualitatives qui semblent mal formattées.
 
@@ -103,7 +103,7 @@ Nous devions faire des recherches sur les significations de "tot" et "res", qui 
 
 "nd" signifierait un manque de données, "non-détecté" (en anglais *non detected*).
 
-**Solution** : les valeurs avants 'tot' sont gardées dans la colonne et une nouvelle colonne est créee pour les résidus. Cependant, cette colonne ne contient pas assez de valeurs par rapport au dataset et sera sûrement inutile. Nous la retirons de notre analyse principale.
+**Solution** : les valeurs avants 'tot' sont gardées dans la colonne et une nouvelle colonne est créée pour les résidus. Cependant, cette colonne ne contient pas assez de valeurs par rapport au dataset et sera sûrement inutile. Nous la retirons de notre analyse principale.
 
 Nous la gardons de côté afin de peut-être observer une coincidence avec les résultats finaux (peut-être qu'une réaction avec/sans résidus aura plus de chances de produire un résultat de qualité). Nous gardons cette variable afin d'en faire une colonne booléenne : La concentration a-t-elle des résidus ? Oui/Non.
 
@@ -539,9 +539,19 @@ Column 'Hardness scale' has 4 unique values:
 
 ### Type of weld
 
+### AC or DC
+
+Outre les 13 % de valeurs manquantes, cette colonne ne contient que deux catégories de valeurs : AC et DC. Pour rendre ces données plus exploitables, nous avons décidé de transformer la colonne en deux colonnes distinctes : l'une intitulée AC, indiquant de manière binaire si le mode est AC (1 pour AC, 0 sinon), et l'autre intitulée DC, indiquant de manière binaire si le mode est DC (1 pour DC, 0 sinon). 
+
+Les valeurs manquantes semblent être des MAR, liées au type de WeldID. En effet, les valeurs manquantes apparaissent pour les types de WeldID comme p..-RR82011, RC81033, EvansLetter et Birmingham. Nous pouvons toutefois imputer des valeurs sans se tromper : si des signes + ou - sont explicitement indiqués pour l'électrode, il s'agit très probablement d'un mode DC, car le mode AC (courant alternatif) n'a pas de polarité fixe. Nous considérons donc qu'il s'agit d'un mode DC lorsque un type de polarité d'électrode est spécifié. Lorsque une instance a des valeurs manquantes pour ces deux colonnes, xxx. 
+
 ### Electrode positive or negative
 
-### AC or DC
+Nous avons identifié quatre types de valeurs possibles dans cette colonne : +, -, ou 0, et les valeurs manquantes. Les 0 sont liés à l'utilisation du mode AC. 
+
+Nous devons transformer les valeurs présentes afin qu'elles soient interprétables par les algorithmes de ML. Plutôt que d'effectuer un one-hot encoding en créant trois colonnes binaires distinctes, ce qui pourrait entraîner de la multicollinéarité et poser des problèmes pour certains algorithmes de ML, nous choisissons de diviser la colonne en seulement deux colonnes binaires : la première indiquera si l'électrode est positive (+), et la seconde si elle est négative (-). Si la valeur est 0, les deux colonnes afficheront 0.
+
+Ensuite, intéressons nous aux valeurs manquantes, qui sont des MAR liées au type de WeldID (manquantes pour les WeldID EvansLetter et Birmingham), xxx. 
 
 ## Variables quantitatives
 
