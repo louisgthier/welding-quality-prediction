@@ -48,4 +48,4 @@ if __name__ == "__main__":
 
     for welding_type in df['Group'].unique():
         SPEC_WELD_ID_PATH = WELD_ID_PATH + welding_type + '_group.csv'
-        update_csv(fill_with_mean_strategy(SPEC_WELD_ID_PATH), SPEC_WELD_ID_PATH)
+        # update_csv(fill_with_mean_strategy(SPEC_WELD_ID_PATH), SPEC_WELD_ID_PATH)

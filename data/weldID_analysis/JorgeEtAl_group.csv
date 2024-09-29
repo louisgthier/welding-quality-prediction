@@ -1,17 +1,17 @@
-,Carbon concentration / weight %,Silicon concentration / weight %,Manganese concentration / weight %,Sulphur concentration / weight %,Phosphorus concentration / weight %,Chromium concentration / weight %,Oxygen concentration / parts per million by weight,Titanium concentration / parts per million by weight,Nitrogen concentration / parts per million by weight,Current / A,Voltage / V,AC or DC,Heat input / kJ mm^{-1},Interpass temperature / °C,Type of weld,Post weld heat treatment temperature / °C,Post weld heat treatment time / hours,Charpy temperature / °C,Charpy impact toughness / J,Weld ID,Electrode Positive,Electrode Negative,Group
-0,0.068,0.35,1.06,0.006,0.009,0.027,416.0,36.0,63.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,-62.0,100.0,JorgeEtAl-1993-Aaw,1,0,JorgeEtAl
-1,0.068,0.35,1.06,0.006,0.009,0.027,416.0,36.0,63.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,-78.0,100.0,JorgeEtAl-1993-Aht,1,0,JorgeEtAl
-2,0.071,0.36,1.09,0.006,0.009,0.41,418.0,41.0,71.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,-61.0,100.0,JorgeEtAl-1993-Baw,1,0,JorgeEtAl
-3,0.071,0.36,1.09,0.006,0.009,0.41,418.0,41.0,71.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,-73.0,100.0,JorgeEtAl-1993-Bht,1,0,JorgeEtAl
-4,0.072,0.35,1.05,0.005,0.007,0.79,421.0,37.0,73.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,-63.0,100.0,JorgeEtAl-1993-Caw,1,0,JorgeEtAl
-5,0.072,0.35,1.05,0.005,0.007,0.79,421.0,37.0,73.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,-68.0,100.0,JorgeEtAl-1993-Cht,1,0,JorgeEtAl
-6,0.075,0.35,1.09,0.006,0.008,1.22,424.0,52.0,87.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,-57.0,100.0,JorgeEtAl-1993-Daw,1,0,JorgeEtAl
-7,0.075,0.35,1.09,0.006,0.008,1.22,424.0,52.0,87.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,-60.0,100.0,JorgeEtAl-1993-Dht,1,0,JorgeEtAl
-8,0.07,0.34,1.06,0.006,0.008,1.57,463.0,41.0,85.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,-40.0,100.0,JorgeEtAl-1993-Eaw,1,0,JorgeEtAl
-9,0.07,0.34,1.06,0.006,0.008,1.57,463.0,41.0,85.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,-48.0,100.0,JorgeEtAl-1993-Eht,1,0,JorgeEtAl
-10,0.073,0.34,1.07,0.006,0.007,1.97,430.0,40.0,89.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,-25.0,100.0,JorgeEtAl-1993-Faw,1,0,JorgeEtAl
-11,0.073,0.34,1.07,0.006,0.007,1.97,430.0,40.0,89.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,-40.0,100.0,JorgeEtAl-1993-Fht,1,0,JorgeEtAl
-12,0.077,0.35,1.05,0.006,0.008,2.28,424.0,37.0,88.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,1.0,100.0,JorgeEtAl-1993-Gaw,1,0,JorgeEtAl
-13,0.077,0.35,1.05,0.006,0.008,2.28,424.0,37.0,88.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,-25.0,100.0,JorgeEtAl-1993-Ght,1,0,JorgeEtAl
-14,0.072,0.38,1.09,0.006,0.009,2.8,467.0,33.0,85.0,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,20.0,100.0,JorgeEtAl-1993-Haw,1,0,JorgeEtAl
-15,0.072,0.38,1.09,0.006,0.009,2.8,467.0,33.0,85.0,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,1.0,100.0,JorgeEtAl-1993-Hht,1,0,JorgeEtAl
+Carbon concentration / weight %,Silicon concentration / weight %,Manganese concentration / weight %,Sulphur concentration / weight %,Phosphorus concentration / weight %,Nickel concentration / weight %,Chromium concentration / weight %,Molybdenum concentration / weight %,Vanadium concentration / weight %,Copper concentration / weight %,Cobalt concentration / weight %,Tungsten concentration / weight %,Oxygen concentration / parts per million by weight,Titanium concentration / parts per million by weight,Nitrogen concentration / parts per million by weight,Aluminium concentration / parts per million by weight,Boron concentration / parts per million by weight,Niobium concentration / parts per million by weight,Tin concentration / parts per million by weight,Arsenic concentration / parts per million by weight,Antimony concentration / parts per million by weight,Current / A,Voltage / V,AC or DC,Heat input / kJ mm^{-1},Interpass temperature / °C,Type of weld,Post weld heat treatment temperature / °C,Post weld heat treatment time / hours,Yield strength / MPa,Ultimate tensile strength / MPa,Elongation / %,Reduction of Area / %,Charpy temperature / °C,Charpy impact toughness / J,Hardness / kg mm^{-2},50% FATT,Weld ID,Nitrogen residual concentration,Hardness scale,Electrode Positive,Electrode Negative,Group
+0.068,0.35,1.06,0.006,0.009,,0.027,,,,,,416.0,36.0,63.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,-62.0,100.0,,,JorgeEtAl-1993-Aaw,,,1,0,JorgeEtAl
+0.068,0.35,1.06,0.006,0.009,,0.027,,,,,,416.0,36.0,63.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,-78.0,100.0,,,JorgeEtAl-1993-Aht,,,1,0,JorgeEtAl
+0.071,0.36,1.09,0.006,0.009,,0.41,,,,,,418.0,41.0,71.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,-61.0,100.0,,,JorgeEtAl-1993-Baw,,,1,0,JorgeEtAl
+0.071,0.36,1.09,0.006,0.009,,0.41,,,,,,418.0,41.0,71.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,-73.0,100.0,,,JorgeEtAl-1993-Bht,,,1,0,JorgeEtAl
+0.072,0.35,1.05,0.005,0.007,,0.79,,,,,,421.0,37.0,73.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,-63.0,100.0,,,JorgeEtAl-1993-Caw,,,1,0,JorgeEtAl
+0.072,0.35,1.05,0.005,0.007,,0.79,,,,,,421.0,37.0,73.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,-68.0,100.0,,,JorgeEtAl-1993-Cht,,,1,0,JorgeEtAl
+0.075,0.35,1.09,0.006,0.008,,1.22,,,,,,424.0,52.0,87.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,-57.0,100.0,,,JorgeEtAl-1993-Daw,,,1,0,JorgeEtAl
+0.075,0.35,1.09,0.006,0.008,,1.22,,,,,,424.0,52.0,87.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,-60.0,100.0,,,JorgeEtAl-1993-Dht,,,1,0,JorgeEtAl
+0.07,0.34,1.06,0.006,0.008,,1.57,,,,,,463.0,41.0,85.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,-40.0,100.0,,,JorgeEtAl-1993-Eaw,,,1,0,JorgeEtAl
+0.07,0.34,1.06,0.006,0.008,,1.57,,,,,,463.0,41.0,85.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,-48.0,100.0,,,JorgeEtAl-1993-Eht,,,1,0,JorgeEtAl
+0.073,0.34,1.07,0.006,0.007,,1.97,,,,,,430.0,40.0,89.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,-25.0,100.0,,,JorgeEtAl-1993-Faw,,,1,0,JorgeEtAl
+0.073,0.34,1.07,0.006,0.007,,1.97,,,,,,430.0,40.0,89.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,-40.0,100.0,,,JorgeEtAl-1993-Fht,,,1,0,JorgeEtAl
+0.077,0.35,1.05,0.006,0.008,,2.28,,,,,,424.0,37.0,88.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,1.0,100.0,,,JorgeEtAl-1993-Gaw,,,1,0,JorgeEtAl
+0.077,0.35,1.05,0.006,0.008,,2.28,,,,,,424.0,37.0,88.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,-25.0,100.0,,,JorgeEtAl-1993-Ght,,,1,0,JorgeEtAl
+0.072,0.38,1.09,0.006,0.009,,2.8,,,,,,467.0,33.0,85.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,0.0,0.0,,,,,20.0,100.0,,,JorgeEtAl-1993-Haw,,,1,0,JorgeEtAl
+0.072,0.38,1.09,0.006,0.009,,2.8,,,,,,467.0,33.0,85.0,,,,,,,170.0,21.0,1.0,1.0,200,MMA,580.0,2.0,,,,,1.0,100.0,,,JorgeEtAl-1993-Hht,,,1,0,JorgeEtAl
