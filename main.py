@@ -10,7 +10,7 @@ import os
 
 # Import functions from files
 from preprocessing.data_import import data_import
-from preprocessing.missing_values import print_missing_values, change_inferior_signs, print_unique_values, process_hardness_column, process_nitrogen_column, print_missing_percentage
+from preprocessing.missing_values import print_missing_values, remove_inferior_signs, print_unique_values, process_hardness_column, process_nitrogen_column, print_missing_percentage
 
 # Import paths used to store data
 from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH, ORIGINAL_DATA_PATH
@@ -18,6 +18,9 @@ from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH, ORIGINAL_DATA_P
 
 @staticmethod
 def delete_if_exists(file_path: str):
+    """
+    Removes a file if it is found in the path
+    """
     if os.path.exists(file_path):
         os.remove(file_path)
 
@@ -52,7 +55,7 @@ if __name__ == "__main__":
     # 4 - Strategically remove inferior Signs
     #   Method Upper Bound
     #   It means our result represents the results for upper bound of concentration.
-    change_inferior_signs(CLEANED_CSV_PATH)
+    remove_inferior_signs(CLEANED_CSV_PATH)
 
     # 5 - We go back to our percentage now that the data is a bit more cleaned
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
