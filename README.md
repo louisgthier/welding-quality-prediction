@@ -1,18 +1,7 @@
 # welding-quality-prediction info
 
-# PREPROCESS DATA
-Ok les gars ce que j'ai fait pour le moment:
-- définition des variables path dans variables.py
-- Une fonction pour virer les doubles espaces et espaces de fin de ligne
-- Changer les N en NaN
-
-Ce qu'il y a en dessous c'est juste le .tex en markdown
-
-Pour tester l'import, lancez juste data_import.py ça génèrera un fichier dans /data/
-
 # A FAIRE POUR LE PROJET 
 Les objectifs du projet sont les suivants :
-
 
 -	Faire une analyse descriptive de la base de données pour bien la maîtriser et identifier les tâches de preprocessing pertinentes à réaliser. Toute action de preprocessing devra être explicitée, décrite et justifiée. Réfléchir aux unités de mesures des variables, à la nécessité de normaliser ou non les données, appliquer une ACP pour développer de l’intuition sur la problématique, etc. 
 
