@@ -2,7 +2,7 @@ Après avoir divisé les WeldID en différents groupes, nous décidons de faire 
 
 Ces 3 groupes sont : Evans (700 instances), EvansLetter (156 instances) et SvenGret (96 instances). 
 
-Groupe Evans : 
+Preprocessing du groupe Evans : 
 
 
 
