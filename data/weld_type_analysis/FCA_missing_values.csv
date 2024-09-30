@@ -24,7 +24,6 @@ Antimony concentration / parts per million by weight,19.54
 Current / A,0.0
 Voltage / V,0.0
 AC or DC,0.0
-Electrode positive or negative,0.0
 Heat input / kJ mm^{-1},0.0
 Interpass temperature / °C,0.0
 Type of weld,0.0
@@ -41,3 +40,5 @@ Hardness / kg mm^{-2},100.0
 Weld ID,0.0
 Nitrogen residual concentration,100.0
 Hardness scale,100.0
+Electrode Positive,0.0
+Electrode Negative,0.0

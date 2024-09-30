@@ -35,7 +35,7 @@ def data_import(file_path: str):
     """
 
     preprocess_text_file(FILE_NAME, FILE_MODIFIED_NAME)
-    
+
     # Importer le fichier CSV avec spécification des types
     basic_dataframe = pd.read_csv(FILE_MODIFIED_NAME,
                                 names=[

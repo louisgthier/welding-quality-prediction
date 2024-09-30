@@ -1,5 +1,11 @@
+# To handle path
+import os
+import sys
 # Data Treatement Lib
 import pandas as pd
+
+# Ajouter le répertoire racine du projet au sys.path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 # Import paths used to store data
 from paths import CLEANED_CSV_PATH, DATA_PATH

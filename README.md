@@ -1,6 +1,7 @@
 # welding-quality-prediction info
 
-# A FAIRE POUR LE PROJET 
+# A FAIRE POUR LE PROJET
+
 Les objectifs du projet sont les suivants :
 
 -	Faire une analyse descriptive de la base de données pour bien la maîtriser et identifier les tâches de preprocessing pertinentes à réaliser. Toute action de preprocessing devra être explicitée, décrite et justifiée. Réfléchir aux unités de mesures des variables, à la nécessité de normaliser ou non les données, appliquer une ACP pour développer de l’intuition sur la problématique, etc. 
@@ -28,7 +29,8 @@ L'objectif est d'évaluer la qualité des soudures en fonction de divers paramè
 
 # Valeurs manquantes et non typées
 
-Les valeurs manquantes sont traitées dans le fichier *missing_values.py*.  
+Les valeurs manquantes sont traitées dans le fichier *missing_values.py*.
+
 
 ## Section 1 de *missing_values.py* : calcul du nombre de valeurs manquantes dans chaque colonne
 
