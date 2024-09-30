@@ -70,7 +70,7 @@ Nous avons tenté de calculer le coefficient de corrélation entre chacune de ce
 
 De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'évaluation de la qualité des soudures et nous décidons de les supprimer du dataset. 
 
-La colonne '50% FATT' manque aussi 98% de valeurs, ce qui nous indique son inutilité.
+La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. 
 
 ## Valeurs mal formattées :
 
@@ -545,18 +545,13 @@ Outre les 13 % de valeurs manquantes, cette colonne contient uniquement deux cat
 
 Les valeurs manquantes semblent être des MAR (Missing At Random), liées au type de WeldID. En effet, les valeurs manquantes apparaissent pour des types de WeldID tels que p..-RR82011, RC81033, EvansLetter, et Birmingham. Nous pouvons imputer ces valeurs de manière fiable : lorsque la polarité de l'électrode est explicitement indiquée par un signe + ou -, il s'agit très probablement du mode DC, puisque le mode AC (courant alternatif) n'a pas de polarité fixe. Ainsi, lorsqu'une polarité d'électrode est spécifiée, nous imputons le mode DC.
 
-Cependant, il arrive parfois que des valeurs soient également manquantes dans la colonne indiquant la polarité de l'électrode. Dans ces cas, nous examinons les autres colonnes. Nous constatons que les dernières valeurs manquantes dans la colonne AC/DC sont présentes lorsque le type de soudure est MMA (Manual Metal Arc), un procédé utilisant un arc électrique qui ne peut être maintenu en mode AC, car cela entraînerait la rupture de l'arc. Par conséquent, nous remplaçons les valeurs manquantes par 1 (ie un mode DC).
+Cependant, il arrive parfois que des valeurs soient également manquantes dans la colonne indiquant la polarité de l'électrode. Dans ces cas, nous examinons les autres colonnes. Nous constatons que les dernières valeurs manquantes dans la colonne AC/DC apparaissent principalement lorsque le type de soudure est MMA (Manual Metal Arc), un procédé qui est souvent plus stable et efficace en mode DC, surtout dans des conditions exigeant une grande stabilité de l'arc. Bien que le mode AC soit parfois utilisé en MMA, DC est généralement préféré pour éviter les problèmes de stabilité et améliorer la performance du soudage. Il parait donc plus probable que les valeurs manquantes soient des valeurs DC. De plus, 97 % des valeurs de la colonne sont déjà en mode DC. L'imputation des valeurs manquantes en 1 (ie mode DC) est donc en accord avec la distribution générale des données.
 
 ### Electrode positive or negative
 
 Nous avons identifié quatre types de valeurs possibles dans cette colonne : +, -, ou 0, et les valeurs manquantes. Les 0 sont liés à l'utilisation du mode AC. 
 
-Nous devons transformer les valeurs présentes afin qu'elles soient interprétables par les algorithmes de ML. Plutôt que d'effectuer un one-hot encoding en créant trois colonnes binaires distinctes, ce qui pourrait entraîner de la multicollinéarité et poser des problèmes pour certains algorithmes de ML, nous choisissons de diviser la colonne en seulement deux colonnes binaires : la première indiquera si l'électrode est positive (+), et la seconde si elle est négative (-). Si la valeur est 0, les deux colonnes afficheront 0.
-
-Les valeurs manquantes sont dès lors représentées par une valeur 0 à la colonne 'Electrode positive' et une valeur 0 à la colonne 'Electrode negative'.
-
-
-
+Nous devons transformer les valeurs présentes afin qu'elles soient interprétables par les algorithmes de ML. Plutôt que d'effectuer un one-hot encoding en créant trois colonnes binaires distinctes, ce qui pourrait entraîner de la multicollinéarité et poser des problèmes pour certains algorithmes de ML, nous choisissons de diviser la colonne en seulement deux colonnes binaires : la première indiquera si l'électrode est positive (+), et la seconde si elle est négative (-). Si la valeur est 0 (par exemple dû à un mode AC) ou s'il y a une valeur manquante, les deux colonnes afficheront 0.
 
 ## Variables quantitatives
 
