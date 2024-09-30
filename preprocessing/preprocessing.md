@@ -68,9 +68,10 @@ Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *P
 
 Nous avons tenté de calculer le coefficient de corrélation entre chacune de ces colonnes et celles relatives à la qualité des soudures, mais il est extrêmement rare de disposer d'assez de données simultanément présentes dans deux colonnes pour effectuer ce calcul. Lors des quelques cas où cela est possible, l'une des colonnes présente généralement une variance nulle, ce qui rend la corrélation impossible ou nulle.
 
-De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'évaluation de la qualité des soudures et nous décidons de les supprimer du dataset. 
+De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'évaluation de la qualité des soudures et nous décidons de les supprimer du dataset. De même pour les colonnes *Tin concentration / parts per million by weight*, *Arsenic concentration / parts per million by weight*, *Antimony concentration / parts per million by weight*, *Cobalt concentration / weight %*, *Tungsten concentration / weight %*. La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. 
 
-La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. 
+Ensuite, nous supprimons les lignes contenant des missing values conjointement à toutes les colonnes qui indiquent la qualité de la soudure (Yield strength / MPa,	Ultimate tensile strength / MPa,	Elongation / %,	Reduction of Area / %,	Charpy temperature / Â°C,	Charpy impact toughness / J).  Nous remarquons qu'il y a des valeurs manquantes soit dans les deux dernières colonnes conjointement, soit dans les quatre premières colonnes conjointement, et qu'à peu près toutes les lignes contiennent au moins une valeur manquante. Supprimer les lignes qui contiennent au moins une valeur manquante ferait donc perdre une grande quantité d'information. Pour gérer les dernières valeurs manquantes de ces six colonnes indiquant la qualité de la soudure, nous pensons qu'il est préférable d'imputer des valeurs. 
+
 
 ## Valeurs mal formattées :
 
@@ -555,6 +556,8 @@ Nous devons transformer les valeurs présentes afin qu'elles soient interprétab
 
 ## Variables quantitatives
 
+
+
 ### Ferrite with carbide aggregate / %
 
 ### Martensite / %
@@ -580,6 +583,12 @@ Nous devons transformer les valeurs présentes afin qu'elles soient interprétab
 ### Ultimate tensile strength / MPa
 
 ### Yield strength / MPa
+
+
+
+
+
+
 
 ### Post weld heat treatment time / hours
 
