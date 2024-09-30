@@ -93,7 +93,7 @@ def drop_unnecessary_columns(file_path: str) -> pd.DataFrame:
         df = df.drop(columns=columns_to_drop)
     except Exception as e:
         print(f"Erreur lors de la suppression des colonnes : {e}")
-    
+
     df.to_csv(file_path, index=False)
 
 ## Section 3
@@ -283,6 +283,3 @@ if __name__ == "__main__":
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
     process_ac_dc_column(CLEANED_CSV_PATH)
     process_electrode_column(CLEANED_CSV_PATH)
-
-
-    

@@ -3,8 +3,8 @@ import pandas as pd
 
 # Import paths used to store data
 from paths import CLEANED_CSV_PATH, DATA_PATH
-from missing_values import print_missing_percentage
-from data_fill import fill_with_mean_strategy, update_csv
+from preprocessing.missing_values import print_missing_percentage
+from preprocessing.data_fill import fill_with_mean_strategy, update_csv
 
 WELD_TYPE_PATH = DATA_PATH + "weld_type_analysis/"
 WELD_TYPES: list[str] = ['MMA',

@@ -9,8 +9,8 @@ welddb_cleaned.csv is the cleaned dataframe
 import os
 
 # Import functions from files
-from data_import import data_import
-from missing_values import print_missing_values, change_inferior_signs, print_unique_values, process_hardness_column, process_nitrogen_column, print_missing_percentage
+from preprocessing.data_import import data_import
+from preprocessing.missing_values import print_missing_values, change_inferior_signs, print_unique_values, process_hardness_column, process_nitrogen_column, print_missing_percentage
 
 # Import paths used to store data
 from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH, ORIGINAL_DATA_PATH

@@ -35,55 +35,7 @@ def data_import(file_path: str):
     """
 
     preprocess_text_file(FILE_NAME, FILE_MODIFIED_NAME)
-
-    # Définir les types de données des colonnes
-    dtype_dict = {
-        'Carbon concentration / weight %': 'float64',
-        'Silicon concentration / weight %': 'float64',
-        'Manganese concentration / weight %': 'float64',
-        'Sulphur concentration / weight %': 'float64',
-        'Phosphorus concentration / weight %': 'float64',
-        'Nickel concentration / weight %': 'float64',
-        'Chromium concentration / weight %': 'float64',
-        'Molybdenum concentration / weight %': 'float64',
-        'Vanadium concentration / weight %': 'float64',
-        'Copper concentration / weight %': 'float64',
-        'Cobalt concentration / weight %': 'float64',
-        'Tungsten concentration / weight %': 'float64',
-        'Oxygen concentration / parts per million by weight': 'float64',
-        'Titanium concentration / parts per million by weight': 'float64',
-        'Nitrogen concentration / parts per million by weight': 'float64',
-        'Aluminium concentration / parts per million by weight': 'float64',
-        'Boron concentration / parts per million by weight': 'float64',
-        'Niobium concentration / parts per million by weight': 'float64',
-        'Tin concentration / parts per million by weight': 'float64',
-        'Arsenic concentration / parts per million by weight': 'float64',
-        'Antimony concentration / parts per million by weight': 'float64',
-        'Current / A': 'float64',
-        'Voltage / V': 'float64',
-        'AC or DC': 'str',  # AC or DC, we will one-hot encode it later
-        'Electrode positive or negative': 'str',
-        'Heat input / kJ mm^{-1}': 'float64',
-        'Interpass temperature / °C': 'float64',
-        'Type of weld': 'str',  # Catégorisation du type de soudure
-        'Post weld heat treatment temperature / °C': 'float64',
-        'Post weld heat treatment time / hours': 'float64',
-        'Yield strength / MPa': 'float64',
-        'Ultimate tensile strength / MPa': 'float64',
-        'Elongation / %': 'float64',
-        'Reduction of Area / %': 'float64',
-        'Charpy temperature / °C': 'float64',
-        'Charpy impact toughness / J': 'float64',
-        'Hardness / kg mm^{-2}': 'float64',
-        '50% FATT': 'float64',
-        'Primary ferrite in microstructure / %': 'float64',
-        'Ferrite with second phase / %': 'float64',
-        'Acicular ferrite / %': 'float64',
-        'Martensite / %': 'float64',
-        'Ferrite with carbide aggregate / %': 'float64',
-        'Weld ID': 'str'  # Identifiant
-    }
-
+    
     # Importer le fichier CSV avec spécification des types
     basic_dataframe = pd.read_csv(FILE_MODIFIED_NAME,
                                 names=[

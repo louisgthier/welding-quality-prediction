@@ -2,12 +2,11 @@
 Handles outliers values
 """
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
 
 # Import paths from variables.py
-from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH
+# from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH
 
 def plot_outliers(file_path: str, column_name: str):
     """
@@ -37,5 +36,3 @@ def plot_outliers(file_path: str, column_name: str):
 
     # Afficher le plot
     plt.show()
-
-plot_outliers(df, 'Hardness / kg mm^{-2}')
