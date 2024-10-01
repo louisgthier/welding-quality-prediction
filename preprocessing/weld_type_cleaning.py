@@ -4,13 +4,13 @@ import sys
 # Data Treatement Lib
 import pandas as pd
 
-# Ajouter le répertoire racine du projet au sys.path
-sys.path.append(os.path.dirname(os.path.dirname(__file__)))
-
 # Import paths used to store data
 from paths import CLEANED_CSV_PATH, DATA_PATH
 from preprocessing.missing_values import print_missing_percentage
 from preprocessing.data_fill import fill_with_mean_strategy, update_csv
+
+# Ajouter le répertoire racine du projet au sys.path
+sys.path.append(os.path.dirname(os.path.dirname(__file__)))
 
 WELD_TYPE_PATH = DATA_PATH + "weld_type_analysis/"
 WELD_TYPES: list[str] = ['MMA',

@@ -1,2 +1,3 @@
 /data/welddb_no_trailing_space.data
 __pycache__/
+/data/weld_type_analysis/*.csv
