@@ -95,7 +95,7 @@ if __name__ == "__main__":
     # Remove outliers?
     ######
 
-    # 9 - Standardization
+    # 9 - Standardization in standardisation.py
     ######
     #
     ######
