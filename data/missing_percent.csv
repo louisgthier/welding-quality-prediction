@@ -25,9 +25,9 @@ Voltage / V,15.01
 AC or DC,13.01
 Electrode positive or negative,9.44
 Heat input / kJ mm^{-1},0.0
-Interpass temperature / °C,0.0
+Interpass temperature,0.0
 Type of weld,0.0
-Post weld heat treatment temperature / °C,0.79
+Post weld heat treatment temperature,0.79
 Post weld heat treatment time / hours,0.79
 Yield strength / MPa,52.78
 Ultimate tensile strength / MPa,55.33

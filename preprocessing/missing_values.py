@@ -332,6 +332,31 @@ def impute_with_median(file_path: str, column_name: str):
     else:
         print(f"Column '{column_name}' does not exist in the data.")
 
+def process_interpass_temperature(file_path: str):
+    """
+    Traite la colonne 'Interpass temperature' pour remplacer les valeurs avec un tiret (par exemple, '150-200')
+    par la moyenne des deux bornes.
+    """
+    df = pd.read_csv(file_path)
+    
+    column_name = 'Interpass temperature'
+    
+    # Fonction pour calculer la moyenne si la valeur contient un tiret
+    def calculate_average(val):
+        if isinstance(val, str) and '-' in val:
+            # Séparer les valeurs avant et après le tiret
+            parts = val.split('-')
+            lower = float(parts[0].strip())  # Supprimer les espaces avant la conversion en float
+            upper = float(parts[1].strip())
+            # Retourner la moyenne des deux bornes
+            return (lower + upper) / 2
+        return val
+
+    df[column_name] = df[column_name].apply(calculate_average)
+    
+    df.to_csv(file_path, index=False)
+    print(f"Les valeurs avec un tiret dans la colonne '{column_name}' ont été remplacées par la moyenne des deux bornes.")
+
 def process_electrode_column(file_path: str):
     """
     Traite la colonne Electrode positive or negative, en la divisant en deux colonnes de valeurs binaires -Electrode positive- et -Electrode negative-
@@ -420,6 +445,16 @@ def delete_columns(file_path: str):
     df.to_csv(file_path, index=False)
     print(f"Les colonnes {columns_to_drop} ont été supprimées du fichier.")
 
+def display_column_value_types(file_path: str):
+    """
+    Affiche les types de valeurs pour chaque colonne dans un fichier CSV.
+    """
+    df = pd.read_csv(file_path)
+
+    for column in df.columns:
+        unique_values = df[column].apply(type).unique()
+        print(f"Colonne '{column}' contient les types de données suivants : {unique_values}")
+
 if __name__ == "__main__":
     df = pd.read_csv(CLEANED_CSV_PATH)
     print(df.columns)
@@ -434,20 +469,18 @@ if __name__ == "__main__":
     # process_hardness_column(CLEANED_CSV_PATH)
     process_ac_dc_column(CLEANED_CSV_PATH)
     process_electrode_column(CLEANED_CSV_PATH)
+    process_interpass_temperature(CLEANED_CSV_PATH)
+    impute_with_median(CLEANED_CSV_PATH, 'Voltage / V')
+    impute_with_median(CLEANED_CSV_PATH, 'Current / A')
+    impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment temperature')
+    impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment time / hours')
+    impute_with_median(CLEANED_CSV_PATH, 'Interpass temperature')
     one_hot_encode_weld_type(CLEANED_CSV_PATH)
     one_hot_encode_weld_ids(CLEANED_CSV_PATH)
     delete_columns(CLEANED_CSV_PATH)
-    impute_with_median(CLEANED_CSV_PATH, 'Voltage / V')
-    impute_with_median(CLEANED_CSV_PATH, 'Current / A')
-    impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment temperature / Â°C')
-    impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment time / hours')
     target_separations(CLEANED_CSV_PATH, QUALITY_CSV_PATH, CHARPY_CSV_PATH)
+    display_column_value_types(CLEANED_CSV_PATH)
     print_missing_values(CLEANED_CSV_PATH)
-    print_missing_values(CHARPY_CSV_PATH)
-    print_missing_values(QUALITY_CSV_PATH)
-
-
-
 
     # impute_charpy_impact_regression(CLEANED_CSV_PATH)
     # impute_reduction_of_area_regression(CLEANED_CSV_PATH)
