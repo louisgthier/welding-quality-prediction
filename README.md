@@ -42,8 +42,7 @@ Pour éviter de trop renforcer les hyper-corrélations, nous ajouterons du bruit
 
 ### *missing_values.py* :
 
-Tout d'abord, nous cherchons à comprendre les valeurs des colonnes.
-Pour cela, nous imprimons à plusieurs reprises les pourcentages de valeurs manquantes de chaque colonne.
+Nous imprimons premièrement les pourcentages de valeurs manquantes de chaque colonne.
 
 Voici ce que cela donne :
 
@@ -95,21 +94,21 @@ Voici ce que cela donne :
 | Ferrite with carbide aggregate / %                             | 94.61                             |
 | Weld ID                                                        | 0.00                              |
 
+### Suppression de colonnes inexploitables
 
-Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe.
+Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe. La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. 
 
-Nous avons tenté de calculer le coefficient de corrélation entre chacune de ces colonnes et celles relatives à la qualité des soudures, mais il est extrêmement rare de disposer d'assez de données simultanément présentes dans deux colonnes pour effectuer ce calcul. Lors des quelques cas où cela est possible, l'une des colonnes présente généralement une variance nulle, ce qui rend la corrélation impossible ou nulle.
+De même pour les colonnes '' qui contienne respectivement .. % de valeurs manquantes, nous estimons qu'elles sont inexploitables du fait du manque de données. 
 
-De ce fait, nous concluons que ces cinq colonnes ne sont pas pertinentes pour l'évaluation de la qualité des soudures et nous décidons de les supprimer du dataset. 
+### Suppression de lignes inexploitables
 
-La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. 
+Les variables que l'on cherche à prédire sont celles liées à la qualité de la soudure. Autrement dit, après suppression des colonnes de trop grand nombre de valeurs manquantes, les variables qui nous intéressent sont : 'Yield strength / MPa',	'Ultimate tensile strength / MPa',	'Elongation / %',	'Reduction of Area / %'. 
 
-## Valeurs mal formattées :
+Afin de favoriser la précision du modèle quant à la prédiction de ces variables d'intérêt, il est préférable de ne pas imputer de valeurs pour les valeurs manquantes mais plutôt de les supprimer. Nous supprimons donc toutes les lignes qui contiennent au moins une valeur manquante dans ces quatre colonnes. 
 
-Le dataset contenait déjà des mauvaises valeurs (doubles espaces, trailing space) avant même l'import.
-Nous imprimons les différentes valeurs de chaque colonne afin de savoir à quelle catégorie appartiennent chacun des colonnes.
-Nous trouvons que dans certaines colonnes qui semblent être des variables quantitatives, on trouve des valeurs qualitatives qui semblent mal formattées.
+### Colonnes quantitatives mal formattées :
 
+* Nous constatons que la concentration en Nitrogène
 Par exemple, pour la concentration en Nitrogène :
 
 ```
@@ -131,17 +130,11 @@ Column 'Nitrogen concentration / parts per million by weight' has 162 unique val
  '416' '398' '394']
 ```
 
-Nous devions faire des recherches sur les significations de "tot" et "res", qui font penser à "total" et "résidus", des termes chimiques correspondants à un résultat de réaction chimique.
-
-"nd" signifierait un manque de données, "non-détecté" (en anglais *non detected*).
-
-**Solution** : les valeurs avants 'tot' sont gardées dans la colonne et une nouvelle colonne est créée pour les résidus. Cependant, cette colonne ne contient pas assez de valeurs par rapport au dataset et sera sûrement inutile. Nous la retirons de notre analyse principale.
-
-Nous la gardons de côté afin de peut-être observer une coincidence avec les résultats finaux (peut-être qu'une réaction avec/sans résidus aura plus de chances de produire un résultat de qualité). Nous gardons cette variable afin d'en faire une colonne booléenne : La concentration a-t-elle des résidus ? Oui/Non.
+Nous devions faire des recherches sur les significations de "tot" et "res", qui font penser à "total" et "résidus", des termes chimiques correspondants à un résultat de réaction chimique. "nd" signifierait un manque de données, "non-détecté" (en anglais *non detected*). Les valeurs avant 'tot' sont gardées dans la colonne et une nouvelle colonne est créée pour les résidus. Cependant, cette colonne ne contient pas assez de valeurs par rapport au dataset et sera sûrement inutile. Nous la retirons de notre analyse principale. Nous la gardons de côté afin de peut-être observer une coincidence avec les résultats finaux (peut-être qu'une réaction avec/sans résidus aura plus de chances de produire un résultat de qualité). Nous gardons cette variable afin d'en faire une colonne booléenne : La concentration a-t-elle des résidus ? Oui/Non.
 
 
 
-Nous avons aussi le cas de la colonne Dureté (Hardness) :
+* Nous avons aussi le cas de la colonne Dureté (Hardness) :
 
 ```
 Column 'Hardness / kg mm^{-2}' has 97 unique values:
@@ -158,22 +151,11 @@ Column 'Hardness / kg mm^{-2}' has 97 unique values:
  '269Hv5' '233Hv5' '226Hv5' '222' '205' '253' '219' '182' '199' '240'
  '244' '247' '233' '212']
  ```
- 
 
 Après plusieurs recherches, nous avons découvert que Hv signifie la force effectuée sur l'objet pour obtenir un tel résultat. Comme cela est une statistique, nous la mettons aussi de côté et trions les données.
 
 
-Aussi, nous retrouvons souvent le signe "<" devant de nombreuses variables de concentrations, par exemple :
-
-----------------------------------------
-Column 'Tin concentration / parts per million by weight' has 21 unique values:
-[nan '60' '30' '50' '40' '0' '1000' '150' '<100' '100' '200' '90' '70'
- '10' '11' '20' '140' '0.009' '0.008' '<10' '0.002']
-----------------------------------------
-Column 'Arsenic concentration / parts per million by weight' has 20 unique values:
-[nan '10' '40' '30' '50' '70' '<100' '100' '200' '60' '150' '160' '0.01'
- '0.03' '0.008' '0.016' '0.034' '0.032' '0.31' '0.003']
-----------------------------------------
+* Nous retrouvons souvent le signe "<" devant de nombreuses variables de concentrations, par exemple dans les colonnes 'Tin concentration / parts per million by weight' et 'Arsenic concentration / parts per million by weight'.
 
 Nous avons établi trois approches possibles concernant ces valeurs :
 
