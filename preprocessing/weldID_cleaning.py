@@ -2,7 +2,7 @@ import pandas as pd
 
 from paths import CLEANED_CSV_PATH, DATA_PATH
 from missing_values import print_missing_percentage
-from data_cleaning import fill_with_mean_strategy, update_csv
+from data_fill import fill_with_mean_strategy, update_csv
 
 WELD_ID_PATH = DATA_PATH + "weldID_analysis/"
 
@@ -40,4 +40,4 @@ if __name__ == "__main__":
         group_df = df[df['Group'] == welding_type]
         print(f'nombre de instances pour le groupe {welding_type} : ', len(group_df))
         SPEC_WELD_ID_PATH = WELD_ID_PATH + welding_type + '_group.csv'
-        # update_csv(fill_with_mean_strategy(SPEC_WELD_ID_PATH), SPEC_WELD_ID_PATH)
+        update_csv(fill_with_mean_strategy(SPEC_WELD_ID_PATH), SPEC_WELD_ID_PATH)

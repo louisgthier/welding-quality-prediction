@@ -7,15 +7,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 # Import paths from variables.py
-from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH
+from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH, CHARPY_CSV_PATH, QUALITY_CSV_PATH
 
 def _get_dataframe(file_path: str):
     """
     returns the dataframe of the file
     """
     return pd.read_csv(file_path)
-
-## Section 1
 
 @staticmethod
 def print_missing_values(file_path: str):
@@ -66,15 +64,43 @@ def print_missing_percentage(file_path: str, destination_path: str):
 
     nan_percentage_column.to_csv(destination_path)
 
-## Section 2
+@staticmethod
+def print_column_types(filepath: str):
+    """
+    Lit un fichier CSV et affiche les types de données de chaque colonne.
+    :param filepath: Chemin du fichier CSV.
+    """
+    try:
+        # Lire le fichier CSV dans un DataFrame
+        df = pd.read_csv(filepath)
+        
+        # Afficher les types de données de chaque colonne
+        print("Types de données des colonnes :")
+        print(df.dtypes)
+
+    except Exception as e:
+        print(f"Une erreur s'est produite lors de la lecture du fichier : {e}")
+    
+    
+@staticmethod
+def replace_missing_concentration_with_zero(filepath: str):
+    """
+    Remplace les valeurs manquantes par 0 dans toutes les colonnes contenant le mot 'concentration'.
+    """
+    df = pd.read_csv(filepath)
+    
+    concentration_columns = [col for col in df.columns if 'concentration' in col] # sélectionne les colonnes qui ont 'concentration' dans leur nom
+
+    df[concentration_columns] = df[concentration_columns].fillna(0) # remplace les valeurs manquantes par 0 dans ces colonnes
+
+    df.to_csv(filepath, index=False)
+    print(f"Les valeurs manquantes dans les colonnes 'concentration' ont été remplacées par 0.")
+    
 
 @staticmethod
 def drop_unnecessary_columns(file_path: str) -> pd.DataFrame:
     """
-    Supprime les colonnes non nécessaires d'un fichier CSV et retourne le DataFrame nettoyé.
-    
-    :param file_path: Le chemin du fichier CSV à nettoyer.
-    :return: Le DataFrame nettoyé sans les colonnes spécifiées.
+    Supprime les colonnes jugées non nécessaires.
     """
 
     # Liste des colonnes à supprimer
@@ -84,19 +110,37 @@ def drop_unnecessary_columns(file_path: str) -> pd.DataFrame:
         'Acicular ferrite / %',
         'Martensite / %',
         'Ferrite with carbide aggregate / %', 
-        '50% FATT']
+        '50% FATT', 
+        'Hardness / kg mm^{-2}'
+        ]
 
     df = pd.read_csv(file_path)
 
-    try:
-        # Suppression des colonnes
-        df = df.drop(columns=columns_to_drop)
-    except Exception as e:
-        print(f"Erreur lors de la suppression des colonnes : {e}")
+    df = df.drop(columns=columns_to_drop)
 
     df.to_csv(file_path, index=False)
 
-## Section 3
+# @staticmethod
+# def remove_rows_with_missing_quality_values(file_path: str):
+#     """
+#     Supprime les lignes contenant au moins une valeur manquante dans les colonnes liées à la qualité de la soudure :
+#     'Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Elongation / %', 'Reduction of Area / %'.
+#     """
+#     df = pd.read_csv(file_path)
+
+#     quality_columns = ['Yield strength / MPa', 
+#                         'Ultimate tensile strength / MPa', 
+#                         'Elongation / %', 
+#                         'Reduction of Area / %']
+
+#     df = df.dropna(subset=quality_columns)
+
+#     df.to_csv(file_path, index=False)
+
+#     print("Les lignes contenant des valeurs manquantes dans les colonnes d'intérêt ont été supprimées.")
+
+#     df.to_csv(file_path, index=False)
+
 
 @staticmethod
 def remove_inferior_signs(file_path: str) -> pd.DataFrame:
@@ -106,15 +150,8 @@ def remove_inferior_signs(file_path: str) -> pd.DataFrame:
     :param file_path: Le chemin du fichier CSV à nettoyer.
     :return: Le DataFrame avec les signes "<" supprimés des valeurs.
     """
-
     df = pd.read_csv(file_path)
-
-    try:
-        # Appliquer la transformation à tout le DataFrame
-        df = df.applymap(lambda value: re.sub(r'<(\d+\.?\d*)', r'\1', value) if isinstance(value, str) else value)
-    except Exception as e:
-        print(f"Erreur lors de la suppression des signes '<' : {e}")
-
+    df = df.applymap(lambda value: re.sub(r'<(\d+\.?\d*)', r'\1', value) if isinstance(value, str) else value)
     df.to_csv(file_path, index=False)
 
 
@@ -123,22 +160,17 @@ def print_correlation_matrix(file_path: str):
     """
     Prints the correlation matrix
     """
-
-    # Load the CSV file into a DataFrame
     df = pd.read_csv(file_path)
-
     correlation_matrix = df.corr(method='pearson')
-
     print(correlation_matrix)
+
 
 @staticmethod
 def print_unique_values(file_path: str):
     """
     Prints the unique values of each column of a df
     """
-
     df = _get_dataframe(file_path)
-
     for column in df.columns:
         unique_values = df[column].unique()
         print(f"Column '{column}' has {len(unique_values)} unique values:")
@@ -184,6 +216,8 @@ def process_nitrogen_column(file_path: str):
     # Convertir les colonnes en types numériques (ignorer les erreurs pour les valeurs non numériques)
     df[column_name] = pd.to_numeric(df[column_name], errors='coerce')
     df['Nitrogen residual concentration'] = pd.to_numeric(df['Nitrogen residual concentration'], errors='coerce')
+
+    df.drop(columns=['Nitrogen residual concentration'], inplace=True)
 
     df.to_csv(file_path, index = False)
 
@@ -236,23 +270,53 @@ def process_ac_dc_column(file_path: str):
     ac_dc_column = 'AC or DC'
     electrode_column = 'Electrode positive or negative'
 
-    # Binarisation des valeurs
-    df[ac_dc_column] = df[ac_dc_column].replace({'AC': 0, 'DC': 1})
+    df[ac_dc_column] = df[ac_dc_column].replace({'AC': 0, 'DC': 1}) # on remplace tous les DC par 1 et les AC par 0
 
-    # Identification des valeurs manquantes
-    missing_ac_dc = df[ac_dc_column].isna()
+    missing_ac_dc = df[ac_dc_column].isna() # on récupère les valeurs manquantes
 
-    # Remplacement de certaines valeurs manquantes (Si le signe de l'électrode est '+' ou '-', on impute la valeur 1 (DC))
-    df.loc[missing_ac_dc & df[electrode_column].isin(['+', '-']), ac_dc_column] = 1
+    df.loc[missing_ac_dc & df[electrode_column].isin(['+', '-']), ac_dc_column] = 1 # on remplace les valeurs manquantes par 1 si la polarité de l'électrode est spécifiée
 
-    proportion_dc = df[ac_dc_column].value_counts(normalize=True).get(1, 0)
-
+    proportion_dc = df[ac_dc_column].value_counts(normalize=True).get(1, 0) 
     print('proportion de DC', proportion_dc)
     if proportion_dc > 0.9:
-        # Imputer les valeurs manquantes par DC si la proportion de DC est supérieure à 0.9 dans le dataset
         df[ac_dc_column].fillna(1, inplace=True)
 
     df.to_csv(file_path, index=False)
+
+def drop_rows(file_path: str):    
+    df = pd.read_csv(file_path)
+    columns_to_check = [
+        'Yield strength / MPa', 
+        'Ultimate tensile strength / MPa', 
+        'Elongation / %', 
+        'Reduction of Area / %', 
+    ]
+
+    df = df.dropna(subset=columns_to_check, how='any')
+    df.to_csv(file_path, index=False)
+
+from sklearn.preprocessing import OneHotEncoder
+def one_hot_encode_weld_type(file_path: str):
+    df = pd.read_csv(file_path)
+    
+    column_to_encode = 'Type of weld'
+    
+    if column_to_encode in df.columns:
+        encoder = OneHotEncoder(sparse=False)
+
+        encoded_columns = encoder.fit_transform(df[[column_to_encode]])
+
+        encoded_column_names = encoder.get_feature_names_out([column_to_encode])
+        
+        encoded_df = pd.DataFrame(encoded_columns, columns=encoded_column_names)
+        
+        df = pd.concat([df, encoded_df], axis=1)
+        
+        df.drop(columns=[column_to_encode], inplace=True)
+        
+        df.to_csv(file_path, index=False)
+    else:
+        print(f"La colonne '{column_to_encode}' n'existe pas dans le fichier.")
 
 def process_electrode_column(file_path: str):
     """
@@ -263,23 +327,113 @@ def process_electrode_column(file_path: str):
 
     electrode_column = 'Electrode positive or negative'
 
-    # Créer les deux nouvelles colonnes de valeurs binaires 'Electrode Positive' et 'Electrode Negative'
     df['Electrode Positive'] = df[electrode_column].apply(lambda x: 1 if x == '+' else 0)
     df['Electrode Negative'] = df[electrode_column].apply(lambda x: 1 if x == '-' else 0)
 
     df.drop(columns=[electrode_column], inplace=True)
 
-    # Sauvegarder les modifications dans le fichier CSV
     df.to_csv(file_path, index=False)
 
-# Run the analysis
+def one_hot_encode_weld_ids(file_path: str):
+    """
+    Cette fonction extrait les groupes à partir de la colonne 'Weld ID', effectue le one-hot encoding
+    uniquement sur la colonne 'Group', et enregistre le fichier résultant dans le chemin donné.
+    """
+    
+    df = pd.read_csv(file_path)
+
+    def extract_group(weld_id: str) -> str:
+        if weld_id.startswith("EvansLetter"):
+            return "EvansLetter"
+        
+        if weld_id.startswith("p") and "-RR82011" in weld_id:
+            return "p-RR82011"
+        
+        return weld_id.split('-')[0]
+
+    df['Group'] = df['Weld ID'].apply(extract_group)
+
+    one_hot_encoded_df = pd.get_dummies(df, columns=['Group'], prefix='Group')
+
+    group_columns = [col for col in one_hot_encoded_df.columns if col.startswith('Group_')]
+    one_hot_encoded_df[group_columns] = one_hot_encoded_df[group_columns].astype(int)
+
+    print('One-hot encoding effectué avec succès.')
+    one_hot_encoded_df.drop(columns=['Weld ID'], inplace=True)
+
+    one_hot_encoded_df.to_csv(file_path, index=False)
+
+
+def target_separations(file_path: str, output_path1: str, output_path2: str):
+    """
+    Crée deux CSV différents :
+    - Le premier CSV est sans les colonnes 'Charpy temperature' et 'Charpy impact toughness / J',
+      et supprime les lignes contenant des valeurs manquantes dans ces deux colonnes.
+    - Le deuxième CSV est sans les colonnes 'Yield strength / MPa', 'Ultimate tensile strength / MPa',
+      'Elongation / %' et 'Reduction of Area / %', et supprime les lignes avec des valeurs manquantes
+      dans au moins une de ces colonnes.
+    """
+    df = pd.read_csv(file_path)
+
+    # Premier csv : on enlève les colonnes liées au test Charpy, et on nettoie les 4 colonnes liées à la qualité de la soudure
+    columns_to_remove_1 = ['Charpy temperature', 'Charpy impact toughness / J']
+    quality_columns = ['Yield strength / MPa', 
+                       'Ultimate tensile strength / MPa', 
+                       'Elongation / %', 
+                       'Reduction of Area / %']
+    df1 = df.copy()
+    df1 = df1.drop(columns=[col for col in columns_to_remove_1 if col in df.columns])
+    df1 = df1.dropna(subset=quality_columns)
+    df1.to_csv(output_path1, index=False)
+    print(f"Premier CSV créé : {output_path1} (sans les colonnes {columns_to_remove_1} et sans valeurs manquantes dans les colonnes de qualité)")
+
+    # Deuxième csv : on enlève les colonnes liées à la qualité de la soudure, et on nettoie les colonnes liées au test Charpy
+    columns_to_remove_2 = quality_columns
+    df2 = df.copy()
+    df2 = df2.drop(columns=[col for col in columns_to_remove_2 if col in df.columns])
+    charpy_columns = ['Charpy temperature', 'Charpy impact toughness / J']
+    df2 = df2.dropna(subset=charpy_columns)
+    df2.to_csv(output_path2, index=False)
+    print(f"Deuxième CSV créé : {output_path2} (sans les colonnes {columns_to_remove_2} et sans valeurs manquantes dans les colonnes de test Charpy)")
+
+def delete_columns(file_path: str):
+    """
+    Supprime les colonnes 'Group_Wolst' et 'Type of weld_ShMA' du fichier CSV, pour éviter les multicorrélations dues aux one-hot encoding.
+    """
+    df = pd.read_csv(file_path)
+    columns_to_drop = ['Group_Wolst', 'Type of weld_ShMA']
+    df = df.drop(columns=columns_to_drop)
+    df.to_csv(file_path, index=False)
+    print(f"Les colonnes {columns_to_drop} ont été supprimées du fichier.")
+
 if __name__ == "__main__":
+    df = pd.read_csv(CLEANED_CSV_PATH)
+    print(df.columns)
     print_missing_values(CLEANED_CSV_PATH)
+    print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
     drop_unnecessary_columns(CLEANED_CSV_PATH)
+    # drop_rows(CLEANED_CSV_PATH)
+    replace_missing_concentration_with_zero(CLEANED_CSV_PATH)
     remove_inferior_signs(CLEANED_CSV_PATH)
     print_unique_values(CLEANED_CSV_PATH)
     process_nitrogen_column(CLEANED_CSV_PATH)
-    process_hardness_column(CLEANED_CSV_PATH)
-    print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
+    # process_hardness_column(CLEANED_CSV_PATH)
     process_ac_dc_column(CLEANED_CSV_PATH)
     process_electrode_column(CLEANED_CSV_PATH)
+    one_hot_encode_weld_type(CLEANED_CSV_PATH)
+    one_hot_encode_weld_ids(CLEANED_CSV_PATH)
+    delete_columns(CLEANED_CSV_PATH)
+    target_separations(CLEANED_CSV_PATH, QUALITY_CSV_PATH, CHARPY_CSV_PATH)
+    print_missing_values(CLEANED_CSV_PATH)
+    print_missing_values(CHARPY_CSV_PATH)
+    print_missing_values(QUALITY_CSV_PATH)
+
+
+
+
+    # impute_charpy_impact_regression(CLEANED_CSV_PATH)
+    # impute_reduction_of_area_regression(CLEANED_CSV_PATH)
+    # impute_charpy_temperature_knn(CLEANED_CSV_PATH, n_neighbors=5, missing_threshold=0.2)
+
+
+
