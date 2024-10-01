@@ -1,7 +1,12 @@
+# Import libraries
 import pandas as pd
 from sklearn.preprocessing import StandardScaler, MinMaxScaler
 
 def standardize_column(file_path: str, column_name: str, strategy: str) -> pd.DataFrame:
+    """
+    This function is used to standardize a column in a .csv located at a file_path
+    The variable strategy defines which strategy is used
+    """
     # Lire le fichier CSV dans un DataFrame
     df = pd.read_csv(file_path)
     
