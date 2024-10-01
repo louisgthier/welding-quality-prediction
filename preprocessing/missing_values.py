@@ -283,8 +283,6 @@ def process_ac_dc_column(file_path: str):
 
     df.to_csv(file_path, index=False)
 
-def impute_
-
 def drop_rows(file_path: str):    
     df = pd.read_csv(file_path)
     columns_to_check = [
@@ -319,6 +317,20 @@ def one_hot_encode_weld_type(file_path: str):
         df.to_csv(file_path, index=False)
     else:
         print(f"La colonne '{column_to_encode}' n'existe pas dans le fichier.")
+
+def impute_with_median(file_path: str, column_name: str):
+    """
+    Impute missing values in the specified column with the median of that column
+    """
+    df = pd.read_csv(file_path)
+    
+    if column_name in df.columns:
+        df[column_name].fillna(df[column_name].median(), inplace=True)
+    
+        df.to_csv(file_path, index=False)
+        print(f"Missing values in column '{column_name}' have been imputed with the median.")
+    else:
+        print(f"Column '{column_name}' does not exist in the data.")
 
 def process_electrode_column(file_path: str):
     """
@@ -425,6 +437,10 @@ if __name__ == "__main__":
     one_hot_encode_weld_type(CLEANED_CSV_PATH)
     one_hot_encode_weld_ids(CLEANED_CSV_PATH)
     delete_columns(CLEANED_CSV_PATH)
+    impute_with_median(CLEANED_CSV_PATH, 'Voltage / V')
+    impute_with_median(CLEANED_CSV_PATH, 'Current / A')
+    impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment temperature / Â°C')
+    impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment time / hours')
     target_separations(CLEANED_CSV_PATH, QUALITY_CSV_PATH, CHARPY_CSV_PATH)
     print_missing_values(CLEANED_CSV_PATH)
     print_missing_values(CHARPY_CSV_PATH)
