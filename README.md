@@ -33,6 +33,8 @@ Première apriori :
 ## PreProcessing
 
 Avant-propos : Etant donné la nature du dataset, qui est composé de seulement 1600 valeurs environ, il faut être délicat.
+C'est pourquoi nous optons pour la stratégie de diviser l'étude en 2 : l'analyse globale d'un dataset principal beaucoup plus léger que le dataset de base et nettoyé de toute valeur manquante, ainsi que l'analyse plus fine de datasets séparés par le type de soudure, permettant d'analyser indépendemment les types de soudure comprenant des valeurs qui leur sont propres, qui auraient pu être supprimées dans le dataset principal. 
+
 Notre stratégie sera de d'abord privilégier le remplacement des données, quitte à parfois aller dans le sens
 de renforcer les corrélations existantes, cependant nous ne pouvons supprimer des lignes données car la moitié de leurs valeurs de colonnes sont manquantes.
 
@@ -96,9 +98,10 @@ Voici ce que cela donne :
 
 ### Suppression de colonnes inexploitables
 
-Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe. La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. 
+Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe. La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. De même pour les colonnes '' qui contienne respectivement .. % de valeurs manquantes, nous estimons qu'elles sont inexploitables du fait du manque de données. 
 
-De même pour les colonnes '' qui contienne respectivement .. % de valeurs manquantes, nous estimons qu'elles sont inexploitables du fait du manque de données. 
+Enfin, nous supprimons la colonne 'WeldID', colonne de type catégorielle de trop nombreuses instances différentes pour permettre un encoding efficace pour le ML. 
+
 
 ### Suppression de lignes inexploitables
 
@@ -549,7 +552,7 @@ Column 'Hardness scale' has 4 unique values:
 
 ## Variables qualitatives
 
-### Weld ID
+### Weld 
 
 ### Type of weld
 
