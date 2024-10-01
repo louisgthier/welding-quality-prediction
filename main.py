@@ -10,7 +10,12 @@ import os
 
 # Import functions from files
 from preprocessing.data_import import data_import
-from preprocessing.missing_values import print_missing_values, remove_inferior_signs, print_unique_values, process_hardness_column, process_nitrogen_column, print_missing_percentage
+from preprocessing.missing_values import print_missing_values, remove_inferior_signs
+from preprocessing.missing_values import print_unique_values, process_hardness_column
+from preprocessing.missing_values import process_nitrogen_column, print_missing_percentage
+from preprocessing.weld_type_cleaning import divide_by_weld_type, update_csv, fill_with_mean_strategy
+from preprocessing.weld_type_cleaning import WELD_TYPE_PATH, WELD_TYPES
+
 
 # Import paths used to store data
 from paths import CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH, ORIGINAL_DATA_PATH
@@ -30,6 +35,9 @@ if __name__ == "__main__":
     delete_if_exists(CLEANED_CSV_PATH)
     delete_if_exists(MISSING_PERCENTAGE_CSV_PATH)
     delete_if_exists(ORIGINAL_DATA_PATH)
+    for welding_type in WELD_TYPES:
+        SPEC_WELD_TYPE_PATH = WELD_TYPE_PATH + welding_type + '_group.csv'
+        delete_if_exists(SPEC_WELD_TYPE_PATH)
 
     # 1 - Import the data
     #   Remove trailing whitespace
@@ -61,14 +69,23 @@ if __name__ == "__main__":
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
     # Same for our unique values
     print_unique_values(CLEANED_CSV_PATH)
-    
-    
+
+    # Divide by weld type
+    divide_by_weld_type(CLEANED_CSV_PATH)
+    # Finalize preprocess on each weld_type .csv
+    for welding_type in WELD_TYPES:
+        SPEC_WELD_TYPE_PATH = WELD_TYPE_PATH + welding_type + '_group.csv'
+        update_csv(fill_with_mean_strategy(SPEC_WELD_TYPE_PATH), SPEC_WELD_TYPE_PATH)
+    # We observe missing columns by type of weld, which is logic:
+    # (Electric welding does not produce Nitrogen)
+
+
     # 6 - We delete / place apart useless columns for now
     ######
     # Delete new columns
     ######
 
-    # 7 - Change type of eache columns
+    # 7 - Change type of each column
     ######
     # change to float
     ######
@@ -78,7 +95,7 @@ if __name__ == "__main__":
     # Remove outliers?
     ######
 
-    # 9 - Standardization ?
+    # 9 - Standardization in standardisation.py
     ######
     #
     ######

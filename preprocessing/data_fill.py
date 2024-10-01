@@ -23,9 +23,16 @@ def fill_with_mean_strategy(file_path):
     # 1. Suppression des colonnes vides (colonnes où toutes les valeurs sont manquantes)
     data_cleaned = data.dropna(axis=1, how='all')
 
+<<<<<<< HEAD
     # 2. Suppression des colonnes avec plus de 70% de valeurs manquantes
     threshold = len(data_cleaned.shape[0]) * 0.7
     data_cleaned = data_cleaned.dropna(thresh=threshold, axis=1)
+=======
+    # 2. Suppression des lignes avec plus de 30% de valeurs manquantes
+    # On garde seulement les lignes où au moins 70% des colonnes contiennent des données
+    threshold = data_cleaned.shape[0] * 0.7
+    data_cleaned = data_cleaned.dropna(axis=1, thresh=threshold)
+>>>>>>> d2164623648a592e08f6e2baae10cb0971a6eb6f
 
     # 3. Suppression de la colonne 'Unnamed: 0' qui est un ancien index inutile
     if 'Unnamed: 0' in data_cleaned.columns:
