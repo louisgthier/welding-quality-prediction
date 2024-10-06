@@ -58,4 +58,6 @@ The tar file contains data for the chemical composition of the steels studied, a
 - **Column 39:** Primary ferrite in microstructure / %
 - **Column 40:** Ferrite with second phase / %
 - **Column 41:** Acicular ferrite / %
-- **Column 42:** Martens
+- **Column 42:** Martensite / %
+- **Column 43:** Ferrite with carbide aggreagate / %
+- **Column 44:** Weld ID

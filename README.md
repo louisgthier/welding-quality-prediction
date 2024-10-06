@@ -1,39 +1,43 @@
-# welding-quality-prediction info
+# Welding Quality Prediction
 
-## ATTENDUS DU PROJET
+Le but de ce projet est de prédire la qualité de soudures sur des aciers. Il s’agit d’une problématique d’intérêt pour de nombreux industriels dont le secteur pèse plusieurs milliards d’euros (exemple : soudure de pipe d’éoliennes). De nos jours, la connaissance liée à la qualité des soudures se transmet principalement d’expert à expert soudeur dont les industriels sont dépendants. Il y a un gros enjeu à acquérir de la connaissance via les données pour à la fois extraire et homogénéiser la connaissance experte mais également explorer de nouvelles connaissances via des patterns que l’on pourrait découvrir par l’exploration de la donnée.
+
+## Obtenir les données
+
+Les données publiques pour réaliser ce projet sont accessibles via le lien suivant : https://www.phase-trans.msm.cam.ac.uk/map/data/materials/welddb-b.html
+
+## Objectifs du projet
 
 Les objectifs du projet sont les suivants :
 
--	Faire une analyse descriptive de la base de données pour bien la maîtriser et identifier les tâches de preprocessing pertinentes à réaliser. Toute action de preprocessing devra être explicitée, décrite et justifiée. Réfléchir aux unités de mesures des variables, à la nécessité de normaliser ou non les données, appliquer une ACP pour développer de l’intuition sur la problématique, etc. 
+- Faire une analyse descriptive de la base de données pour bien la maîtriser et identifier les tâches de preprocessing pertinentes à réaliser. Toute action de preprocessing devra être explicitée, décrite et justifiée. Réfléchir aux unités de mesures des variables, à la nécessité de normaliser ou non les données, appliquer une ACP pour développer de l’intuition sur la problématique, etc.
 
--	Identifier quelles sont les variables représentatives de la qualité de soudure et bien les comprendre. Réfléchir à la façon de prédire la qualité de soudure à partir de ces variables identifiées. Cela implique de réfléchir à une stratégie et il est attendu de bien l’expliciter et la justifier.
+- Identifier quelles sont les variables représentatives de la qualité de soudure et bien les comprendre. Réfléchir à la façon de prédire la qualité de soudure à partir de ces variables identifiées. Cela implique de réfléchir à une stratégie et il est attendu de bien l’expliciter et la justifier.
 
--	Appliquer différentes approches de ML vues en cours et en TD sur ce dataset pour prédire la qualité de soudure. Pensez à réaliser un protocole de validation croisée rigoureux. Enfin, le dataset n’étant pas complétement labélisé, nous vous invitons à effectuer un travail bibliographique sur des méthodes de ML avancées de type semi-supervisées. Vous êtes invités à en appliquer au minimum une en justifiant votre choix et la pertinence de celle-ci. 
+- Appliquer différentes approches de ML vues en cours et en TD sur ce dataset pour prédire la qualité de soudure. Pensez à réaliser un protocole de validation croisée rigoureux. Enfin, le dataset n’étant pas complétement labélisé, nous vous invitons à effectuer un travail bibliographique sur des méthodes de ML avancées de type semi-supervisées. Vous êtes invités à en appliquer au minimum une en justifiant votre choix et la pertinence de celle-ci.
 
--	Faire une analyse comparative des performances des différents modèles et méthodes appliqués. Il est donc nécessaire de réfléchir aux choix des métriques pertinentes. 
+- Faire une analyse comparative des performances des différents modèles et méthodes appliqués. Il est donc nécessaire de réfléchir aux choix des métriques pertinentes.
 
--	Conclure sur l’approche la plus appropriée pour prédire la qualité de soudure. 
+- Conclure sur l’approche la plus appropriée pour prédire la qualité de soudure.
 
--	Après cette étude : quelles sont vos recommandations pour obtenir une bonne qualité de soudure ?
+- Après cette étude : quelles sont vos recommandations pour obtenir une bonne qualité de soudure ?
 
--	Écrire un rapport d’environ 5 pages synthétisant le travail effectué et les résultats obtenus. Pensez à indiquer vos noms, le numéro de votre équipe, la date, vos mails et le titre sur la première page. Pensez aussi à mettre quelques figures illustratives. Il sera attendu un plan, une section rappelant la problématique du projet et votre traduction de celle-ci en problème/tâche de ML. Une section décrivant la base de données est aussi attendue (résultat d’ACP etc.), votre compréhension des variables cibles pour prédire la qualité de soudure et comment est-ce que vous proposez de vous y prendre. Une section sur les méthodes ML que vous choisissez d’appliquer avec vos justifications (pensez à les présenter synthétiquement, surtout si elles n’ont pas été vues en cours). Une section sur les résultats numériques sera à réaliser avec une étude comparative des performances. Les formules et/ou description des métriques utilisées devront être présentées. Enfin, pensez à ajouter une dernière section de discussion et conclusion avec un diagramme de GANNT contenant le partage en tâches, le temps que chaque tâche a pris et quel membre de l’équipe s’en est chargée. Bien entendu, une section sur les références bibliographiques clôturera le rapport. Pensez à bien citer vos références dans le corps de rapport. 
+- Écrire un rapport d’environ 5 pages synthétisant le travail effectué et les résultats obtenus. Pensez à indiquer vos noms, le numéro de votre équipe, la date, vos mails et le titre sur la première page. Pensez aussi à mettre quelques figures illustratives. Il sera attendu un plan, une section rappelant la problématique du projet et votre traduction de celle-ci en problème/tâche de ML. Une section décrivant la base de données est aussi attendue (résultat d’ACP etc.), votre compréhension des variables cibles pour prédire la qualité de soudure et comment est-ce que vous proposez de vous y prendre. Une section sur les méthodes ML que vous choisissez d’appliquer avec vos justifications (pensez à les présenter synthétiquement, surtout si elles n’ont pas été vues en cours). Une section sur les résultats numériques sera à réaliser avec une étude comparative des performances. Les formules et/ou description des métriques utilisées devront être présentées. Enfin, pensez à ajouter une dernière section de discussion et conclusion avec un diagramme de GANNT contenant le partage en tâches, le temps que chaque tâche a pris et quel membre de l’équipe s’en est chargée. Bien entendu, une section sur les références bibliographiques clôturera le rapport. Pensez à bien citer vos références dans le corps de rapport.
 
--	Remarques générales : un rapport doit être paginé, les figures et tableaux doivent avoir un titre et être cités dans le corps du rapport quand on y fait référence. 
+- Remarques générales : un rapport doit être paginé, les figures et tableaux doivent avoir un titre et être cités dans le corps du rapport quand on y fait référence.
 
+## Identification des variables pertinentes
 
-## Objectif du projet
+L'objectif est de prédire la qualité des soudures en fonction de divers paramètres mécaniques et physiques.
 
-L'objectif est de prédire la qualité des soudures en fonction de divers paramètres mécaniques et physiques. 
+Premier apriori :
 
-Première apriori :
-
-À première vue, les colonnes pertinentes pour cette évaluation incluent : l'allongement *(Elongation / %)*, réduction de la zone *(Reduction of Area / %)*, résistance limite d'élasticité *(Yield strength / MPa)*, résistance à la traction *(Ultimate tensile strength / MPa)*, dureté *(Hardness / kg mm^{-2})*, ténacité Charpy *(Charpy impact toughness / J)*, et température de transition de fracture (*50% FATT*).
-
+À première vue, les colonnes pertinentes pour cette évaluation incluent : l'allongement _(Elongation / %)_, réduction de la zone _(Reduction of Area / %)_, résistance limite d'élasticité _(Yield strength / MPa)_, résistance à la traction _(Ultimate tensile strength / MPa)_, dureté _(Hardness / kg mm^{-2})_, ténacité Charpy _(Charpy impact toughness / J)_, et température de transition de fracture (_50% FATT_).
 
 ## PreProcessing
 
 Avant-propos : Etant donné la nature du dataset, qui est composé de seulement 1600 valeurs environ, il faut être délicat.
-C'est pourquoi nous optons pour la stratégie de diviser l'étude en 2 : l'analyse globale d'un dataset principal beaucoup plus léger que le dataset de base et nettoyé de toute valeur manquante, ainsi que l'analyse plus fine de datasets séparés par le type de soudure, permettant d'analyser indépendemment les types de soudure comprenant des valeurs qui leur sont propres, qui auraient pu être supprimées dans le dataset principal. 
+C'est pourquoi nous optons pour la stratégie de diviser l'étude en 2 : l'analyse globale d'un dataset principal beaucoup plus léger que le dataset de base et nettoyé de toute valeur manquante, ainsi que l'analyse plus fine de datasets séparés par le type de soudure, permettant d'analyser indépendemment les types de soudure comprenant des valeurs qui leur sont propres, qui auraient pu être supprimées dans le dataset principal.
 
 Notre stratégie sera de d'abord privilégier le remplacement des données, quitte à parfois aller dans le sens
 de renforcer les corrélations existantes, cependant nous ne pouvons supprimer des lignes données car la moitié de leurs valeurs de colonnes sont manquantes.
@@ -42,77 +46,75 @@ Pour éviter de trop renforcer les hyper-corrélations, nous ajouterons du bruit
 
 ## Valeurs manquantes
 
-### *missing_values.py* :
+### _missing_values.py_ :
 
 Nous imprimons premièrement les pourcentages de valeurs manquantes de chaque colonne.
 
 Voici ce que cela donne :
 
-
-| Nom de la colonne                                              | Pourcentage de valeurs manquantes |
-|----------------------------------------------------------------|-----------------------------------|
-| Carbon concentration / weight %                                | 0.00                              |
-| Silicon concentration / weight %                               | 0.00                              |
-| Manganese concentration / weight %                             | 0.00                              |
-| Sulphur concentration / weight %                               | 0.24                              |
-| Phosphorus concentration / weight %                            | 0.61                              |
-| Nickel concentration / weight %                                | 57.81                             |
-| Chromium concentration / weight %                              | 52.54                             |
-| Molybdenum concentration / weight %                            | 52.00                             |
-| Vanadium concentration / weight %                              | 43.83                             |
-| Copper concentration / weight %                                | 65.01                             |
-| Cobalt concentration / weight %                                | 92.19                             |
-| Tungsten concentration / weight %                              | 95.46                             |
-| Oxygen concentration / parts per million by weight             | 23.97                             |
-| Titanium concentration / parts per million by weight           | 43.40                             |
-| Nitrogen concentration / parts per million by weight           | 24.82                             |
-| Aluminium concentration / parts per million by weight          | 45.22                             |
-| Boron concentration / parts per million by weight              | 69.49                             |
-| Niobium concentration / parts per million by weight            | 54.48                             |
-| Tin concentration / parts per million by weight                | 82.08                             |
-| Arsenic concentration / parts per million by weight            | 85.84                             |
-| Antimony concentration / parts per million by weight           | 84.26                             |
-| Current / A                                                    | 15.01                             |
-| Voltage / V                                                    | 15.01                             |
-| AC or DC                                                       | 13.01                             |
-| Electrode positive or negative                                 | 9.44                              |
-| Heat input / kJ mm^{-1}                                        | 0.00                              |
-| Interpass temperature / °C                                     | 0.00                              |
-| Type of weld                                                   | 0.00                              |
-| Post weld heat treatment temperature / °C                      | 0.79                              |
-| Post weld heat treatment time / hours                          | 0.79                              |
-| Yield strength / MPa                                           | 52.78                             |
-| Ultimate tensile strength / MPa                                | 55.33                             |
-| Elongation / %                                                 | 57.63                             |
-| Reduction of Area / %                                          | 57.32                             |
-| Charpy temperature / °C                                        | 46.79                             |
-| Charpy impact toughness / J                                    | 46.79                             |
-| Hardness / kg mm^{-2}                                          | 91.65                             |
-| 50% FATT                                                       | 98.12                             |
-| Primary ferrite in microstructure / %                          | 94.07                             |
-| Ferrite with second phase / %                                  | 94.55                             |
-| Acicular ferrite / %                                           | 94.55                             |
-| Martensite / %                                                 | 94.61                             |
-| Ferrite with carbide aggregate / %                             | 94.61                             |
-| Weld ID                                                        | 0.00                              |
+| Nom de la colonne                                     | Pourcentage de valeurs manquantes |
+| ----------------------------------------------------- | --------------------------------- |
+| Carbon concentration / weight %                       | 0.00                              |
+| Silicon concentration / weight %                      | 0.00                              |
+| Manganese concentration / weight %                    | 0.00                              |
+| Sulphur concentration / weight %                      | 0.24                              |
+| Phosphorus concentration / weight %                   | 0.61                              |
+| Nickel concentration / weight %                       | 57.81                             |
+| Chromium concentration / weight %                     | 52.54                             |
+| Molybdenum concentration / weight %                   | 52.00                             |
+| Vanadium concentration / weight %                     | 43.83                             |
+| Copper concentration / weight %                       | 65.01                             |
+| Cobalt concentration / weight %                       | 92.19                             |
+| Tungsten concentration / weight %                     | 95.46                             |
+| Oxygen concentration / parts per million by weight    | 23.97                             |
+| Titanium concentration / parts per million by weight  | 43.40                             |
+| Nitrogen concentration / parts per million by weight  | 24.82                             |
+| Aluminium concentration / parts per million by weight | 45.22                             |
+| Boron concentration / parts per million by weight     | 69.49                             |
+| Niobium concentration / parts per million by weight   | 54.48                             |
+| Tin concentration / parts per million by weight       | 82.08                             |
+| Arsenic concentration / parts per million by weight   | 85.84                             |
+| Antimony concentration / parts per million by weight  | 84.26                             |
+| Current / A                                           | 15.01                             |
+| Voltage / V                                           | 15.01                             |
+| AC or DC                                              | 13.01                             |
+| Electrode positive or negative                        | 9.44                              |
+| Heat input / kJ mm^{-1}                               | 0.00                              |
+| Interpass temperature / °C                            | 0.00                              |
+| Type of weld                                          | 0.00                              |
+| Post weld heat treatment temperature / °C             | 0.79                              |
+| Post weld heat treatment time / hours                 | 0.79                              |
+| Yield strength / MPa                                  | 52.78                             |
+| Ultimate tensile strength / MPa                       | 55.33                             |
+| Elongation / %                                        | 57.63                             |
+| Reduction of Area / %                                 | 57.32                             |
+| Charpy temperature / °C                               | 46.79                             |
+| Charpy impact toughness / J                           | 46.79                             |
+| Hardness / kg mm^{-2}                                 | 91.65                             |
+| 50% FATT                                              | 98.12                             |
+| Primary ferrite in microstructure / %                 | 94.07                             |
+| Ferrite with second phase / %                         | 94.55                             |
+| Acicular ferrite / %                                  | 94.55                             |
+| Martensite / %                                        | 94.61                             |
+| Ferrite with carbide aggregate / %                    | 94.61                             |
+| Weld ID                                               | 0.00                              |
 
 ### Suppression de colonnes inexploitables
 
-Nous constatons un très grand nombre de valeurs manquantes dans les colonnes *Primary ferrite in microstructure* (94,07 %), *Ferrite with second phase* (94,55 %), *Acicular ferrite* (94,55 %), *Martensite* (94,61 %), et *Ferrite with carbide aggregate* (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des *MNAR (Missing Not At Random)*, car elles apparaissent systématiquement de manière conjointe. La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. De même pour les colonnes '' qui contienne respectivement .. % de valeurs manquantes, nous estimons qu'elles sont inexploitables du fait du manque de données. 
+Nous constatons un très grand nombre de valeurs manquantes dans les colonnes _Primary ferrite in microstructure_ (94,07 %), _Ferrite with second phase_ (94,55 %), _Acicular ferrite_ (94,55 %), _Martensite_ (94,61 %), et _Ferrite with carbide aggregate_ (94,61 %). Les valeurs manquantes de ces cinq colonnes sont des _MNAR (Missing Not At Random)_, car elles apparaissent systématiquement de manière conjointe. La colonne '50% FATT', qui manque 98% de valeurs, est aussi inexploitable du fait du manque de données en comparaison aux autres colonnes. De même pour les colonnes '' qui contienne respectivement .. % de valeurs manquantes, nous estimons qu'elles sont inexploitables du fait du manque de données.
 
-Enfin, nous supprimons la colonne 'WeldID', colonne de type catégorielle de trop nombreuses instances différentes pour permettre un encoding efficace pour le ML. 
-
+Enfin, nous supprimons la colonne 'WeldID', colonne de type catégorielle de trop nombreuses instances différentes pour permettre un encoding efficace pour le ML.
 
 ### Suppression de lignes inexploitables
 
-Les variables que l'on cherche à prédire sont celles liées à la qualité de la soudure. Autrement dit, après suppression des colonnes de trop grand nombre de valeurs manquantes, les variables qui nous intéressent sont : 'Yield strength / MPa',	'Ultimate tensile strength / MPa',	'Elongation / %',	'Reduction of Area / %'. 
+Les variables que l'on cherche à prédire sont celles liées à la qualité de la soudure. Autrement dit, après suppression des colonnes de trop grand nombre de valeurs manquantes, les variables qui nous intéressent sont : 'Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Elongation / %', 'Reduction of Area / %'.
 
-Afin de favoriser la précision du modèle quant à la prédiction de ces variables d'intérêt, il est préférable de ne pas imputer de valeurs pour les valeurs manquantes mais plutôt de les supprimer. Nous supprimons donc toutes les lignes qui contiennent au moins une valeur manquante dans ces quatre colonnes. 
+Afin de favoriser la précision du modèle quant à la prédiction de ces variables d'intérêt, il est préférable de ne pas imputer de valeurs pour les valeurs manquantes mais plutôt de les supprimer. Nous supprimons donc toutes les lignes qui contiennent au moins une valeur manquante dans ces quatre colonnes.
 
 ### Colonnes quantitatives mal formattées :
 
-* Nous constatons que la concentration en Nitrogène
-Par exemple, pour la concentration en Nitrogène :
+- Nous constatons que la concentration en Nitrogène
+  Par exemple, pour la concentration en Nitrogène :
 
 ```
 ----------------------------------------
@@ -133,11 +135,9 @@ Column 'Nitrogen concentration / parts per million by weight' has 162 unique val
  '416' '398' '394']
 ```
 
-Nous devions faire des recherches sur les significations de "tot" et "res", qui font penser à "total" et "résidus", des termes chimiques correspondants à un résultat de réaction chimique. "nd" signifierait un manque de données, "non-détecté" (en anglais *non detected*). Les valeurs avant 'tot' sont gardées dans la colonne et une nouvelle colonne est créée pour les résidus. Cependant, cette colonne ne contient pas assez de valeurs par rapport au dataset et sera sûrement inutile. Nous la retirons de notre analyse principale. Nous la gardons de côté afin de peut-être observer une coincidence avec les résultats finaux (peut-être qu'une réaction avec/sans résidus aura plus de chances de produire un résultat de qualité). Nous gardons cette variable afin d'en faire une colonne booléenne : La concentration a-t-elle des résidus ? Oui/Non.
+Nous devions faire des recherches sur les significations de "tot" et "res", qui font penser à "total" et "résidus", des termes chimiques correspondants à un résultat de réaction chimique. "nd" signifierait un manque de données, "non-détecté" (en anglais _non detected_). Les valeurs avant 'tot' sont gardées dans la colonne et une nouvelle colonne est créée pour les résidus. Cependant, cette colonne ne contient pas assez de valeurs par rapport au dataset et sera sûrement inutile. Nous la retirons de notre analyse principale. Nous la gardons de côté afin de peut-être observer une coincidence avec les résultats finaux (peut-être qu'une réaction avec/sans résidus aura plus de chances de produire un résultat de qualité). Nous gardons cette variable afin d'en faire une colonne booléenne : La concentration a-t-elle des résidus ? Oui/Non.
 
-
-
-* Nous avons aussi le cas de la colonne Dureté (Hardness) :
+- Nous avons aussi le cas de la colonne Dureté (Hardness) :
 
 ```
 Column 'Hardness / kg mm^{-2}' has 97 unique values:
@@ -153,12 +153,11 @@ Column 'Hardness / kg mm^{-2}' has 97 unique values:
  '291Hv10' '262Hv10' '266Hv10' '253Hv10' '257Hv10' '246Hv10' '264Hv5'
  '269Hv5' '233Hv5' '226Hv5' '222' '205' '253' '219' '182' '199' '240'
  '244' '247' '233' '212']
- ```
+```
 
 Après plusieurs recherches, nous avons découvert que Hv signifie la force effectuée sur l'objet pour obtenir un tel résultat. Comme cela est une statistique, nous la mettons aussi de côté et trions les données.
 
-
-* Nous retrouvons souvent le signe "<" devant de nombreuses variables de concentrations, par exemple dans les colonnes 'Tin concentration / parts per million by weight' et 'Arsenic concentration / parts per million by weight'.
+- Nous retrouvons souvent le signe "<" devant de nombreuses variables de concentrations, par exemple dans les colonnes 'Tin concentration / parts per million by weight' et 'Arsenic concentration / parts per million by weight'.
 
 Nous avons établi trois approches possibles concernant ces valeurs :
 
@@ -552,7 +551,7 @@ Column 'Hardness scale' has 4 unique values:
 
 ## Variables qualitatives
 
-### Weld 
+### Weld
 
 ### Type of weld
 
@@ -566,7 +565,7 @@ Cependant, il arrive parfois que des valeurs soient également manquantes dans l
 
 ### Electrode positive or negative
 
-Nous avons identifié quatre types de valeurs possibles dans cette colonne : +, -, ou 0, et les valeurs manquantes. Les 0 sont liés à l'utilisation du mode AC. 
+Nous avons identifié quatre types de valeurs possibles dans cette colonne : +, -, ou 0, et les valeurs manquantes. Les 0 sont liés à l'utilisation du mode AC.
 
 Nous devons transformer les valeurs présentes afin qu'elles soient interprétables par les algorithmes de ML. Plutôt que d'effectuer un one-hot encoding en créant trois colonnes binaires distinctes, ce qui pourrait entraîner de la multicollinéarité et poser des problèmes pour certains algorithmes de ML, nous choisissons de diviser la colonne en seulement deux colonnes binaires : la première indiquera si l'électrode est positive (+), et la seconde si elle est négative (-). Si la valeur est 0 (par exemple dû à un mode AC) ou s'il y a une valeur manquante, les deux colonnes afficheront 0.
 
