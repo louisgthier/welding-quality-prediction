@@ -81,21 +81,6 @@ def print_column_types(filepath: str):
     except Exception as e:
         print(f"Une erreur s'est produite lors de la lecture du fichier : {e}")
     
-    
-@staticmethod
-def replace_missing_concentration_with_zero(filepath: str):
-    """
-    Remplace les valeurs manquantes par 0 dans toutes les colonnes contenant le mot 'concentration'.
-    """
-    df = pd.read_csv(filepath)
-    
-    concentration_columns = [col for col in df.columns if 'concentration' in col] # sélectionne les colonnes qui ont 'concentration' dans leur nom
-
-    df[concentration_columns] = df[concentration_columns].fillna(0) # remplace les valeurs manquantes par 0 dans ces colonnes
-
-    df.to_csv(filepath, index=False)
-    print(f"Les valeurs manquantes dans les colonnes 'concentration' ont été remplacées par 0.")
-    
 
 @staticmethod
 def drop_unnecessary_columns(file_path: str) -> pd.DataFrame:
@@ -140,6 +125,20 @@ def drop_unnecessary_columns(file_path: str) -> pd.DataFrame:
 #     print("Les lignes contenant des valeurs manquantes dans les colonnes d'intérêt ont été supprimées.")
 
 #     df.to_csv(file_path, index=False)
+    
+@staticmethod
+def replace_missing_concentration_with_zero(filepath: str):
+    """
+    Remplace les valeurs manquantes par 0 dans toutes les colonnes contenant le mot 'concentration'.
+    """
+    df = pd.read_csv(filepath)
+    
+    concentration_columns = [col for col in df.columns if 'concentration' in col] # sélectionne les colonnes qui ont 'concentration' dans leur nom
+
+    df[concentration_columns] = df[concentration_columns].fillna(0) # remplace les valeurs manquantes par 0 dans ces colonnes
+
+    df.to_csv(filepath, index=False)
+    print(f"Les valeurs manquantes dans les colonnes 'concentration' ont été remplacées par 0.")
 
 
 @staticmethod
@@ -176,6 +175,7 @@ def print_unique_values(file_path: str):
         print(f"Column '{column}' has {len(unique_values)} unique values:")
         print(unique_values)
         print("-" * 40)
+        
 
 def process_nitrogen_column(file_path: str):
     """
