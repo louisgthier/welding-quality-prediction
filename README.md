@@ -4,7 +4,7 @@ Le but de ce projet est de prédire la qualité de soudures sur des aciers. Il s
 
 ## Obtenir les données
 
-Les données publiques pour réaliser ce projet sont accessibles via le lien suivant : https://www.phase-trans.msm.cam.ac.uk/map/data/materials/welddb-b.html
+Les données publiques pour réaliser ce projet sont accessibles via le lien suivant : https://www.phase-trans.msm.cam.ac.uk/map/data/materials/welddb-b.html. 
 
 ## Objectifs du projet
 
@@ -30,7 +30,7 @@ Les objectifs du projet sont les suivants :
 
 L'objectif est de prédire la qualité des soudures en fonction de divers paramètres mécaniques et physiques.
 
-Premier apriori :
+Le descriptif des soudures est résumé [ici](https://github.com/louisgthier/welding-quality-prediction/blob/main/columns_description.md)
 
 À première vue, les colonnes pertinentes pour cette évaluation incluent : l'allongement _(Elongation / %)_, réduction de la zone _(Reduction of Area / %)_, résistance limite d'élasticité _(Yield strength / MPa)_, résistance à la traction _(Ultimate tensile strength / MPa)_, dureté _(Hardness / kg mm^{-2})_, ténacité Charpy _(Charpy impact toughness / J)_, et température de transition de fracture (_50% FATT_).
 
