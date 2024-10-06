@@ -517,14 +517,14 @@ Column 'Hardness scale' has 4 unique values:
 
 ## Colonnes qualitatives mal formattées
 
-### WeldID
-
-
-
 
 ### Type of weld
 
+Il y a 10 types de soudure différents, identifiés par des chaines de caractère dans la colonne. Pour que cette information soit exploitable, nous effectuons un one-hot encoding résultant en la création de 10 colonnes binaires. Pour éviter la multicollinéarité (corrélation entre 2 colonnes ou plus) dû au one-hot encoding, nous supprimons une des colonnes choisie aléatoirement : il s'agit en particulier de la colonne ShMA.
 
+### WeldID
+
+Le nombre d'IDs différents étant très important, il serait mal venu de réaliser un one-hot encoding sur la colonne WeldID créant un nombre trop important de colonnes par rapport au nombre d'instances du dataset. Toutefois, nous remarquons que les IDs peuvent se regrouper, en fonction du format de l'ID (s'il contiennent un même mot, par exemple Evans), et en fonction des valeurs manquantes (les IDs d'un même groupe ont très souvent des valeurs manquantes dans les mêmes colonnes). Ainsi, nous regroupons les IDs en groupes grâce à des commandes regex. Ensuite, nous effectuons un one-hot encoding sur la colonne WeldID, tout en supprimant une des colonnes (Wolst) pour éviter l'effet indésirable de multicollinéarité dû à cette opération.
 
 ### AC or DC
 
