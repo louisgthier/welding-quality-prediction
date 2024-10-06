@@ -540,4 +540,15 @@ Nous avons identifié quatre types de valeurs possibles dans cette colonne : +, 
 
 Nous devons transformer les valeurs présentes afin qu'elles soient interprétables par les algorithmes de ML. Plutôt que d'effectuer un one-hot encoding en créant trois colonnes binaires distinctes, ce qui pourrait entraîner de la multicollinéarité et poser des problèmes pour certains algorithmes de ML, nous choisissons de diviser la colonne en seulement deux colonnes binaires : la première indiquera si l'électrode est positive (+), et la seconde si elle est négative (-). Si la valeur est 0 (par exemple dû à un mode AC) ou s'il y a une valeur manquante, les deux colonnes afficheront 0.
 
+## Imputation des valeurs 
+
+Après avoir nettoyé et reformatté des colonnes, il faut imputer les valeurs manquantes qui n'ont pas été supprimées. 
+
+* Colonnes de concentration
+
+ Nous remplaçons les valeurs manquantes de ces colonnes par 0, car nous supposons que s'il y a des valeurs manquantes, c'est que l'élément chimique concerné n'est pas présent dans le composé.
+
+* Autres colonnes (*Voltage / V*, *Current / A*, *Post weld heat treatment temperature*, *Post weld heat treatment time / hours*, *Interpass temperature*)
+
+Les valeurs manquantes de chaque colonnes sont remplacées par la médiane de la colonne concernée. (?)
 
