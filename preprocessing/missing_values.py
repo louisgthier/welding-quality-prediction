@@ -455,6 +455,42 @@ def display_column_value_types(file_path: str):
         unique_values = df[column].apply(type).unique()
         print(f"Colonne '{column}' contient les types de données suivants : {unique_values}")
 
+def plot_distributions(file_path: str):
+    df = pd.read_csv(file_path)
+    numeric_columns = df.select_dtypes(include=[np.number]).columns
+    for column in numeric_columns:
+        plt.figure(figsize=(12, 5))
+        
+        # Histogramme
+        plt.subplot(1, 2, 1)
+        plt.hist(df[column].dropna(), bins=30, color='skyblue', edgecolor='black')
+        plt.title(f"Distribution of {column}")
+        plt.xlabel(column)
+        plt.ylabel('Frequency')
+        
+        # Boxplot
+        plt.subplot(1, 2, 2)
+        plt.boxplot(df[column].dropna(), vert=False)
+        plt.title(f"Boxplot of {column}")
+        plt.xlabel(column)
+        
+        plt.tight_layout()
+        plt.show()
+
+from sklearn.preprocessing import StandardScaler
+
+def standardize_data(file_path: str, columns_to_standardize: list):
+    df = pd.read_csv(file_path)
+    columns_to_standardize = [col for col in columns_to_standardize if col in df.columns]
+    if not columns_to_standardize:
+        print("Aucune colonne à standardiser n'a été trouvée dans le fichier.")
+        return
+    scaler = StandardScaler()
+    df[columns_to_standardize] = scaler.fit_transform(df[columns_to_standardize])
+    df.to_csv(file_path, index=False)
+    
+    print(f"Les colonnes {columns_to_standardize} ont été standardisées.")
+
 if __name__ == "__main__":
     df = pd.read_csv(CLEANED_CSV_PATH)
     print(df.columns)
@@ -462,6 +498,7 @@ if __name__ == "__main__":
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
     drop_unnecessary_columns(CLEANED_CSV_PATH)
     # drop_rows(CLEANED_CSV_PATH)
+    # plot_distributions(CLEANED_CSV_PATH)
     replace_missing_concentration_with_zero(CLEANED_CSV_PATH)
     remove_inferior_signs(CLEANED_CSV_PATH)
     print_unique_values(CLEANED_CSV_PATH)
@@ -470,6 +507,7 @@ if __name__ == "__main__":
     process_ac_dc_column(CLEANED_CSV_PATH)
     process_electrode_column(CLEANED_CSV_PATH)
     process_interpass_temperature(CLEANED_CSV_PATH)
+
     impute_with_median(CLEANED_CSV_PATH, 'Voltage / V')
     impute_with_median(CLEANED_CSV_PATH, 'Current / A')
     impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment temperature')
@@ -481,6 +519,7 @@ if __name__ == "__main__":
     target_separations(CLEANED_CSV_PATH, QUALITY_CSV_PATH, CHARPY_CSV_PATH)
     display_column_value_types(CLEANED_CSV_PATH)
     print_missing_values(CLEANED_CSV_PATH)
+    standardize_data(CLEANED_CSV_PATH, ['Carbon concentration / weight %', 'Silicon concentration / weight %', 'Manganese concentration / weight %', 'Sulphur concentration / weight %', 'Phosphorus concentration / weight %', 'Nickel concentration / weight %',	'Chromium concentration / weight %','Molybdenum concentration / weight %',	'Vanadium concentration / weight %',	'Copper concentration / weight %',	'Cobalt concentration / weight %',	'Tungsten concentration / weight %',	'Oxygen concentration / parts per million by weight',	'Titanium concentration / parts per million by weight',	'Nitrogen concentration / parts per million by weight',	'Aluminium concentration / parts per million by weight',	'Boron concentration / parts per million by weight',	'Niobium concentration / parts per million by weight',	'Tin concentration / parts per million by weight',	'Arsenic concentration / parts per million by weight', 'Antimony concentration / parts per million by weight',	'Current / A',	'Voltage / V',	'AC or DC',	'Heat input / kJ mm^{-1}',	'Interpass temperature',	'Post weld heat treatment temperature',	'Post weld heat treatment time / hours'])
 
     # impute_charpy_impact_regression(CLEANED_CSV_PATH)
     # impute_reduction_of_area_regression(CLEANED_CSV_PATH)
