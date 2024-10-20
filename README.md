@@ -136,10 +136,6 @@ Après plusieurs recherches, nous avons découvert que Hv signifie la force effe
 
 Nous remarquons que certaines valeurs sont présentes sous la forme d'un intervalle (par exemple, '150-200'). Nous remplaçons ces valeurs par la moyenne des deux bornes de l'intervalle. 
 
-# Analyse des variables
-
-Pour analyser les variables, nous avons simplement imprimé les valeurs unique de chaque colonne et déduit le type de chaque colonne [ici](https://github.com/louisgthier/welding-quality-prediction/blob/main/unique_values.md)
-
 ## Colonnes qualitatives mal formattées
 
 
