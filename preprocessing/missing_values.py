@@ -15,6 +15,22 @@ def _get_dataframe(file_path: str):
     """
     return pd.read_csv(file_path)
 
+def replace_names(file_path: str):
+    # to replace somes names of the columns incompatible with the csv format (specifically the ones containing the degree symbol, related to temperature)
+    df = pd.read_csv(file_path)
+    
+    # columns to replace by their number (AA = 27, AC = 29, AI = 35)
+    columns_to_replace = {
+        26: 'Interpass temperature',
+        28: 'Post weld heat treatment temperature',
+        34: 'Charpy temperature'
+    }
+    
+    for col_idx, new_name in columns_to_replace.items():
+        df.columns.values[col_idx] = new_name
+    
+    df.to_csv(file_path, index=False)
+
 @staticmethod
 def print_missing_values(file_path: str):
     """
@@ -150,10 +166,22 @@ def remove_inferior_signs(file_path: str) -> pd.DataFrame:
     :return: Le DataFrame avec les signes "<" supprimés des valeurs.
     """
     df = pd.read_csv(file_path)
-    df = df.applymap(lambda value: re.sub(r'<(\d+\.?\d*)', r'\1', value) if isinstance(value, str) else value)
+    
+    # Fonction pour diviser les valeurs "<" par 2
+    def divide_if_inferior(value):
+        if isinstance(value, str) and re.match(r'<\d+\.?\d*', value):
+            # Extraire la valeur numérique et diviser par 2
+            numeric_value = float(re.search(r'\d+\.?\d*', value).group())
+            return numeric_value / 2
+        return value
+    
+    # Appliquer la fonction à tout le DataFrame
+    df = df.applymap(divide_if_inferior)
+    
+    # Sauvegarder le DataFrame nettoyé dans le fichier CSV
     df.to_csv(file_path, index=False)
-
-
+    
+    return df
 @staticmethod
 def print_correlation_matrix(file_path: str):
     """
@@ -302,7 +330,7 @@ def one_hot_encode_weld_type(file_path: str):
     column_to_encode = 'Type of weld'
     
     if column_to_encode in df.columns:
-        encoder = OneHotEncoder(sparse=False)
+        encoder = OneHotEncoder(sparse_output=False)
 
         encoded_columns = encoder.fit_transform(df[[column_to_encode]])
 
@@ -494,6 +522,7 @@ def standardize_data(file_path: str, columns_to_standardize: list):
 if __name__ == "__main__":
     df = pd.read_csv(CLEANED_CSV_PATH)
     print(df.columns)
+    replace_names(CLEANED_CSV_PATH)
     print_missing_values(CLEANED_CSV_PATH)
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
     drop_unnecessary_columns(CLEANED_CSV_PATH)
