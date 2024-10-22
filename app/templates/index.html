@@ -133,9 +133,9 @@
             outputDiv.innerHTML = `
                 <h3 class="text-xl font-semibold mb-2">Predictions:</h3>
                 <ul class="list-disc list-inside">
-                    <li><strong>Yield strength / MPa:</strong> ${predictions['Yield strength / MPa'][0].toFixed(2)}</li>
-                    <li><strong>Ultimate tensile strength / MPa:</strong> ${predictions['Ultimate tensile strength / MPa'][0].toFixed(2)}</li>
-                    <li><strong>Charpy impact toughness / J (at 40°C):</strong> ${predictions['Charpy impact toughness / J'][0].toFixed(2)}</li>
+                    <li><strong>Yield strength / MPa:</strong> ${predictions['Yield strength / MPa_prediction'][0].toFixed(2)}</li>
+                    <li><strong>Ultimate tensile strength / MPa:</strong> ${predictions['Ultimate tensile strength / MPa_prediction'][0].toFixed(2)}</li>
+                    <li><strong>Charpy impact toughness / J (at 40°C):</strong> ${predictions['Charpy impact toughness / J_prediction'][0].toFixed(2)}</li>
                     <li><strong>Combined Score:</strong> ${(predictions['combined_score'][0] * 100).toFixed(2)}%</li>
                 </ul>
             `;
