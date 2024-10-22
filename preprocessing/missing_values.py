@@ -15,6 +15,22 @@ def _get_dataframe(file_path: str):
     """
     return pd.read_csv(file_path)
 
+def replace_names(file_path: str):
+    # to replace somes names of the columns incompatible with the csv format (specifically the ones containing the degree symbol, related to temperature)
+    df = pd.read_csv(file_path)
+    
+    # columns to replace by their number (AA = 27, AC = 29, AI = 35)
+    columns_to_replace = {
+        26: 'Interpass temperature',
+        28: 'Post weld heat treatment temperature',
+        34: 'Charpy temperature'
+    }
+    
+    for col_idx, new_name in columns_to_replace.items():
+        df.columns.values[col_idx] = new_name
+    
+    df.to_csv(file_path, index=False)
+
 @staticmethod
 def print_missing_values(file_path: str):
     """
@@ -150,10 +166,22 @@ def remove_inferior_signs(file_path: str) -> pd.DataFrame:
     :return: Le DataFrame avec les signes "<" supprimés des valeurs.
     """
     df = pd.read_csv(file_path)
-    df = df.applymap(lambda value: re.sub(r'<(\d+\.?\d*)', r'\1', value) if isinstance(value, str) else value)
+    
+    # Fonction pour diviser les valeurs "<" par 2
+    def divide_if_inferior(value):
+        if isinstance(value, str) and re.match(r'<\d+\.?\d*', value):
+            # Extraire la valeur numérique et diviser par 2
+            numeric_value = float(re.search(r'\d+\.?\d*', value).group())
+            return numeric_value / 2
+        return value
+    
+    # Appliquer la fonction à tout le DataFrame
+    df = df.applymap(divide_if_inferior)
+    
+    # Sauvegarder le DataFrame nettoyé dans le fichier CSV
     df.to_csv(file_path, index=False)
-
-
+    
+    return df
 @staticmethod
 def print_correlation_matrix(file_path: str):
     """
@@ -302,7 +330,7 @@ def one_hot_encode_weld_type(file_path: str):
     column_to_encode = 'Type of weld'
     
     if column_to_encode in df.columns:
-        encoder = OneHotEncoder(sparse=False)
+        encoder = OneHotEncoder(sparse_output=False)
 
         encoded_columns = encoder.fit_transform(df[[column_to_encode]])
 
@@ -455,13 +483,51 @@ def display_column_value_types(file_path: str):
         unique_values = df[column].apply(type).unique()
         print(f"Colonne '{column}' contient les types de données suivants : {unique_values}")
 
+def plot_distributions(file_path: str):
+    df = pd.read_csv(file_path)
+    numeric_columns = df.select_dtypes(include=[np.number]).columns
+    for column in numeric_columns:
+        plt.figure(figsize=(12, 5))
+        
+        # Histogramme
+        plt.subplot(1, 2, 1)
+        plt.hist(df[column].dropna(), bins=30, color='skyblue', edgecolor='black')
+        plt.title(f"Distribution of {column}")
+        plt.xlabel(column)
+        plt.ylabel('Frequency')
+        
+        # Boxplot
+        plt.subplot(1, 2, 2)
+        plt.boxplot(df[column].dropna(), vert=False)
+        plt.title(f"Boxplot of {column}")
+        plt.xlabel(column)
+        
+        plt.tight_layout()
+        plt.show()
+
+from sklearn.preprocessing import StandardScaler
+
+def standardize_data(file_path: str, columns_to_standardize: list):
+    df = pd.read_csv(file_path)
+    columns_to_standardize = [col for col in columns_to_standardize if col in df.columns]
+    if not columns_to_standardize:
+        print("Aucune colonne à standardiser n'a été trouvée dans le fichier.")
+        return
+    scaler = StandardScaler()
+    df[columns_to_standardize] = scaler.fit_transform(df[columns_to_standardize])
+    df.to_csv(file_path, index=False)
+    
+    print(f"Les colonnes {columns_to_standardize} ont été standardisées.")
+
 if __name__ == "__main__":
     df = pd.read_csv(CLEANED_CSV_PATH)
     print(df.columns)
+    replace_names(CLEANED_CSV_PATH)
     print_missing_values(CLEANED_CSV_PATH)
     print_missing_percentage(CLEANED_CSV_PATH, MISSING_PERCENTAGE_CSV_PATH)
     drop_unnecessary_columns(CLEANED_CSV_PATH)
     # drop_rows(CLEANED_CSV_PATH)
+    # plot_distributions(CLEANED_CSV_PATH)
     replace_missing_concentration_with_zero(CLEANED_CSV_PATH)
     remove_inferior_signs(CLEANED_CSV_PATH)
     print_unique_values(CLEANED_CSV_PATH)
@@ -470,6 +536,7 @@ if __name__ == "__main__":
     process_ac_dc_column(CLEANED_CSV_PATH)
     process_electrode_column(CLEANED_CSV_PATH)
     process_interpass_temperature(CLEANED_CSV_PATH)
+
     impute_with_median(CLEANED_CSV_PATH, 'Voltage / V')
     impute_with_median(CLEANED_CSV_PATH, 'Current / A')
     impute_with_median(CLEANED_CSV_PATH, 'Post weld heat treatment temperature')
@@ -481,6 +548,7 @@ if __name__ == "__main__":
     target_separations(CLEANED_CSV_PATH, QUALITY_CSV_PATH, CHARPY_CSV_PATH)
     display_column_value_types(CLEANED_CSV_PATH)
     print_missing_values(CLEANED_CSV_PATH)
+    standardize_data(CLEANED_CSV_PATH, ['Carbon concentration / weight %', 'Silicon concentration / weight %', 'Manganese concentration / weight %', 'Sulphur concentration / weight %', 'Phosphorus concentration / weight %', 'Nickel concentration / weight %',	'Chromium concentration / weight %','Molybdenum concentration / weight %',	'Vanadium concentration / weight %',	'Copper concentration / weight %',	'Cobalt concentration / weight %',	'Tungsten concentration / weight %',	'Oxygen concentration / parts per million by weight',	'Titanium concentration / parts per million by weight',	'Nitrogen concentration / parts per million by weight',	'Aluminium concentration / parts per million by weight',	'Boron concentration / parts per million by weight',	'Niobium concentration / parts per million by weight',	'Tin concentration / parts per million by weight',	'Arsenic concentration / parts per million by weight', 'Antimony concentration / parts per million by weight',	'Current / A',	'Voltage / V',	'AC or DC',	'Heat input / kJ mm^{-1}',	'Interpass temperature',	'Post weld heat treatment temperature',	'Post weld heat treatment time / hours'])
 
     # impute_charpy_impact_regression(CLEANED_CSV_PATH)
     # impute_reduction_of_area_regression(CLEANED_CSV_PATH)
