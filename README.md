@@ -2,6 +2,33 @@
 
 Le but de ce projet est de prédire la qualité de soudures sur des aciers. Il s’agit d’une problématique d’intérêt pour de nombreux industriels dont le secteur pèse plusieurs milliards d’euros (exemple : soudure de pipe d’éoliennes). De nos jours, la connaissance liée à la qualité des soudures se transmet principalement d’expert à expert soudeur dont les industriels sont dépendants. Il y a un gros enjeu à acquérir de la connaissance via les données pour à la fois extraire et homogénéiser la connaissance experte mais également explorer de nouvelles connaissances via des patterns que l’on pourrait découvrir par l’exploration de la donnée.
 
+## Instructions for Running the Flask App
+
+### To run the app
+
+1. Install the required packages by running:
+
+```bash
+pip install -r app/requirements.txt
+```
+
+2. From the root directory of the project, run:
+
+```bash
+python app/app.py
+```
+
+3. Once the app is running, open a web browser and go to the following URL:
+
+```
+http://localhost:5123/
+```
+
+### How to use
+
+- **Manual input**: You can enter values directly into the input fields on the webpage. Missing values will be automatically imputed where necessary, and predictions will be provided based on your inputs.
+- **Upload a full file** (e.g. `data/welddb_data.csv`) through the provided file upload section in the UI. The app will generate predictions and allow you to download a CSV file with these predictions.
+
 ## Obtenir les données
 
 Les données publiques pour réaliser ce projet sont accessibles via le lien suivant : https://www.phase-trans.msm.cam.ac.uk/map/data/materials/welddb-b.html. 
