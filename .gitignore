@@ -1,4 +1,14 @@
+# Ignore specific data file
 /data/welddb_no_trailing_space.data
+convert_notebooks.py
+/temp_py_files
+
+# Ignore Python cache directories
 __pycache__/
+
+# Ignore CSV files in the weld_type_analysis directory
 /data/weld_type_analysis/*.csv
+
+# Ignore macOS system files
 .DS_Store
+
