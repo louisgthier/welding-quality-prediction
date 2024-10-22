@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Weld Quality Prediction</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100">
+    <div class="container mx-auto p-6">
+        <h1 class="text-3xl font-bold mb-6 text-center">Weld Quality Prediction</h1>
+
+        <!-- Manual Input Form -->
+        <div class="bg-white rounded shadow p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4">Manual Input</h2>
+            <form id="manual-input-form" class="space-y-4">
+                <!-- Dynamically generated form fields will go here -->
+                <div id="form-fields" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                    <!-- Form fields will be inserted here -->
+                </div>
+                <button type="submit" class="mt-4 bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600">Get Prediction</button>
+            </form>
+            <div id="manual-output" class="mt-6"></div>
+        </div>
+
+        <!-- File Upload Form -->
+        <div class="bg-white rounded shadow p-6">
+            <h2 class="text-2xl font-semibold mb-4">Upload CSV File</h2>
+            <form id="file-upload-form" class="flex items-center space-x-4">
+                <input type="file" id="input-file" accept=".csv" class="border border-gray-300 p-2 rounded">
+                <button type="submit" class="bg-green-500 text-white py-2 px-4 rounded hover:bg-green-600">Upload and Predict</button>
+            </form>
+            <div id="file-output" class="mt-6"></div>
+        </div>
+    </div>
+
+    <!-- Include Axios for HTTP requests -->
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+    <!-- JavaScript code to handle form submissions -->
+    <script>
+        // Fetch input fields from the backend
+        let inputFields = [];
+
+        axios.get('/get_fields')
+            .then(response => {
+                inputFields = response.data;
+                generateFormFields();
+            })
+            .catch(error => {
+                console.error('Error fetching input fields:', error);
+                alert('An error occurred while fetching input fields.');
+            });
+
+        function generateFormFields() {
+            const formFieldsContainer = document.getElementById('form-fields');
+
+            inputFields.forEach(fieldInfo => {
+                const fieldName = fieldInfo.name;
+                const fieldType = fieldInfo.type;
+                const fieldId = fieldName.replace(/[^a-zA-Z0-9]/g, '_');
+
+                const fieldDiv = document.createElement('div');
+                fieldDiv.className = 'flex flex-col';
+
+                const label = document.createElement('label');
+                label.className = 'font-semibold';
+                label.htmlFor = fieldId;
+                label.textContent = fieldName;
+
+                let inputElement;
+
+                if (fieldType === 'numerical') {
+                    inputElement = document.createElement('input');
+                    inputElement.type = 'number';
+                    inputElement.step = 'any';
+                    inputElement.className = 'border border-gray-300 p-2 rounded';
+                } else if (fieldType === 'categorical') {
+                    inputElement = document.createElement('select');
+                    inputElement.className = 'border border-gray-300 p-2 rounded';
+                    const defaultOption = document.createElement('option');
+                    defaultOption.value = '';
+                    defaultOption.textContent = 'Select an option';
+                    inputElement.appendChild(defaultOption);
+
+                    fieldInfo.values.forEach(value => {
+                        const option = document.createElement('option');
+                        option.value = value;
+                        option.textContent = value;
+                        inputElement.appendChild(option);
+                    });
+                }
+
+                inputElement.id = fieldId;
+                inputElement.name = fieldName;
+
+                fieldDiv.appendChild(label);
+                fieldDiv.appendChild(inputElement);
+                formFieldsContainer.appendChild(fieldDiv);
+            });
+        }
+
+        // Handle manual input form submission
+        document.getElementById('manual-input-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            // Collect form data
+            const formData = {};
+            inputFields.forEach(fieldInfo => {
+                const fieldName = fieldInfo.name;
+                const fieldId = fieldName.replace(/[^a-zA-Z0-9]/g, '_');
+                const value = document.getElementById(fieldId).value;
+                if (value) {
+                    formData[fieldName] = value;
+                }
+            });
+
+            // Send POST request to /predict endpoint
+            axios.post('/predict', formData)
+                .then(response => {
+                    const predictions = response.data;
+                    displayManualOutput(predictions);
+                })
+                .catch(error => {
+                    console.error(error);
+                    alert('An error occurred while making the prediction.');
+                });
+        });
+
+        // Display manual output
+        function displayManualOutput(predictions) {
+            const outputDiv = document.getElementById('manual-output');
+            outputDiv.innerHTML = `
+                <h3 class="text-xl font-semibold mb-2">Predictions:</h3>
+                <ul class="list-disc list-inside">
+                    <li><strong>Yield strength / MPa:</strong> ${predictions['Yield strength / MPa'][0].toFixed(2)}</li>
+                    <li><strong>Ultimate tensile strength / MPa:</strong> ${predictions['Ultimate tensile strength / MPa'][0].toFixed(2)}</li>
+                    <li><strong>Charpy impact toughness / J (at 40°C):</strong> ${predictions['Charpy impact toughness / J'][0].toFixed(2)}</li>
+                    <li><strong>Combined Score:</strong> ${(predictions['combined_score'][0] * 100).toFixed(2)}%</li>
+                </ul>
+            `;
+        }
+
+        // Handle file upload form submission
+        document.getElementById('file-upload-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const inputFile = document.getElementById('input-file').files[0];
+            if (!inputFile) {
+                alert('Please select a CSV file to upload.');
+                return;
+            }
+
+            const formData = new FormData();
+            formData.append('file', inputFile);
+
+            // Send POST request to /predict_file endpoint
+            axios.post('/predict_file', formData, {
+                responseType: 'blob',
+                headers: {
+                    'Content-Type': 'multipart/form-data'
+                }
+            })
+            .then(response => {
+                // Create a link to download the file
+                const blob = new Blob([response.data], { type: 'text/csv' });
+                const url = window.URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'predictions.csv');
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+
+                // Display success message
+                const outputDiv = document.getElementById('file-output');
+                outputDiv.innerHTML = `<p class="text-green-600 font-semibold">Predictions file has been downloaded successfully.</p>`;
+            })
+            .catch(error => {
+                console.error(error);
+                alert('An error occurred while processing the file.');
+            });
+        });
+    </script>
+</body>
+</html>
