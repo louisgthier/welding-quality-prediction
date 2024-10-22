@@ -1,0 +1,6 @@
+# permet de supprimer automatiquement les sorties des notebooks avant de les commiter
+repos:
+  - repo: https://github.com/kynan/nbstripout
+    rev: 0.7.1
+    hooks:
+      - id: nbstripout
