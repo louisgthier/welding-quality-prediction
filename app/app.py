@@ -33,7 +33,7 @@ Y_max = None
 numerical_imputer = None
 categorical_imputer = None
 df_columns_info = None
-target_variables = ['Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Charpy impact toughness / J']
+target_variables = ['Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Elongation / %', 'Reduction of Area / %', 'Charpy impact toughness / J']
 pca = None
 
 def load_data():
@@ -60,7 +60,7 @@ def preprocess_data(df, is_train=True):
     df = df.drop(columns=['Weld ID'], errors='ignore')
     
     # Drop non-target columns known only with destructive testing
-    df = df.drop(columns=['Elongation / %', 'Reduction of Area / %', '50% FATT'], errors='ignore')
+    df = df.drop(columns=['50% FATT'], errors='ignore')
     
     if not is_train:
         # Drop columns not present in the training data
@@ -262,7 +262,7 @@ def train_models(X, Y_scaled):
     """
     global models, Y_min, Y_max
 
-    target_variables = ['Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Charpy impact toughness / J']
+    target_variables = ['Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Elongation / %', 'Reduction of Area / %', 'Charpy impact toughness / J']
 
     # Initialize dictionary to hold models
     models = {}
@@ -391,7 +391,7 @@ def predict_file():
         df_predictions = pd.DataFrame(predictions)
 
         # RMSE Calculation for each target
-        target_variables = ['Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Charpy impact toughness / J']
+        target_variables = [['Yield strength / MPa', 'Ultimate tensile strength / MPa', 'Elongation / %', 'Reduction of Area / %', 'Charpy impact toughness / J']]
         rmse_results = {}
         for target in target_variables:
             if target in df.columns:
