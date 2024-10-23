@@ -150,44 +150,30 @@ Nous avons calculé la matrice de corrélation entre les variables numériques e
     \label{fig:correlation_matrix}
 \end{figure}
 
-\section{Prétraitement des Données}
+\subsection{Résumé des transformations effectuées}
 
-\subsection{Nettoyage des Données}
+\begin{longtable}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Catégorie} & \textbf{Changements Apportés} \\ \hline
+\multicolumn{2}{|c|}{\textbf{Suppression de Colonnes}} \\ \hline
+\textit{Weld ID} & Suppression de la colonne car elle ne correspond pas à une caractéristique physique, chimique ou mécanique des soudures, mais à un identifiant non pertinent pour l'analyse. \\ \hline
+Colonnes avec plus de 80\% de valeurs manquantes & Suppression des colonnes ayant plus de 80\% de valeurs manquantes. Ces colonnes sont considérées comme inexploitables à cause du trop faible nombre de données disponibles, comme \textit{Primary ferrite}, \textit{Ferrite with second phase}, et \textit{Acicular ferrite}. \\ \hline
 
-\subsubsection{Conversion des Valeurs Non Numériques}
+\multicolumn{2}{|c|}{\textbf{Gestion des Valeurs Manquantes}} \\ \hline
+Imputation numérique & Les valeurs manquantes des colonnes numériques sont imputées par la médiane pour conserver la distribution des données sans introduire de biais. Cette méthode est robuste aux valeurs aberrantes. \\ \hline
+Imputation catégorielle & Les valeurs manquantes dans les colonnes catégorielles sont imputées par la valeur la plus fréquente (\textit{mode}), ce qui permet de maintenir une cohérence tout en minimisant l'impact des valeurs manquantes. \\ \hline
+Colonnes intéressantes avec indicateurs de manquants & Création d'indicateurs binaires (\textit{0 = non manquant}, \textit{1 = manquant}) pour des colonnes considérées importantes mais contenant des valeurs manquantes, comme \textit{Chromium concentration}, \textit{Tungsten concentration}, et \textit{Copper concentration}. Cela permet de modéliser l'impact potentiel des valeurs manquantes sur le modèle. \\ \hline
+\multicolumn{2}{|c|}{\textbf{Traitement des Colonnes Numériques}} \\ \hline
+Colonnes avec signes \leq & Les valeurs précédées du signe \leq sont remplacées par la moitié de ces valeurs pour fournir une estimation utilisable tout en restant proche des données originales. \\ \hline
+\textit{Hardness / kg mm$^{-2}$} & Les annotations non pertinentes comme \textit{'158(Hv30)'} sont supprimées pour ne garder que la valeur numérique de la dureté. La colonne est ensuite convertie en valeurs numériques exploitables. \\ \hline
+\textit{Interpass temperature / °C} & Les valeurs exprimées sous forme d’intervalles (\textit{150-200°C}) sont remplacées par la moyenne des bornes de l'intervalle afin de simplifier l'analyse. Les valeurs sont ensuite converties en données numériques. \\ \hline
 
-Certaines colonnes contiennent des valeurs avec des symboles \textit{'<'}, \textit{'>'}. Nous avons remplacé ces valeurs par la valeur numérique correspondante, en supprimant les symboles.
+\multicolumn{2}{|c|}{\textbf{Traitement des Colonnes Catégorielles}} \\ \hline
+Encodage catégoriel & Un encodage \textit{one-hot} est réalisé pour les colonnes \textit{AC or DC} et \textit{Type of weld} afin de transformer les catégories en variables numériques. Une catégorie est supprimée dans chaque cas pour éviter la multicollinéarité. \\ \hline
+\textit{Electrode positive or negative} & Les signes \textit{+} et \textit{-} sont transformés en valeurs numériques : \textit{1} pour une électrode positive et \textit{-1} pour une électrode négative, facilitant ainsi leur utilisation dans les modèles de machine learning. \\ \hline
 
-Dans la colonne \textit{Hardness / kg mm$^{-2}$}, nous avons extrait les valeurs numériques en supprimant les annotations telles que \textit{'(Hv30)'}.
-
-Pour la colonne \textit{Nitrogen concentration / parts per million by weight}, nous avons extrait les valeurs numériques en ignorant les annotations \textit{'tot'} et \textit{'res'}.
-
-\subsubsection{Traitement des Ranges de Valeurs}
-
-Dans la colonne \textit{Interpass temperature / °C}, certaines valeurs sont des intervalles (par exemple, \textit{'150-200'}). Nous avons remplacé ces valeurs par la moyenne des bornes de l'intervalle.
-
-\subsubsection{Transformation des Variables Catégorielles}
-
-La colonne \textit{Electrode positive or negative} a été transformée en valeurs numériques, en remplaçant \textit{'+'} par 1 et \textit{'-'} par -1.
-
-Les colonnes catégorielles \textit{AC or DC} et \textit{Type of weld} ont été transformées à l'aide d'un encodage \textit{one-hot}.
-
-\subsection{Gestion des Valeurs Manquantes}
-
-Nous avons décidé de supprimer les colonnes avec plus de 80\,\% de valeurs manquantes, car elles apportent peu d'information exploitable. Les colonnes supprimées sont :
-
-\begin{itemize}
-    \item \textit{50\,\% FATT}
-    \item \textit{Hardness scale}
-    \item \textit{Primary ferrite in microstructure / \%}
-    \item \textit{Ferrite with second phase / \%}
-    \item \textit{Acicular ferrite / \%}
-    \item \textit{Martensite / \%}
-    \item \textit{Ferrite with carbide aggregate / \%}
-\end{itemize}
-
-Pour les variables numériques restantes, nous avons imputé les valeurs manquantes avec la médiane de la colonne correspondante. Pour les variables catégorielles, nous avons utilisé la modalité la plus fréquente.
-
+\caption{Tableau récapitulatif des transformations de données correspondant au prétraitement effectué.}
+\end{longtable}
 \subsection{Traitement des Valeurs Aberrantes}
 
 Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemple, dans la variable \textit{Vanadium concentration / weight \%}, certaines valeurs dépassent largement les concentrations typiques. Nous avons choisi de ne pas les supprimer, car elles pourraient représenter des cas particuliers intéressants, mais nous en tenons compte dans l'analyse.
