@@ -122,42 +122,30 @@ Nous avons calculé la matrice de corrélation entre les variables numériques e
 
 \section{Prétraitement des Données}
 
-\subsection{Nettoyage des Données}
+\subsection{Résumé des transformations effectuées}
 
-\subsubsection{Conversion des Valeurs Non Numériques}
+\begin{longtable}{|p{4cm}|p{10cm}|}
+\hline
+\textbf{Catégorie} & \textbf{Changements Apportés} \\ \hline
+\multicolumn{2}{|c|}{\textbf{Suppression de Colonnes}} \\ \hline
+\textit{Weld ID} & Suppression de la colonne car elle ne correspond pas à une caractéristique physique, chimique ou mécanique des soudures, mais à un identifiant non pertinent pour l'analyse. \\ \hline
+Colonnes avec plus de 80\% de valeurs manquantes & Suppression des colonnes ayant plus de 80\% de valeurs manquantes. Ces colonnes sont considérées comme inexploitables à cause du trop faible nombre de données disponibles, comme \textit{Primary ferrite}, \textit{Ferrite with second phase}, et \textit{Acicular ferrite}. \\ \hline
 
-Certaines colonnes contiennent des valeurs avec des symboles \textit{'<'}, \textit{'>'}. Nous avons remplacé ces valeurs par la valeur numérique correspondante, en supprimant les symboles.
+\multicolumn{2}{|c|}{\textbf{Gestion des Valeurs Manquantes}} \\ \hline
+Imputation numérique & Les valeurs manquantes des colonnes numériques sont imputées par la médiane pour conserver la distribution des données sans introduire de biais. Cette méthode est robuste aux valeurs aberrantes. \\ \hline
+Imputation catégorielle & Les valeurs manquantes dans les colonnes catégorielles sont imputées par la valeur la plus fréquente (\textit{mode}), ce qui permet de maintenir une cohérence tout en minimisant l'impact des valeurs manquantes. \\ \hline
+Colonnes intéressantes avec indicateurs de manquants & Création d'indicateurs binaires (\textit{0 = non manquant}, \textit{1 = manquant}) pour des colonnes considérées importantes mais contenant des valeurs manquantes, comme \textit{Chromium concentration}, \textit{Tungsten concentration}, et \textit{Copper concentration}. Cela permet de modéliser l'impact potentiel des valeurs manquantes sur le modèle. \\ \hline
+\multicolumn{2}{|c|}{\textbf{Traitement des Colonnes Numériques}} \\ \hline
+Colonnes avec signes \leq & Les valeurs précédées du signe \leq sont remplacées par la moitié de ces valeurs pour fournir une estimation utilisable tout en restant proche des données originales. \\ \hline
+\textit{Hardness / kg mm$^{-2}$} & Les annotations non pertinentes comme \textit{'158(Hv30)'} sont supprimées pour ne garder que la valeur numérique de la dureté. La colonne est ensuite convertie en valeurs numériques exploitables. \\ \hline
+\textit{Interpass temperature / °C} & Les valeurs exprimées sous forme d’intervalles (\textit{150-200°C}) sont remplacées par la moyenne des bornes de l'intervalle afin de simplifier l'analyse. Les valeurs sont ensuite converties en données numériques. \\ \hline
 
-Dans la colonne \textit{Hardness / kg mm$^{-2}$}, nous avons extrait les valeurs numériques en supprimant les annotations telles que \textit{'(Hv30)'}.
+\multicolumn{2}{|c|}{\textbf{Traitement des Colonnes Catégorielles}} \\ \hline
+Encodage catégoriel & Un encodage \textit{one-hot} est réalisé pour les colonnes \textit{AC or DC} et \textit{Type of weld} afin de transformer les catégories en variables numériques. Une catégorie est supprimée dans chaque cas pour éviter la multicollinéarité. \\ \hline
+\textit{Electrode positive or negative} & Les signes \textit{+} et \textit{-} sont transformés en valeurs numériques : \textit{1} pour une électrode positive et \textit{-1} pour une électrode négative, facilitant ainsi leur utilisation dans les modèles de machine learning. \\ \hline
 
-Pour la colonne \textit{Nitrogen concentration / parts per million by weight}, nous avons extrait les valeurs numériques en ignorant les annotations \textit{'tot'} et \textit{'res'}.
-
-\subsubsection{Traitement des Ranges de Valeurs}
-
-Dans la colonne \textit{Interpass temperature / °C}, certaines valeurs sont des intervalles (par exemple, \textit{'150-200'}). Nous avons remplacé ces valeurs par la moyenne des bornes de l'intervalle.
-
-\subsubsection{Transformation des Variables Catégorielles}
-
-La colonne \textit{Electrode positive or negative} a été transformée en valeurs numériques, en remplaçant \textit{'+'} par 1 et \textit{'-'} par -1.
-
-Les colonnes catégorielles \textit{AC or DC} et \textit{Type of weld} ont été transformées à l'aide d'un encodage \textit{one-hot}.
-
-\subsection{Gestion des Valeurs Manquantes}
-
-Nous avons décidé de supprimer les colonnes avec plus de 80\,\% de valeurs manquantes, car elles apportent peu d'information exploitable. Les colonnes supprimées sont :
-
-\begin{itemize}
-    \item \textit{50\,\% FATT}
-    \item \textit{Hardness scale}
-    \item \textit{Primary ferrite in microstructure / \%}
-    \item \textit{Ferrite with second phase / \%}
-    \item \textit{Acicular ferrite / \%}
-    \item \textit{Martensite / \%}
-    \item \textit{Ferrite with carbide aggregate / \%}
-\end{itemize}
-
-Pour les variables numériques restantes, nous avons imputé les valeurs manquantes avec la médiane de la colonne correspondante. Pour les variables catégorielles, nous avons utilisé la modalité la plus fréquente.
-
+\caption{Tableau récapitulatif des transformations de données correspondant au prétraitement effectué.}
+\end{longtable}
 \subsection{Traitement des Valeurs Aberrantes}
 
 Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemple, dans la variable \textit{Vanadium concentration / weight \%}, certaines valeurs dépassent largement les concentrations typiques. Nous avons choisi de ne pas les supprimer, car elles pourraient représenter des cas particuliers intéressants, mais nous en tenons compte dans l'analyse.
@@ -186,41 +174,42 @@ Nous avons visualisé les deux premières composantes principales en colorant le
 
 \section{Application des Algorithmes de Machine Learning}
 
-\subsection{Sélection de la Variable Cible}
+\subsection{Sélection des Variables Cible}
 
-Nous avons choisi de prédire la variable \textit{Yield strength / MPa}, car elle est disponible pour la plupart des observations et représente une mesure importante de la qualité de la soudure.
-
-\subsection{Séparation des Données}
-
-Nous avons séparé le jeu de données en un ensemble d'entraînement et un ensemble de test, en veillant à ce que les groupes (\textit{group\_id}) ne soient pas présents dans les deux ensembles, afin d'éviter toute fuite d'information.
+Nous avons choisi de prédire plusieurs variables essentielles à la qualité des soudures : \textit{Yield strength / MPa}, \textit{Ultimate tensile strength / MPa}, \textit{Elongation / \%}, \textit{Reduction of Area / \%}, et \textit{Charpy impact toughness / J}. Ces variables sont des indicateurs clés qui permettent d’évaluer les propriétés mécaniques et la résistance globale des soudures, et donc leur qualité.
 
 \subsection{Modèles Utilisés}
 
-Nous avons testé plusieurs modèles de régression :
+Durant notre phase de test, nous avons utilisé plusieurs modèles de régression :
 
 \begin{itemize}
-    \item Régression Linéaire
-    \item Forêt d'arbres décisionnels (\textit{Random Forest})
-    \item Gradient Boosting
-    \item Machine à Vecteurs de Support (\textit{Support Vector Machine})
-    \item XGBoost
+\item Régression Linéaire
+\item Forêt d’arbres décisionnels (\textit{Random Forest})
+\item Gradient Boosting
+\item Machine à Vecteurs de Support (\textit{Support Vector Machine})
+\item XGBoost
 \end{itemize}
+
+Après une phase d’expérimentation et d’optimisation des hyperparamètres via une recherche par grille (\textit{grid search}), nous avons retenu le modèle XGBoost. Celui-ci a montré des performances supérieures en termes de précision prédictive, tout en offrant une certaine explicabilité grâce à l’analyse de l’importance des caractéristiques (voir Figure~\ref{fig:xgboost_feature_importance}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/xgboost_feature_importance.png}
+    \caption{Importance des caractéristiques du modèle XGBoost}
+    \label{fig:xgboost_feature_importance}
+\end{figure}
 
 \subsection{Évaluation des Modèles}
 
-Nous avons utilisé la validation croisée avec \textit{GroupKFold} pour évaluer les modèles, en utilisant l'erreur quadratique moyenne (RMSE) comme métrique de performance.
+Nous avons évalué nos modèles à l’aide de la validation croisée en utilisant la méthode \textit{GroupKFold}. Deux métriques de performance ont été retenues : l’erreur quadratique moyenne (RMSE) et le coefficient de détermination (R2). Le modèle XGBoost a montré les meilleures performances globales sur nos 5 variables cibles, avec une RMSE moyenne de 0,5 et un R2 élevé, indiquant une bonne capacité de prédiction.
 
-Le modèle XGBoost a obtenu les meilleurs résultats, avec un RMSE moyen de 0,95 sur l'ensemble de validation.
+\subsection{Apprentissage semi-supervisé}
 
-\subsection{Apprentissage Semi-Supervisé}
-
-Étant donné que le jeu de données contient de nombreuses valeurs manquantes pour la variable cible, nous avons appliqué une approche d'apprentissage semi-supervisé en utilisant l'auto-entraînement (\textit{self-training}). Cette méthode consiste à utiliser les prédictions du modèle sur les données non étiquetées comme pseudo-étiquettes pour enrichir l'ensemble d'entraînement.
-
-Après plusieurs itérations, nous avons constaté une amélioration des performances du modèle, avec un RMSE réduit à 0,90 sur l'ensemble de test.
+Initialement, nous avions envisagé l’utilisation d’une méthode d’apprentissage semi-supervisé basée sur l’auto-entraînement (\textit{self-training}) pour pallier les valeurs manquantes des variables cibles. Cependant, une analyse plus approfondie du jeu de données a révélé que la majorité des valeurs manquantes étaient en réalité dues à un mauvais regroupement des données dans le dataset, et non à des absences réelles de mesures. En conséquence, nous avons abandonné cette approche, d’autant plus que les tentatives d’utilisation de l’auto-entraînement n’ont pas donné de bons résultats.
 
 \subsection{Résultats}
 
-Le modèle final basé sur XGBoost et l'apprentissage semi-supervisé a permis de prédire la \textit{Yield strength / MPa} avec une bonne précision. La Figure~\ref{fig:predictions_vs_true} montre la comparaison entre les valeurs prédites et les valeurs réelles.
+Le modèle final basé sur XGBoost a montré une précision élevée pour toutes les variables cibles sélectionnées, avec une bonne capacité de généralisation. La Figure~\ref{fig:predictions_vs_true} illustre la comparaison entre les valeurs prédites et les valeurs réelles pour la variable \textit{Yield strength / MPa}.
 
 \begin{figure}[H]
     \centering
