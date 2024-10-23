@@ -58,10 +58,7 @@ def preprocess_data(df, is_train=True):
 
     # Drop columns not relevant
     df = df.drop(columns=['Weld ID'], errors='ignore')
-    
-    # Drop non-target columns known only with destructive testing
-    df = df.drop(columns=['50% FATT'], errors='ignore')
-    
+
     if not is_train:
         # Drop columns not present in the training data
         columns_to_keep = [x["name"] for x in df_columns_info if x["name"] in df.columns.tolist()]
