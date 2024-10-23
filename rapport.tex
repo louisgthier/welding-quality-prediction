@@ -216,41 +216,42 @@ Nous avons visualisé les deux premières composantes principales en colorant le
 
 \section{Application des Algorithmes de Machine Learning}
 
-\subsection{Sélection de la Variable Cible}
+\subsection{Sélection des Variables Cible}
 
-Nous avons choisi de prédire la variable \textit{Yield strength / MPa}, car elle est disponible pour la plupart des observations et représente une mesure importante de la qualité de la soudure.
-
-\subsection{Séparation des Données}
-
-Nous avons séparé le jeu de données en un ensemble d'entraînement et un ensemble de test, en veillant à ce que les groupes (\textit{group\_id}) ne soient pas présents dans les deux ensembles, afin d'éviter toute fuite d'information.
+Nous avons choisi de prédire plusieurs variables essentielles à la qualité des soudures : \textit{Yield strength / MPa}, \textit{Ultimate tensile strength / MPa}, \textit{Elongation / \%}, \textit{Reduction of Area / \%}, et \textit{Charpy impact toughness / J}. Ces variables sont des indicateurs clés qui permettent d’évaluer les propriétés mécaniques et la résistance globale des soudures, et donc leur qualité.
 
 \subsection{Modèles Utilisés}
 
-Nous avons testé plusieurs modèles de régression :
+Durant notre phase de test, nous avons utilisé plusieurs modèles de régression :
 
 \begin{itemize}
-    \item Régression Linéaire
-    \item Forêt d'arbres décisionnels (\textit{Random Forest})
-    \item Gradient Boosting
-    \item Machine à Vecteurs de Support (\textit{Support Vector Machine})
-    \item XGBoost
+\item Régression Linéaire
+\item Forêt d’arbres décisionnels (\textit{Random Forest})
+\item Gradient Boosting
+\item Machine à Vecteurs de Support (\textit{Support Vector Machine})
+\item XGBoost
 \end{itemize}
+
+Après une phase d’expérimentation et d’optimisation des hyperparamètres via une recherche par grille (\textit{grid search}), nous avons retenu le modèle XGBoost. Celui-ci a montré des performances supérieures en termes de précision prédictive, tout en offrant une certaine explicabilité grâce à l’analyse de l’importance des caractéristiques (voir Figure~\ref{fig:xgboost_feature_importance}).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{images/xgboost_feature_importance.png}
+    \caption{Importance des caractéristiques du modèle XGBoost}
+    \label{fig:xgboost_feature_importance}
+\end{figure}
 
 \subsection{Évaluation des Modèles}
 
-Nous avons utilisé la validation croisée avec \textit{GroupKFold} pour évaluer les modèles, en utilisant l'erreur quadratique moyenne (RMSE) comme métrique de performance.
+Nous avons évalué nos modèles à l’aide de la validation croisée en utilisant la méthode \textit{GroupKFold}. Deux métriques de performance ont été retenues : l’erreur quadratique moyenne (RMSE) et le coefficient de détermination (R2). Le modèle XGBoost a montré les meilleures performances globales sur nos 5 variables cibles, avec une RMSE moyenne de 0,5 et un R2 élevé, indiquant une bonne capacité de prédiction.
 
-Le modèle XGBoost a obtenu les meilleurs résultats, avec un RMSE moyen de 0,95 sur l'ensemble de validation.
+\subsection{Apprentissage semi-supervisé}
 
-\subsection{Apprentissage Semi-Supervisé}
-
-Étant donné que le jeu de données contient de nombreuses valeurs manquantes pour la variable cible, nous avons appliqué une approche d'apprentissage semi-supervisé en utilisant l'auto-entraînement (\textit{self-training}). Cette méthode consiste à utiliser les prédictions du modèle sur les données non étiquetées comme pseudo-étiquettes pour enrichir l'ensemble d'entraînement.
-
-Après plusieurs itérations, nous avons constaté une amélioration des performances du modèle, avec un RMSE réduit à 0,90 sur l'ensemble de test.
+Initialement, nous avions envisagé l’utilisation d’une méthode d’apprentissage semi-supervisé basée sur l’auto-entraînement (\textit{self-training}) pour pallier les valeurs manquantes des variables cibles. Cependant, une analyse plus approfondie du jeu de données a révélé que la majorité des valeurs manquantes étaient en réalité dues à un mauvais regroupement des données dans le dataset, et non à des absences réelles de mesures. En conséquence, nous avons abandonné cette approche, d’autant plus que les tentatives d’utilisation de l’auto-entraînement n’ont pas donné de bons résultats.
 
 \subsection{Résultats}
 
-Le modèle final basé sur XGBoost et l'apprentissage semi-supervisé a permis de prédire la \textit{Yield strength / MPa} avec une bonne précision. La Figure~\ref{fig:predictions_vs_true} montre la comparaison entre les valeurs prédites et les valeurs réelles.
+Le modèle final basé sur XGBoost a montré une précision élevée pour toutes les variables cibles sélectionnées, avec une bonne capacité de généralisation. La Figure~\ref{fig:predictions_vs_true} illustre la comparaison entre les valeurs prédites et les valeurs réelles pour la variable \textit{Yield strength / MPa}.
 
 \begin{figure}[H]
     \centering
