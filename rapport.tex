@@ -59,16 +59,7 @@ Le jeu de données contient 1\,652 observations et 46 variables. Ces variables c
 
 \subsection{Analyse des Valeurs Manquantes}
 
-Nous avons tout d'abord examiné la présence de valeurs manquantes dans le jeu de données. La Figure~\ref{fig:missing_heatmap} illustre la répartition des valeurs manquantes.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/missing_data_heatmap.png}
-    \caption{Carte thermique des valeurs manquantes dans le jeu de données}
-    \label{fig:missing_heatmap}
-\end{figure}
-
-Plusieurs colonnes cruciales affichent un nombre très élevé de valeurs manquantes, dépassant souvent 95\,\%. Par exemple, la variable \textit{50\,\% FATT}, qui mesure la température de transition fragile-ductile d'une soudure, manque dans plus de 98\,\% des cas, tout comme \textit{Hardness scale} (96,5\,\%). La perte d'une telle quantité de données rend ces colonnes inexploitables sans traitement supplémentaire. Elles ont donc été exclues de l'analyse.
+Nous avons tout d'abord examiné la présence de valeurs manquantes dans le jeu de données. Plusieurs colonnes cruciales affichent un nombre très élevé de valeurs manquantes, dépassant souvent 95\,\%. Par exemple, la variable \textit{50\,\% FATT}, qui mesure la température de transition fragile-ductile d'une soudure, manque dans plus de 98\,\% des cas, tout comme \textit{Hardness scale} (96,5\,\%). La perte d'une telle quantité de données rend ces colonnes inexploitables sans traitement supplémentaire. Elles ont donc été exclues de l'analyse.
 
 En revanche, certaines variables sont bien renseignées et montrent très peu de valeurs manquantes, ce qui les rend exploitables sans transformation majeure. C'est le cas des concentrations en \textit{carbone}, \textit{silicium}, ou encore des propriétés mécaniques telles que la \textit{résistance à la traction} (\textit{Ultimate tensile strength}) et la \textit{limite d'élasticité} (\textit{Yield strength}). Ces variables sont complètes dans plus de 99\,\% des cas, offrant ainsi une base solide pour le modèle.
 
@@ -82,21 +73,7 @@ Certaines colonnes contiennent des valeurs non numériques, comme des symboles \
 
 \subsection{Visualisation des Données}
 
-Nous avons réalisé des histogrammes pour visualiser la distribution des variables numériques (Figure~\ref{fig:histograms}). De plus, des boîtes à moustaches ont été tracées pour détecter la présence de valeurs aberrantes (Figure~\ref{fig:boxplots}).
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{images/numerical_histograms.png}
-    \caption{Histogrammes des variables numériques}
-    \label{fig:histograms}
-\end{figure}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{images/numerical_boxplots.png}
-    \caption{Boîtes à moustaches des variables numériques}
-    \label{fig:boxplots}
-\end{figure}
+Nous avons créé des histogrammes et des boîtes à moustaches pour visualiser la distribution des variables numériques et détecter la présence de valeurs aberrantes.
 
 \subsection{Identification des Variables Cibles}
 
@@ -135,20 +112,13 @@ Compte tenu du grand nombre de valeurs manquantes pour \textit{50\,\% FATT}, nou
 
 \subsection{Analyse des Corrélations}
 
-Nous avons calculé la matrice de corrélation entre les variables numériques et les variables cibles (Figure~\ref{fig:correlation_matrix}). Certaines corrélations intéressantes ont été observées :
+Nous avons calculé la matrice de corrélation entre les variables numériques et les variables cibles. Certaines corrélations intéressantes ont été observées :
 
 \begin{itemize}
     \item Forte corrélation entre \textit{Yield strength} et \textit{Ultimate tensile strength} (0,92).
     \item Corrélation négative entre \textit{Elongation} et \textit{Chrome concentration} (-0,44).
     \item Corrélation entre \textit{Reduction of Area} et \textit{Charpy impact toughness} (0,83).
 \end{itemize}
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.9\textwidth]{images/correlation_matrix.png}
-    \caption{Matrice de corrélation entre les variables numériques et les variables cibles}
-    \label{fig:correlation_matrix}
-\end{figure}
 
 \section{Prétraitement des Données}
 
@@ -208,25 +178,11 @@ Nous avons appliqué une ACP sur les variables numériques standardisées pour r
 
 \subsection{Choix du Nombre de Composantes}
 
-La Figure~\ref{fig:explained_variance} montre la variance expliquée cumulée en fonction du nombre de composantes principales. Nous avons choisi de conserver les 10 premières composantes, qui expliquent environ 80\,\% de la variance totale.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/explained_variance.png}
-    \caption{Variance expliquée cumulée en fonction du nombre de composantes principales}
-    \label{fig:explained_variance}
-\end{figure}
+Nous avons examiné la variance expliquée cumulée en fonction du nombre de composantes principales. Nous avons choisi de conserver les 10 premières composantes, qui expliquent environ 80\,\% de la variance totale.
 
 \subsection{Visualisation des Composantes Principales}
 
-Nous avons visualisé les deux premières composantes principales en colorant les points en fonction de la variable cible \textit{Yield strength / MPa} (Figure~\ref{fig:pca_scatter}). Cette visualisation permet de détecter des structures ou des regroupements dans les données.
-
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.8\textwidth]{images/ca_scatter.png}
-    \caption{Projection des données sur les deux premières composantes principales, colorées par \textit{Yield strength / MPa}}
-    \label{fig:pca_scatter}
-\end{figure}
+Nous avons visualisé les deux premières composantes principales en colorant les points en fonction de la variable cible \textit{Yield strength / MPa}. Cette visualisation permet de détecter des structures ou des regroupements dans les données.
 
 \section{Application des Algorithmes de Machine Learning}
 
