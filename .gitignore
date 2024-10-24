@@ -12,3 +12,7 @@ __pycache__/
 # Ignore macOS system files
 .DS_Store
 
+# Ignorer le dossier des fichiers auxiliaires
+build/
+
+
