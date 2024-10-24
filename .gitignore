@@ -15,4 +15,7 @@ __pycache__/
 # Ignorer le dossier des fichiers auxiliaires
 build/
 
+# Ignorer certains fichiers latex
+*.synctex.gz
+
 
