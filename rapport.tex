@@ -23,6 +23,25 @@
 \usepackage{listings}
 \usepackage{xcolor}
 \usepackage{pgfplots}
+\usepackage{fancyhdr}
+\usepackage{lastpage} 
+
+\pagestyle{fancy}
+\fancyhf{} % On efface les entêtes et pieds de page par défaut
+
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyfoot[L]{\includegraphics[height=1cm]{images/logoCS.jpg}}
+\fancyfoot[C]{\textit{Mention IA - Projet d'Apprentissage Automatique}}
+\fancyfoot[R]{Page \thepage{} sur \pageref{LastPage}}
+
+% Pour que le pied de page s'applique aussi sur la première page
+\fancypagestyle{plain}{
+    \fancyhf{} % Efface les entêtes et pieds de page par défaut de plain
+    \fancyfoot[L]{\includegraphics[height=1cm]{images/logoCS.jpg}}
+    \fancyfoot[C]{\textit{Mention IA - Projet d'Apprentissage Automatique}}
+    \fancyfoot[R]{Page \thepage{} sur \pageref{LastPage}}
+    \renewcommand{\footrulewidth}{0.4pt} % Ligne horizontale
+}
 
 \pgfplotsset{compat=1.16}
 
