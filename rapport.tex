@@ -213,9 +213,21 @@ Le modèle final basé sur XGBoost a montré une précision élevée pour toutes
 
 \begin{figure}[H]
     \centering
-    \includegraphics[width=0.7\textwidth]{images/predictions_vs_true.png}
-    \caption{Comparaison entre les valeurs prédites et les valeurs réelles de \textit{Yield strength / MPa}}
-    \label{fig:predictions_vs_true}
+    \begin{subfigure}[b]{0.40\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{images/predictions_vs_true.png}
+        % \caption{Comparaison entre les valeurs prédites et les valeurs réelles de \textit{Yield strength / MPa}}
+        \label{fig:predictions_vs_true}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}[b]{0.55\textwidth}
+        \centering
+        \includegraphics[width=\textwidth, height=0.25\textheight]{images/model_R2_results.png}
+        % \caption{Résultats du score R2 des modèles (les scores R2 négatifs sont tronqués à 0)}
+        \label{fig:second_image}
+    \end{subfigure}
+    \caption{(Gauche) Comparaison entre les valeurs prédites et les valeurs réelles de \textit{Yield strength / MPa}. (Droite) Classement des modèles en fonction de leur score R2 (validation), les scores R2 négatifs sont tronqués à 0.}
+    \label{fig:side_by_side}
 \end{figure}
 
 \section{Développement d'une Interface Web}
