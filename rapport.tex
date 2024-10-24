@@ -129,7 +129,7 @@ Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemp
 
 \subsubsection{Gestion des valeurs manquantes}
 
-Pour effectuer l'ACP, nous devons gérer les valeurs manquantes du dataset.
+Pour effectuer l'ACP et appliquer ensuite les modèles de Machine Learning, nous devons gérer les valeurs manquantes du dataset.
 Nous supprimons les colonnes contenant trop de valeurs manquantes (plus de 80\%, considérées inexploitables et imputer des données risque de trop fausser les résultats). Cela supprime des colonnes comme \textit{Hardness} ou \textit{Primary Ferrite}.
 
 D'autres variables présentent un taux de valeurs manquantes plus modéré, notamment des indicateurs clés de la qualité des soudures, tels que la \textit{Yield strength}, l'\textit{Ultimate tensile strength}, l'\textit{Elongation}, la \textit{Reduction of Area} et la \textit{Charpy impact toughness}. Comme vu dans l'analyse exploratoire des données, ces variables proviennent de tests destructifs ; par exemple, le test Charpy, qui mesure la \textit{Charpy impact toughness}, détruit la soudure, ce qui empêche de réaliser d'autres mesures comme la \textit{tensile strength} sur le même échantillon. De plus, nous avons remarqué que plusieurs tests étaient souvent réalisés sur des soudures identiques (ayant exactement les mêmes paramètres), avec un test de \textit{Yield strength} et \textit{UTS}, suivi de plusieurs tests Charpy à différentes températures. Pour traiter ces cas, nous avons regroupé les observations correspondant à une même soudure afin de combler les valeurs manquantes et d'éviter toute fuite de données (\textit{data leakage}) entre l'ensemble d'entraînement et les ensembles de test/validation.
