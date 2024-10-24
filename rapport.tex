@@ -142,11 +142,33 @@ Avant d'appliquer l'ACP et les modèles de Machine Learning, nous avons standard
 
 \subsubsection{Résultats de l'ACP}
 
-Appliquer une ACP sur les variables numériques standardisées permet de réduire la dimensionnalité du jeu de données et éliminer les redondances.
+Appliquer une ACP sur les variables numériques standardisées permet de réduire la dimensionnalité des données tout en préservant autant que possible la variance.
 
 Nous avons examiné la variance expliquée cumulée en fonction du nombre de composantes principales. Nous avons choisi de conserver les 10 premières composantes, qui expliquent environ 80\,\% de la variance totale.
 
 Nous avons visualisé les deux premières composantes principales en colorant les points en fonction de la variable cible \textit{Yield strength / MPa}. Cette visualisation permet de détecter des structures ou des regroupements dans les données.
+
+\subsubsection{Clustering sur les résultats de l'ACP}
+Nous avons appliqué un clustering par la méthode des k-means sur les résultats de l'ACP. Cette pratique est courante, le clustering devient alors plus efficace, car il opère sur des variables non corrélées, qui représentent les directions de plus grande variance dans les données. Cela aide à éviter les problèmes de multicolinéarité qui peuvent affecter les algorithmes de clustering. Nous avons également veillé à n'utiliser que les features en entrée afin de garantir que les groupes formés reflètent uniquement les structures présentes dans les données originales, sans influence des variables cibles.
+
+Toutefois nous avons ensuite examiné la distribution des résultats de ce clustering par rapport à chaque variable cible (Figure~\ref{fig:inertia}). Cette analyse nous a permis de déterminer si les groupes obtenus se répercutent sur les outputs. Les résultats étaient modérés, mais nous avons observé des différences dans les distributions des variables cibles, en particulier pour le cluster 2, qui s'est distingué d'avantage.
+
+De plus, nous avons utilisé l'ACP, en sélectionnant les cinq premières composantes principales lors de la méthode de représentation des features, pour vérifier l'impact des features sur les clusters générés. Cette analyse a confirmé l'importance relative des différentes concentrations mesurées dans le dataset. 
+
+La méthode de l'inertie a été utilisée pour déterminer le nombre optimal de clusters. Pour rappel, l'inertie est définie par la formule suivante :
+
+\[
+I(k) = \sum_{i=1}^{k} \sum_{x_j \in C_i} \| x_j - \mu_i \|^2
+\]
+
+où \(I(k)\) est l'inertie pour \(k\) clusters, \(C_i\) est le \(i^{ème}\) cluster, \(x_j\) est un point de données dans \(C_i\), et \(\mu_i\) est le centroid du cluster \(C_i\).
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth]{images/clustering.png}
+    \caption{résultats du clustering k-means appliqué aux données de l'ACP, ainsi que les distributions des variables cibles par cluster}
+    \label{fig:inertia}
+\end{figure}
 
 \section{Application des Algorithmes de Machine Learning}
 
@@ -210,7 +232,7 @@ Ce projet nous a permis de mettre en pratique différentes techniques d'analyse 
 
 L'utilisation de l'apprentissage semi-supervisé a également permis de tirer parti des données non étiquetées, améliorant ainsi les performances du modèle. Ce travail ouvre la voie à une meilleure compréhension des facteurs influençant la qualité des soudures et pourrait aider les industriels à optimiser leurs processus de fabrication.
 
-% \newpage
+\newpage
 
 \begin{thebibliography}{11}
 
