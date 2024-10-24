@@ -39,122 +39,49 @@
 }
 
 \title{Rapport de projet d'Apprentissage Automatique}
-\author{Martin Rampont, Noémie Guisnel, Oscar Pastural, Louis Gauthier, Clément Florval}
+\author{
+    \small Martin Rampont (martin.rampont@student-cs.fr) \and 
+    \small Noémie Guisnel (noemie.guisnel@student-cs.fr) \and 
+    \small Oscar Pastural (oscar.pastural@student-cs.fr) \and 
+    \small Louis Gauthier (louis.gauthier@student-cs.fr) \and 
+    \small Clément Florval (clement.florval@student-cs.fr)
+}
+\date{24 Octobre 2024 \\ Équipe 2}
 
 \begin{document}
 \maketitle
 
-\section{Introduction}
+\section{Problématique du projet}
 
-L'objectif de ce projet est de prédire la qualité de soudures à partir de divers paramètres mécaniques, physiques et chimiques. Le but est d'identifier quels sont les paramètres qui influent le plus sur la qualité d'une soudure.
+Ce projet vise à développer un modèle de Machine Learning capable de prédire la qualité des soudures à partir de paramètres mécaniques, physiques et chimiques, obtenus sans recourir à des tests destructifs. L'objectif est d'identifier les facteurs influençant des propriétés clés comme la résistance à la traction, l'élasticité et la ductilité.
 
-Ce projet est d'autant plus intéressant qu'il se concentre sur une problématique critique pour les industriels. En effet, une soudure défaillante dans le domaine de l'aéronautique, la construction navale ou encore l'industrie pétrolière peut engendrer des conséquences graves, tant en termes de coûts que de sécurité.
+Dans des secteurs critiques tels que l'aéronautique et l'industrie pétrolière, la qualité des soudures est essentielle pour la sécurité et la fiabilité des infrastructures. Un modèle prédictif permettrait de prévenir les défauts de soudure, réduisant ainsi les risques d'accidents et les coûts liés aux réparations et tests destructifs.
 
-Après un premier travail d'analyse exploratoire visant à s’approprier le jeu de données en observant le nombre de valeurs manquantes pour chaque colonne et les corrélations entre celles-ci, nous décrivons les différentes étapes de prétraitement appliquées au dataset, ainsi que les raisons qui nous ont poussés à les effectuer. Nous appliquons ensuite une Analyse en Composantes Principales (ACP) pour simplifier le modèle en réduisant le nombre de variables à traiter, tout en conservant l’information essentielle. Enfin, nous appliquons des algorithmes de Machine Learning adaptés et analysons leurs performances.
+\section{Analyse exploratoire des données et prétraitement}
 
-\section{Analyse Exploratoire des Données (EDA)}
+\subsection{Exploration initiale des données et identification des variables cibles}
 
-\subsection{Chargement et Exploration Initiale des Données}
+Le jeu de données comporte 1,652 observations et 46 variables, couvrant un large éventail d'informations sur les soudures. Ces variables incluent des concentrations d'éléments chimiques tels que le carbone, le manganèse et le nickel, des propriétés mécaniques comme la résistance à la traction, la limite d’élasticité et la dureté, ainsi que des caractéristiques microstructurales. Chaque observation représente un échantillon unique de soudure, identifiable par (\textit{Weld ID}).
 
-Le jeu de données contient 1\,652 observations et 46 variables. Ces variables couvrent un large éventail d'informations concernant les soudures : des concentrations en éléments chimiques (carbone, manganèse, nickel, etc.), des propriétés mécaniques (résistance à la traction, limite d’élasticité, dureté), ainsi que des caractéristiques microstructurales. Chaque observation représente un échantillon unique, identifiable par la colonne \textit{Weld ID}.
+L’objectif est de prédire la qualité des soudures en utilisant uniquement des variables mesurables avant la destruction de l'échantillon. En conséquence, les variables obtenues par des tests destructifs, comme la \textit{Yield strength}, l'\textit{Ultimate tensile strength} ou encore la \textit{Charpy impact toughness}, ne peuvent pas être incluses dans les variables d'entrée (features) de notre modèle. Ces variables seront plutôt utilisées comme variables cibles pour évaluer la qualité des soudures. La charpy temperature (température à laquelle le test Charpy est réalisé) n'est pas une variable à prédire, mais une variable d'entrée, car elle influe directement sur les résultats du test Charpy.
 
-\subsection{Analyse des Valeurs Manquantes}
+Le test Charpy, qui mesure la capacité d'un matériau à absorber de l'énergie avant de se casser, et les autres mesures mécaniques (résistance à la traction, élongation, etc.) ne sont généralement pas effectués simultanément sur le même échantillon, ce qui entraîne de nombreuses valeurs manquantes, classées comme MAR (Missing At Random). Nous avons initialement envisagé de séparer le dataset en deux pour prédire indépendamment les résultats du test Charpy et ceux des autres propriétés mécaniques. Cependant, cette approche a conduit à des résultats insatisfaisants pour le test Charpy en raison de la perte d'information. Nous avons donc opté pour conserver l'ensemble des données dans un même dataset pour améliorer la qualité des prédictions.\\
 
-Nous avons tout d'abord examiné la présence de valeurs manquantes dans le jeu de données. Plusieurs colonnes cruciales affichent un nombre très élevé de valeurs manquantes, dépassant parfois 95\,\%. Par exemple, la variable \textit{50\,\% FATT}, qui mesure la température de transition fragile-ductile d'une soudure, manque dans plus de 98\,\% des cas, tout comme \textit{Hardness} (91,6\,\%). La perte d'une telle quantité de données rend ces colonnes inexploitables, elles ont donc été exclues de l'analyse.
+Ainsi, les variables cibles utilisables pour estimer la qualité des soudures incluent :
 
-En revanche, certaines variables sont bien renseignées et ne montrent aucune valeur manquante, ce qui les rend exploitables sans transformation majeure. C'est le cas des concentrations en \textit{carbone}, \textit{silicium}, ou encore de \textit{Heat input} ou \textit{Type of weld}.
+\begin{itemize} \item \textit{Yield strength / MPa} \item \textit{Ultimate tensile strength / MPa} \item \textit{Elongation / \%} \item \textit{Reduction of Area / \%} \item \textit{Charpy impact toughness / J} \end{itemize}
 
-D'autres variables présentent un taux de valeurs manquantes plus modéré, notamment des indicateurs clés de la qualité des soudures, tels que la \textit{Yield strength}, l'\textit{Ultimate tensile strength}, l'\textit{Elongation}, la \textit{Reduction of Area} et la \textit{Charpy impact toughness}. Ces variables proviennent de tests destructifs ; par exemple, le test Charpy, qui mesure la \textit{Charpy impact toughness}, détruit la soudure, ce qui empêche de réaliser d'autres mesures comme la \textit{tensile strength} sur le même échantillon. De plus, nous avons remarqué que plusieurs tests étaient souvent réalisés sur des soudures identiques (ayant exactement les mêmes paramètres), avec un test de \textit{Yield strength} et \textit{UTS}, suivi de plusieurs tests Charpy à différentes températures. Pour traiter ces cas, nous avons regroupé les observations correspondant à une même soudure afin de combler les valeurs manquantes et d'éviter toute fuite de données (\textit{data leakage}) entre l'ensemble d'entraînement et les ensembles de test/validation.
+Nous avons également pris en compte la variable \textit{50 \% FATT} (température de transition fragile-ductile), mais elle présente un taux de valeurs manquantes de plus de 98 \%, la rendant inutilisable.
 
-Nous avons également comparé la distribution des cibles en fonction de la présence ou de l'absence de données pour chaque variable. Lorsque les distributions étaient similaires, nous avons considéré que les données manquaient de manière complètement aléatoire (MCAR) et avons imputé les valeurs manquantes avec la médiane. Pour les autres variables, où les données manquaient de manière conditionnelle (MAR), nous avons testé l'imputation par KNN, mais les meilleurs résultats ont été obtenus en imputant la médiane et en ajoutant une colonne binaire indiquant la présence ou non de données manquantes.
+\subsection{Analyse des corrélations}
 
-\subsection{Analyse des Duplicatas}
-
-Nous avons vérifié la présence de duplicatas dans le jeu de données. Aucun duplicata exact n'a été trouvé. Cependant, des observations avec le même \textit{Weld ID} mais des données légèrement différentes existent. Nous avons considéré que ces observations représentent des soudures différentes et les avons conservées.
-
-\subsection{Analyse des Données Non Numériques}
-
-Certaines colonnes contiennent des valeurs non numériques, comme des symboles \textit{'<'}, \textit{'>'}, ou des annotations textuelles. Par exemple, dans la colonne \textit{Hardness / kg mm$^{-2}$}, certaines valeurs sont de la forme \textit{'158(Hv30)'}. Nous avons extrait les valeurs numériques pour rendre ces colonnes exploitables.
-
-\subsection{Visualisation des Données}
-
-Nous avons créé des histogrammes et des boîtes à moustaches pour visualiser la distribution des variables numériques et détecter la présence de valeurs aberrantes.
-
-\subsection{Identification des Variables Cibles}
-
-Pour que notre modèle soit utile en production sur des soudures réelles, il est essentiel que les variables d'entrée soient disponibles avant tout test destructif. Cela signifie que les variables dérivées de tests destructifs (par exemple, \textit{Yield strength}, \textit{Ultimate tensile strength}, \textit{Charpy impact toughness}) ne peuvent pas être utilisées comme features dans le modèle. Seules des variables mesurables avant la destruction de l'échantillon peuvent servir d'entrées dans le modèle.
-
-Un cas particulier est la variable \textit{Charpy temperature}, qui correspond à la température à laquelle le test Charpy est réalisé. Cette température est arbitraire et ne peut pas être prédite, car il existe souvent plusieurs tests pour un même échantillon réalisés à des températures différentes. Nous utilisons donc cette variable comme input pour fixer la température du test, ce qui permet de rendre les résultats comparables.
-
-\vspace{0.25cm}
-
-Les variables potentielles pour représenter la qualité des soudures sont donc :
-
-\begin{itemize}
-    \item \textit{Yield strength / MPa}
-    \item \textit{Ultimate tensile strength / MPa}
-    \item \textit{Elongation / \%}
-    \item \textit{Reduction of Area / \%}
-    \item \textit{Charpy impact toughness / J}
-    \item \textit{50\,\% FATT}
-\end{itemize}
-
-\vspace{0.25cm}
-
-Nous avons vérifié la disponibilité de ces variables et le nombre de valeurs manquantes (Tableau~\ref{tab:missing_targets}).
-
-\begin{table}[H]
-    \centering
-    \begin{tabular}{lcc}
-    \toprule
-    \textbf{Variable} & \textbf{Valeurs Présentes} & \textbf{Disponibilité (\%)} \\
-    \midrule
-    Yield strength / MPa & 780 & 47,2\,\% \\
-    Ultimate tensile strength / MPa & 738 & 44,6\,\% \\
-    Elongation / \% & 700 & 42,4\,\% \\
-    Reduction of Area / \% & 705 & 42,7\,\% \\
-    Charpy impact toughness / J & 879 & 53,2\,\% \\
-    50\,\% FATT & 31 & 1,9\,\% \\
-    \bottomrule
-    \end{tabular}
-    \caption{Disponibilité des variables cibles potentielles}
-    \label{tab:missing_targets}
-\end{table}
-
-Compte tenu du grand nombre de valeurs manquantes pour \textit{50\,\% FATT}, nous avons décidé de ne pas l'utiliser comme variable cible. Les autres variables présentent une disponibilité suffisante pour être considérées.
-
-\subsection{Analyse des Corrélations}
-
-Nous avons calculé la matrice de corrélation entre les variables numériques et les variables cibles. Certaines corrélations intéressantes ont été observées :
-
-\begin{itemize}
-    \item Forte corrélation entre \textit{Yield strength} et \textit{Ultimate tensile strength} (0,92).
-    \item L'\textit{Elongation}, la \textit{Reduction of area} et la \textit{Charpy impact toughness} sont inversement corrélées avec la \textit{Yield strength} et l'\textit{Ultimate tensile strength}.
-    \item Corrélation entre \textit{UTS} et \textit{Chrome concentration} (0,49).
-\end{itemize}
-
-\vspace{0.25cm}
-
-Bien que ces variables cibles soient des indicateurs positifs de la qualité des soudures, représentant des propriétés mécaniques telles que la résistance et la ductilité, et que des valeurs plus élevées sont généralement associées à une meilleure performance, certaines corrélations inverses sont observées. Cela s'explique par un compromis inhérent (\textit{tradeoff}) entre ces propriétés, où une augmentation de la résistance, par exemple, peut se faire au détriment de la ductilité.
-
-\section{Prétraitement des Données}
-
-\subsection{Résumé des transformations effectuées}
+Afin de développer une intuition sur les relations entre les différentes variables du dataset, nous avons analysé les corrélations entre celles-ci. Pour ce faire, nous avons d’abord effectué quelques modifications sur les colonnes pour qu'elles soient exploitables :
 
 \begin{longtable}{|p{4cm}|p{10cm}|}
 \hline
 \textbf{Catégorie} & \textbf{Changements Apportés} \\ \hline
-\multicolumn{2}{|c|}{\textbf{Suppression de Colonnes}} \\ \hline
-\textit{Weld ID} & Suppression de la colonne car elle ne correspond pas à une caractéristique physique, chimique ou mécanique des soudures, mais à un identifiant non pertinent pour l'analyse. \\ \hline
-Colonnes avec plus de 80\% de valeurs manquantes & Suppression des colonnes ayant plus de 80\% de valeurs manquantes. Ces colonnes sont considérées comme inexploitables à cause du trop faible nombre de données disponibles, comme \textit{Primary ferrite}, \textit{Ferrite with second phase}, et \textit{Acicular ferrite}. \\ \hline
-
-\multicolumn{2}{|c|}{\textbf{Gestion des Valeurs Manquantes}} \\ \hline
-Imputation numérique & Les valeurs manquantes des colonnes numériques sont imputées par la médiane. Bien que cette méthode ne conserve pas la distribution d'origine des données, elle est robuste aux valeurs aberrantes et offre une solution simple et efficace, surtout lorsque les données manquantes ne sont pas trop nombreuses. \\ \hline
-Imputation catégorielle & Les valeurs manquantes dans les colonnes catégorielles sont imputées par la valeur la plus fréquente (\textit{mode}), ce qui permet de maintenir une cohérence dans les données, bien que cela puisse introduire un biais si les données manquantes sont \textit{MAR} (Missing At Random). \\ \hline
-Colonnes avec indicateurs de manquants & Pour des colonnes où il a été déterminé que les données manquantes sont \textit{MAR} (Missing At Random), telles que \textit{Chromium concentration}, \textit{Tungsten concentration}, et \textit{Copper concentration}, des indicateurs binaires (\textit{0 = non manquant}, \textit{1 = manquant}) ont été créés. Cela permet de capturer l'impact potentiel des valeurs manquantes et d'améliorer la modélisation. \\ \hline
-
 \multicolumn{2}{|c|}{\textbf{Traitement des Colonnes Numériques}} \\ \hline
-Colonnes avec signes $\leq$ & Les valeurs précédées du signe $\leq$ sont remplacées par la moitié de ces valeurs pour fournir une estimation utilisable tout en restant proche des données originales. \\ \hline
+Colonnes avec signes $\leq$ & Les valeurs précédées du signe $\leq$ sont conservées telles quelles, sans modification, pour fournir une estimation utilisable tout en restant fidèle aux données originales. \\ \hline
 \textit{Hardness / kg mm$^{-2}$} & Les annotations non pertinentes comme \textit{'158(Hv30)'} sont supprimées pour ne garder que la valeur numérique de la dureté. La colonne est ensuite convertie en valeurs numériques exploitables. \\ \hline
 \textit{Interpass temperature / °C} & Les valeurs exprimées sous forme d’intervalles (\textit{150-200°C}) sont remplacées par la moyenne des bornes de l'intervalle afin de simplifier l'analyse. Les valeurs sont ensuite converties en données numériques. \\ \hline
 
@@ -164,30 +91,39 @@ Encodage catégoriel & Un encodage \textit{one-hot} est réalisé pour les colon
 
 \caption{Tableau récapitulatif des transformations de données correspondant au prétraitement effectué.}
 \end{longtable}
-    
-\subsection{Traitement des Valeurs Aberrantes}
 
-Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemple, dans la variable \textit{Vanadium concentration / weight \%}, certaines valeurs dépassent largement les concentrations typiques. Au lieu de les supprimer, nous avons appliqué une winsorisation pour limiter l'impact de ces valeurs extrêmes tout en conservant leur information. Cette méthode permet de réduire l'influence des outliers tout en prenant en compte ces observations dans l'analyse.
+Enfin, pour rendre toutes les colonnes exploitables dans notre modèle et permettre l'analyse des corrélations, nous avons transformé les colonnes de type object en valeurs numériques, soit sous forme d'entiers (int), soit de nombres flottants (float). Cela a permis de simplifier le traitement des données et d'assurer une compatibilité totale avec les outils d'analyse.\\
 
-\subsection{Création de Variables Indicatrices de Valeurs Manquantes}
+Une fois ce travail effectué, nous étudions les corrélations. 
 
-Pour certaines variables où la présence de valeurs manquantes est informative (par exemple, lorsque la présence d'une valeur manquante est corrélée avec la variable cible), nous avons créé des variables indicatrices signalant si la valeur est manquante ou non.
+Les corrélations les plus pertinentes pour notre étude concernent les variables liées directement à la qualité d'une soudure, telles que la \textit{résistance à la traction}, la \textit{limite d'élasticité}, l'\textit{élongation}, la \textit{résilience Charpy} et la \textit{réduction de section}. Voici quelques corrélations notables :
 
-\subsection{Standardisation des Variables}
+\begin{itemize} \item La \textbf{résistance à la traction} (\textit{Ultimate tensile strength}) est modérément corrélée à la concentration en chrome (0.48), suggérant que l'ajout de chrome améliore la résistance mécanique de la soudure. \item La \textbf{limite d'élasticité} (\textit{Yield strength}) montre une corrélation notable avec le tungstène (0.40), ce qui pourrait indiquer que cet élément influence la résistance aux déformations. \item L'\textbf{élongation} (\textit{Elongation}) présente une corrélation négative avec le chrome (-0.44), indiquant que des concentrations plus élevées de chrome peuvent diminuer la capacité d'allongement du matériau avant rupture. \item La \textbf{tenacité Charpy} (\textit{Charpy impact toughness}) est faiblement corrélée avec les concentrations chimiques, mais elle présente une forte corrélation avec la \textit{réduction de section} (0.83), ce qui est attendu, car une plus grande ductilité permet une meilleure absorption d'énergie avant la rupture. \end{itemize}
+
+\subsection{Application d'une ACP}
+
+\subsubsection{Gestion des outliers}
+
+Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemple, dans la variable \textit{Vanadium concentration / weight \%}, certaines valeurs dépassent largement les concentrations typiques. Au lieu de les supprimer, nous avons appliqué une winsorisation pour limiter l'impact de ces valeurs extrêmes tout en conservant leur information. Cette méthode permet de réduire l'influence des outliers tout en prenant en compte ces observations dans l'analyse.\\
+
+\subsubsection{Gestion des valeurs manquantes}
+
+Pour effectuer l'ACP, nous devons gérer les valeurs manquantes du dataset.
+Nous supprimons les colonnes contenant trop de valeurs manquantes (plus de 80\%, considérées inexploitables et imputer des données risque de trop fausser les résultats). Cela supprime des colonnes comme \textit{Hardness} ou \textit{Primary Ferrite}.
+
+D'autres variables présentent un taux de valeurs manquantes plus modéré, notamment des indicateurs clés de la qualité des soudures, tels que la \textit{Yield strength}, l'\textit{Ultimate tensile strength}, l'\textit{Elongation}, la \textit{Reduction of Area} et la \textit{Charpy impact toughness}. Comme vu dans l'analyse exploratoire des données, ces variables proviennent de tests destructifs ; par exemple, le test Charpy, qui mesure la \textit{Charpy impact toughness}, détruit la soudure, ce qui empêche de réaliser d'autres mesures comme la \textit{tensile strength} sur le même échantillon. De plus, nous avons remarqué que plusieurs tests étaient souvent réalisés sur des soudures identiques (ayant exactement les mêmes paramètres), avec un test de \textit{Yield strength} et \textit{UTS}, suivi de plusieurs tests Charpy à différentes températures. Pour traiter ces cas, nous avons regroupé les observations correspondant à une même soudure afin de combler les valeurs manquantes et d'éviter toute fuite de données (\textit{data leakage}) entre l'ensemble d'entraînement et les ensembles de test/validation.
+
+Nous avons également comparé la distribution des cibles en fonction de la présence ou de l'absence de données pour chaque variable. Lorsque les distributions étaient similaires, nous avons considéré que les données manquaient de manière complètement aléatoire (MCAR) et avons imputé les valeurs manquantes avec la médiane. Pour les autres variables, où les données manquaient de manière conditionnelle (MAR), nous avons testé l'imputation par KNN, mais les meilleurs résultats ont été obtenus en imputant la médiane et en ajoutant une colonne binaire indiquant la présence ou non de données manquantes.
+
+\subsubsection{Standardisation des Variables}
 
 Avant d'appliquer l'ACP et les modèles de Machine Learning, nous avons standardisé les variables numériques à l'aide de la méthode de \textit{StandardScaler}, afin de leur donner une échelle comparable.
 
-\section{Analyse en Composantes Principales (ACP)}
+\subsubsection{Résultats de l'ACP}
 
-\subsection{Application de l'ACP}
-
-Nous avons appliqué une ACP sur les variables numériques standardisées pour réduire la dimensionnalité du jeu de données et éliminer les redondances.
-
-\subsection{Choix du Nombre de Composantes}
+Appliquer une ACP sur les variables numériques standardisées permet de réduire la dimensionnalité du jeu de données et éliminer les redondances.
 
 Nous avons examiné la variance expliquée cumulée en fonction du nombre de composantes principales. Nous avons choisi de conserver les 10 premières composantes, qui expliquent environ 80\,\% de la variance totale.
-
-\subsection{Visualisation des Composantes Principales}
 
 Nous avons visualisé les deux premières composantes principales en colorant les points en fonction de la variable cible \textit{Yield strength / MPa}. Cette visualisation permet de détecter des structures ou des regroupements dans les données.
 
@@ -250,5 +186,7 @@ Cette application web facilite l'interaction avec le modèle et permet une éval
 Ce projet nous a permis de mettre en pratique différentes techniques d'analyse de données et de modélisation pour prédire la qualité des soudures. Malgré les défis liés aux données manquantes et aux valeurs aberrantes, nous avons réussi à construire un modèle performant en appliquant des méthodes de prétraitement adaptées, une réduction de dimensionnalité avec l'ACP, et des algorithmes de Machine Learning avancés.
 
 L'utilisation de l'apprentissage semi-supervisé a également permis de tirer parti des données non étiquetées, améliorant ainsi les performances du modèle. Ce travail ouvre la voie à une meilleure compréhension des facteurs influençant la qualité des soudures et pourrait aider les industriels à optimiser leurs processus de fabrication.
+
+\section{Références}
 
 \end{document}
