@@ -1,4 +1,5 @@
 \documentclass{article}
+\usepackage[T1]{fontenc}
 
 % Language setting
 \usepackage[french]{babel}
@@ -49,7 +50,7 @@ L'objectif de ce projet est de prédire la qualité de soudures à partir de div
 
 Ce projet est d'autant plus intéressant qu'il se concentre sur une problématique critique pour les industriels. En effet, une soudure défaillante dans le domaine de l'aéronautique, la construction navale ou encore l'industrie pétrolière peut engendrer des conséquences graves, tant en termes de coûts que de sécurité.
 
-Après un premier travail d'analyse exploratoire visant à s'approprier le jeu de données en observant le nombre de valeurs manquantes pour chaque colonne et les corrélations entre celles-ci, nous décrivons les différentes étapes de prétraitement appliquées au dataset, ainsi que les raisons qui nous ont poussés à les effectuer. Nous appliquons ensuite une Analyse en Composantes Principales (ACP) pour simplifier le modèle en réduisant le nombre de variables à traiter, tout en conservant l'information essentielle. Enfin, nous appliquons des algorithmes de Machine Learning adaptés et analysons leurs performances.
+Après un premier travail d'analyse exploratoire visant à s’approprier le jeu de données en observant le nombre de valeurs manquantes pour chaque colonne et les corrélations entre celles-ci, nous décrivons les différentes étapes de prétraitement appliquées au dataset, ainsi que les raisons qui nous ont poussés à les effectuer. Nous appliquons ensuite une Analyse en Composantes Principales (ACP) pour simplifier le modèle en réduisant le nombre de variables à traiter, tout en conservant l’information essentielle. Enfin, nous appliquons des algorithmes de Machine Learning adaptés et analysons leurs performances.
 
 \section{Analyse Exploratoire des Données (EDA)}
 
@@ -59,9 +60,13 @@ Le jeu de données contient 1\,652 observations et 46 variables. Ces variables c
 
 \subsection{Analyse des Valeurs Manquantes}
 
-Nous avons tout d'abord examiné la présence de valeurs manquantes dans le jeu de données. Plusieurs colonnes cruciales affichent un nombre très élevé de valeurs manquantes, dépassant souvent 95\,\%. Par exemple, la variable \textit{50\,\% FATT}, qui mesure la température de transition fragile-ductile d'une soudure, manque dans plus de 98\,\% des cas, tout comme \textit{Hardness scale} (96,5\,\%). La perte d'une telle quantité de données rend ces colonnes inexploitables sans traitement supplémentaire. Elles ont donc été exclues de l'analyse.
+Nous avons tout d'abord examiné la présence de valeurs manquantes dans le jeu de données. Plusieurs colonnes cruciales affichent un nombre très élevé de valeurs manquantes, dépassant parfois 95\,\%. Par exemple, la variable \textit{50\,\% FATT}, qui mesure la température de transition fragile-ductile d'une soudure, manque dans plus de 98\,\% des cas, tout comme \textit{Hardness} (91,6\,\%). La perte d'une telle quantité de données rend ces colonnes inexploitables, elles ont donc été exclues de l'analyse.
 
-En revanche, certaines variables sont bien renseignées et montrent très peu de valeurs manquantes, ce qui les rend exploitables sans transformation majeure. C'est le cas des concentrations en \textit{carbone}, \textit{silicium}, ou encore des propriétés mécaniques telles que la \textit{résistance à la traction} (\textit{Ultimate tensile strength}) et la \textit{limite d'élasticité} (\textit{Yield strength}). Ces variables sont complètes dans plus de 99\,\% des cas, offrant ainsi une base solide pour le modèle.
+En revanche, certaines variables sont bien renseignées et ne montrent aucune valeur manquante, ce qui les rend exploitables sans transformation majeure. C'est le cas des concentrations en \textit{carbone}, \textit{silicium}, ou encore de \textit{Heat input} ou \textit{Type of weld}.
+
+D'autres variables présentent un taux de valeurs manquantes plus modéré, notamment des indicateurs clés de la qualité des soudures, tels que la \textit{Yield strength}, l'\textit{Ultimate tensile strength}, l'\textit{Elongation}, la \textit{Reduction of Area} et la \textit{Charpy impact toughness}. Ces variables proviennent de tests destructifs ; par exemple, le test Charpy, qui mesure la \textit{Charpy impact toughness}, détruit la soudure, ce qui empêche de réaliser d'autres mesures comme la \textit{tensile strength} sur le même échantillon. De plus, nous avons remarqué que plusieurs tests étaient souvent réalisés sur des soudures identiques (ayant exactement les mêmes paramètres), avec un test de \textit{Yield strength} et \textit{UTS}, suivi de plusieurs tests Charpy à différentes températures. Pour traiter ces cas, nous avons regroupé les observations correspondant à une même soudure afin de combler les valeurs manquantes et d'éviter toute fuite de données (\textit{data leakage}) entre l'ensemble d'entraînement et les ensembles de test/validation.
+
+Nous avons également comparé la distribution des cibles en fonction de la présence ou de l'absence de données pour chaque variable. Lorsque les distributions étaient similaires, nous avons considéré que les données manquaient de manière complètement aléatoire (MCAR) et avons imputé les valeurs manquantes avec la médiane. Pour les autres variables, où les données manquaient de manière conditionnelle (MAR), nous avons testé l'imputation par KNN, mais les meilleurs résultats ont été obtenus en imputant la médiane et en ajoutant une colonne binaire indiquant la présence ou non de données manquantes.
 
 \subsection{Analyse des Duplicatas}
 
@@ -77,7 +82,13 @@ Nous avons créé des histogrammes et des boîtes à moustaches pour visualiser 
 
 \subsection{Identification des Variables Cibles}
 
-Les variables potentielles pour représenter la qualité des soudures sont :
+Pour que notre modèle soit utile en production sur des soudures réelles, il est essentiel que les variables d'entrée soient disponibles avant tout test destructif. Cela signifie que les variables dérivées de tests destructifs (par exemple, \textit{Yield strength}, \textit{Ultimate tensile strength}, \textit{Charpy impact toughness}) ne peuvent pas être utilisées comme features dans le modèle. Seules des variables mesurables avant la destruction de l'échantillon peuvent servir d'entrées dans le modèle.
+
+Un cas particulier est la variable \textit{Charpy temperature}, qui correspond à la température à laquelle le test Charpy est réalisé. Cette température est arbitraire et ne peut pas être prédite, car il existe souvent plusieurs tests pour un même échantillon réalisés à des températures différentes. Nous utilisons donc cette variable comme input pour fixer la température du test, ce qui permet de rendre les résultats comparables.
+
+\vspace{0.25cm}
+
+Les variables potentielles pour représenter la qualité des soudures sont donc :
 
 \begin{itemize}
     \item \textit{Yield strength / MPa}
@@ -88,20 +99,22 @@ Les variables potentielles pour représenter la qualité des soudures sont :
     \item \textit{50\,\% FATT}
 \end{itemize}
 
+\vspace{0.25cm}
+
 Nous avons vérifié la disponibilité de ces variables et le nombre de valeurs manquantes (Tableau~\ref{tab:missing_targets}).
 
 \begin{table}[H]
     \centering
     \begin{tabular}{lcc}
     \toprule
-    \textbf{Variable} & \textbf{Valeurs Manquantes} & \textbf{Disponibilité (\%)} \\
+    \textbf{Variable} & \textbf{Valeurs Présentes} & \textbf{Disponibilité (\%)} \\
     \midrule
-    Yield strength / MPa & 36 & 97,8\,\% \\
-    Ultimate tensile strength / MPa & 28 & 98,3\,\% \\
-    Elongation / \% & 168 & 89,8\,\% \\
-    Reduction of Area / \% & 519 & 68,6\,\% \\
-    Charpy impact toughness / J & 764 & 53,8\,\% \\
-    50\,\% FATT & 1622 & 1,8\,\% \\
+    Yield strength / MPa & 780 & 47,2\,\% \\
+    Ultimate tensile strength / MPa & 738 & 44,6\,\% \\
+    Elongation / \% & 700 & 42,4\,\% \\
+    Reduction of Area / \% & 705 & 42,7\,\% \\
+    Charpy impact toughness / J & 879 & 53,2\,\% \\
+    50\,\% FATT & 31 & 1,9\,\% \\
     \bottomrule
     \end{tabular}
     \caption{Disponibilité des variables cibles potentielles}
@@ -116,9 +129,13 @@ Nous avons calculé la matrice de corrélation entre les variables numériques e
 
 \begin{itemize}
     \item Forte corrélation entre \textit{Yield strength} et \textit{Ultimate tensile strength} (0,92).
-    \item Corrélation négative entre \textit{Elongation} et \textit{Chrome concentration} (-0,44).
-    \item Corrélation entre \textit{Reduction of Area} et \textit{Charpy impact toughness} (0,83).
+    \item L'\textit{Elongation}, la \textit{Reduction of area} et la \textit{Charpy impact toughness} sont inversement corrélées avec la \textit{Yield strength} et l'\textit{Ultimate tensile strength}.
+    \item Corrélation entre \textit{UTS} et \textit{Chrome concentration} (0,49).
 \end{itemize}
+
+\vspace{0.25cm}
+
+Bien que ces variables cibles soient des indicateurs positifs de la qualité des soudures, représentant des propriétés mécaniques telles que la résistance et la ductilité, et que des valeurs plus élevées sont généralement associées à une meilleure performance, certaines corrélations inverses sont observées. Cela s'explique par un compromis inhérent (\textit{tradeoff}) entre ces propriétés, où une augmentation de la résistance, par exemple, peut se faire au détriment de la ductilité.
 
 \section{Prétraitement des Données}
 
@@ -132,11 +149,12 @@ Nous avons calculé la matrice de corrélation entre les variables numériques e
 Colonnes avec plus de 80\% de valeurs manquantes & Suppression des colonnes ayant plus de 80\% de valeurs manquantes. Ces colonnes sont considérées comme inexploitables à cause du trop faible nombre de données disponibles, comme \textit{Primary ferrite}, \textit{Ferrite with second phase}, et \textit{Acicular ferrite}. \\ \hline
 
 \multicolumn{2}{|c|}{\textbf{Gestion des Valeurs Manquantes}} \\ \hline
-Imputation numérique & Les valeurs manquantes des colonnes numériques sont imputées par la médiane pour conserver la distribution des données sans introduire de biais. Cette méthode est robuste aux valeurs aberrantes. \\ \hline
-Imputation catégorielle & Les valeurs manquantes dans les colonnes catégorielles sont imputées par la valeur la plus fréquente (\textit{mode}), ce qui permet de maintenir une cohérence tout en minimisant l'impact des valeurs manquantes. \\ \hline
-Colonnes intéressantes avec indicateurs de manquants & Création d'indicateurs binaires (\textit{0 = non manquant}, \textit{1 = manquant}) pour des colonnes considérées importantes mais contenant des valeurs manquantes, comme \textit{Chromium concentration}, \textit{Tungsten concentration}, et \textit{Copper concentration}. Cela permet de modéliser l'impact potentiel des valeurs manquantes sur le modèle. \\ \hline
+Imputation numérique & Les valeurs manquantes des colonnes numériques sont imputées par la médiane. Bien que cette méthode ne conserve pas la distribution d'origine des données, elle est robuste aux valeurs aberrantes et offre une solution simple et efficace, surtout lorsque les données manquantes ne sont pas trop nombreuses. \\ \hline
+Imputation catégorielle & Les valeurs manquantes dans les colonnes catégorielles sont imputées par la valeur la plus fréquente (\textit{mode}), ce qui permet de maintenir une cohérence dans les données, bien que cela puisse introduire un biais si les données manquantes sont \textit{MAR} (Missing At Random). \\ \hline
+Colonnes avec indicateurs de manquants & Pour des colonnes où il a été déterminé que les données manquantes sont \textit{MAR} (Missing At Random), telles que \textit{Chromium concentration}, \textit{Tungsten concentration}, et \textit{Copper concentration}, des indicateurs binaires (\textit{0 = non manquant}, \textit{1 = manquant}) ont été créés. Cela permet de capturer l'impact potentiel des valeurs manquantes et d'améliorer la modélisation. \\ \hline
+
 \multicolumn{2}{|c|}{\textbf{Traitement des Colonnes Numériques}} \\ \hline
-Colonnes avec signes \leq & Les valeurs précédées du signe \leq sont remplacées par la moitié de ces valeurs pour fournir une estimation utilisable tout en restant proche des données originales. \\ \hline
+Colonnes avec signes $\leq$ & Les valeurs précédées du signe $\leq$ sont remplacées par la moitié de ces valeurs pour fournir une estimation utilisable tout en restant proche des données originales. \\ \hline
 \textit{Hardness / kg mm$^{-2}$} & Les annotations non pertinentes comme \textit{'158(Hv30)'} sont supprimées pour ne garder que la valeur numérique de la dureté. La colonne est ensuite convertie en valeurs numériques exploitables. \\ \hline
 \textit{Interpass temperature / °C} & Les valeurs exprimées sous forme d’intervalles (\textit{150-200°C}) sont remplacées par la moyenne des bornes de l'intervalle afin de simplifier l'analyse. Les valeurs sont ensuite converties en données numériques. \\ \hline
 
@@ -146,9 +164,10 @@ Encodage catégoriel & Un encodage \textit{one-hot} est réalisé pour les colon
 
 \caption{Tableau récapitulatif des transformations de données correspondant au prétraitement effectué.}
 \end{longtable}
+    
 \subsection{Traitement des Valeurs Aberrantes}
 
-Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemple, dans la variable \textit{Vanadium concentration / weight \%}, certaines valeurs dépassent largement les concentrations typiques. Nous avons choisi de ne pas les supprimer, car elles pourraient représenter des cas particuliers intéressants, mais nous en tenons compte dans l'analyse.
+Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemple, dans la variable \textit{Vanadium concentration / weight \%}, certaines valeurs dépassent largement les concentrations typiques. Au lieu de les supprimer, nous avons appliqué une winsorisation pour limiter l'impact de ces valeurs extrêmes tout en conservant leur information. Cette méthode permet de réduire l'influence des outliers tout en prenant en compte ces observations dans l'analyse.
 
 \subsection{Création de Variables Indicatrices de Valeurs Manquantes}
 
@@ -201,7 +220,7 @@ Après une phase d’expérimentation et d’optimisation des hyperparamètres v
 
 \subsection{Évaluation des Modèles}
 
-Nous avons évalué nos modèles à l’aide de la validation croisée en utilisant la méthode \textit{GroupKFold}. Deux métriques de performance ont été retenues : l’erreur quadratique moyenne (RMSE) et le coefficient de détermination (R2). Le modèle XGBoost a montré les meilleures performances globales sur nos 5 variables cibles, avec une RMSE moyenne de 0,5 et un R2 élevé, indiquant une bonne capacité de prédiction.
+Nous avons évalué nos modèles à l’aide de la validation croisée en utilisant la méthode \textit{GroupKFold}. Deux métriques de performance ont été retenues : l’erreur quadratique moyenne (RMSE) et le coefficient de détermination (R2). Le modèle XGBoost a montré les meilleures performances globales sur nos 5 variables cibles, avec une RMSE moyenne (standardisée) inférieure à 0,5 et un R2 élevé (>0.8), indiquant une bonne capacité de prédiction.
 
 \subsection{Apprentissage semi-supervisé}
 
@@ -218,23 +237,18 @@ Le modèle final basé sur XGBoost a montré une précision élevée pour toutes
     \label{fig:predictions_vs_true}
 \end{figure}
 
+\section{Développement d'une Interface Web}
+
+Afin de rendre notre modèle accessible et de démontrer son utilité pratique, nous avons développé une application web à l'aide du framework Flask. Cette interface permet aux utilisateurs d'entrer manuellement les paramètres de soudure et d'obtenir une estimation de la qualité pour chaque variable cible ainsi qu'un score global.
+
+De plus, l'application offre la possibilité d'uploader un fichier CSV contenant plusieurs échantillons de soudures. Le modèle prédit alors la qualité des soudures pour chaque échantillon, et un fichier CSV avec les prédictions peut être téléchargé.
+
+Cette application web facilite l'interaction avec le modèle et permet une évaluation rapide de la qualité des soudures en fonction de différents paramètres. Elle pourrait être particulièrement utile pour les industriels souhaitant estimer la qualité de nouvelles soudures sans avoir à effectuer de tests destructifs immédiats.
+
 \section{Conclusion}
 
 Ce projet nous a permis de mettre en pratique différentes techniques d'analyse de données et de modélisation pour prédire la qualité des soudures. Malgré les défis liés aux données manquantes et aux valeurs aberrantes, nous avons réussi à construire un modèle performant en appliquant des méthodes de prétraitement adaptées, une réduction de dimensionnalité avec l'ACP, et des algorithmes de Machine Learning avancés.
 
 L'utilisation de l'apprentissage semi-supervisé a également permis de tirer parti des données non étiquetées, améliorant ainsi les performances du modèle. Ce travail ouvre la voie à une meilleure compréhension des facteurs influençant la qualité des soudures et pourrait aider les industriels à optimiser leurs processus de fabrication.
-
-\begin{thebibliography}{9}
-
-\bibitem{scikit-learn}
-Pedregosa, F., Varoquaux, G., Gramfort, A., et al. (2011). \textit{Scikit-learn: Machine Learning in Python}. Journal of Machine Learning Research, 12, 2825–2830.
-
-\bibitem{xgboost}
-Chen, T., \& Guestrin, C. (2016). \textit{XGBoost: A Scalable Tree Boosting System}. Proceedings of the 22nd ACM SIGKDD International Conference on Knowledge Discovery and Data Mining.
-
-\bibitem{pca}
-Jolliffe, I. T. (2002). \textit{Principal Component Analysis}. Springer Series in Statistics.
-
-\end{thebibliography}
 
 \end{document}
