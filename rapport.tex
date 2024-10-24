@@ -197,7 +197,7 @@ Après une phase d’expérimentation et d’optimisation des hyperparamètres v
     \label{fig:xgboost_feature_importance}
 \end{figure}
 
-Une partie exploratoire a été effectuée en parallèle, avec pour objectif de tester des prédictions multi-output en récupérant dynamiquement tous les modèles régressifs de scikit-learn. Cette exploration a permis de tester les modèles proposant nativement des prédictions multi-output ainsi que ceux compatibles avec l’implémentation \texttt{MultiOutputRegressor} de scikit-learn, qui permet de convertir un modèle single-output en modèle multi-output. Les modèles externes usuels comme XGBoost ont également été intégrés à des fins de comparaison pour évaluer leurs performances dans un contexte multi-output.
+Une partie exploratoire a été effectuée en parallèle, avec pour objectif de tester des prédictions multi-output en récupérant dynamiquement tous les modèles régressifs de scikit-learn. Cette exploration a permis de tester les modèles proposant nativement des prédictions multi-output ainsi que ceux compatibles avec l’implémentation \texttt{MultiOutputRegressor} de scikit-learn, qui permet de convertir un modèle single-output en modèle multi-output. Une cross-validation à 5 folds a été effectuée afin de mesurer la performance du modèle de régression tout en minimisant le risque de surajustement (overfitting). Cela a également permit de valider la généralisation des modèles. Des modèles externes usuels comme XGBoost ont également été intégrés à des fins de comparaison pour évaluer leurs performances dans un contexte multi-output. 
 
 \subsection{Évaluation des Modèles}
 
@@ -237,8 +237,6 @@ Afin de rendre notre modèle accessible et de démontrer son utilité pratique, 
 De plus, l'application offre la possibilité d'uploader un fichier CSV contenant plusieurs échantillons de soudures. Le modèle prédit alors la qualité des soudures pour chaque échantillon, et un fichier CSV avec les prédictions peut être téléchargé.
 
 Cette application web facilite l'interaction avec le modèle et permet une évaluation rapide de la qualité des soudures en fonction de différents paramètres. Elle pourrait être particulièrement utile pour les industriels souhaitant estimer la qualité de nouvelles soudures sans avoir à effectuer de tests destructifs immédiats.
-
-\section{Conclusion}
 
 \section{Conclusion}
 
