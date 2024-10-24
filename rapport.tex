@@ -5,7 +5,7 @@
 \usepackage[french]{babel}
 
 % Set page size and margins
-\usepackage[a4paper,top=2cm,bottom=2cm,left=3cm,right=3cm]{geometry}
+\usepackage[a4paper,top=1cm,bottom=2cm,left=2cm,right=2cm]{geometry}
 
 \usepackage{multicol}
 \usepackage{tabularx}
@@ -67,9 +67,10 @@
 }
 \date{24 Octobre 2024 \\ Équipe 2}
 
+
 \begin{document}
 \maketitle
-
+\tableofcontents
 \section{Problématique du projet}
 
 Ce projet vise à développer un modèle de Machine Learning capable de prédire la qualité des soudures à partir de paramètres mécaniques, physiques et chimiques, obtenus sans recourir à des tests destructifs. L'objectif est d'identifier les facteurs influençant des propriétés clés comme la résistance à la traction, l'élasticité et la ductilité.
@@ -172,6 +173,8 @@ Après une phase d’expérimentation et d’optimisation des hyperparamètres v
     \caption{Importance des caractéristiques du modèle XGBoost}
     \label{fig:xgboost_feature_importance}
 \end{figure}
+
+Une partie exploratoire a été effectuée en parallèle, avec pour objectif de tester des prédictions multi-output en récupérant dynamiquement tous les modèles régressifs de scikit-learn. Cette exploration a permis de tester les modèles proposant nativement des prédictions multi-output ainsi que ceux compatibles avec l’implémentation \texttt{MultiOutputRegressor} de scikit-learn, qui permet de convertir un modèle single-output en modèle multi-output. Les modèles externes usuels comme XGBoost ont également été intégrés à des fins de comparaison pour évaluer leurs performances dans un contexte multi-output.
 
 \subsection{Évaluation des Modèles}
 
