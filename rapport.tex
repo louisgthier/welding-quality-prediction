@@ -26,9 +26,15 @@
 \usepackage{fancyhdr}
 \usepackage{lastpage} 
 
+\newcommand{\bcite}[1]{\textbf{\cite{#1}}}
+
 \pagestyle{fancy}
 \fancyhf{} % On efface les entêtes et pieds de page par défaut
 
+\setlength{\headheight}{15pt}
+\setlength{\headsep}{30pt}
+
+% \renewcommand{\headrulewidth}{0pt}
 \renewcommand{\footrulewidth}{0.4pt}
 \fancyfoot[L]{\includegraphics[height=1cm]{images/logoCS.jpg}}
 \fancyfoot[C]{\textit{Mention IA - Projet d'Apprentissage Automatique}}
@@ -57,26 +63,42 @@
     captionpos=b
 }
 
-\title{Rapport de projet d'Apprentissage Automatique}
+
+\title{\LARGE \textbf{Rapport de Projet d'Apprentissage Automatique}}
 \author{
-    \small Martin Rampont (martin.rampont@student-cs.fr) \and 
-    \small Noémie Guisnel (noemie.guisnel@student-cs.fr) \and 
-    \small Oscar Pastural (oscar.pastural@student-cs.fr) \and 
-    \small Louis Gauthier (louis.gauthier@student-cs.fr) \and 
-    \small Clément Florval (clement.florval@student-cs.fr)
+    \normalsize Clément Florval\\
+    \small \texttt{clement.florval@student-cs.fr}
+    \and
+    \normalsize Louis Gauthier\\
+    \small \texttt{louis.gauthier@student-cs.fr}
+    \and
+    \normalsize Noémie Guisnel\\
+    \small \texttt{noemie.guisnel@student-cs.fr}
+    \and
+    \normalsize Oscar Pastural\\
+    \small \texttt{oscar.pastural@student-cs.fr}
+    \and
+    \normalsize Martin Rampont\\
+    \small \texttt{martin.rampont@student-cs.fr}
 }
-\date{24 Octobre 2024 \\ Équipe 2}
+\date{\normalsize 24 Octobre 2024 \\ \small Équipe 2}
 
 
 \begin{document}
 \maketitle
 \tableofcontents
+
+\vfill
+\noindent
+\textbf{Lien vers le dépôt GitHub :} \href{https://github.com/louisgthier/welding-quality-prediction}{\texttt{https://github.com/louisgthier/welding-quality-prediction}}
+\vspace*{1cm} 
+
 \newpage
 \section{Problématique du projet}
 
 Ce projet vise à développer un modèle de Machine Learning capable de prédire la qualité des soudures à partir de paramètres mécaniques, physiques et chimiques, obtenus sans recourir à des tests destructifs. L'objectif est d'identifier les facteurs influençant des propriétés clés comme la résistance à la traction, l'élasticité et la ductilité.
 
-Dans des secteurs critiques tels que l'aéronautique et l'industrie pétrolière, la qualité des soudures est essentielle pour la sécurité et la fiabilité des infrastructures. Un modèle prédictif permettrait de prévenir les défauts de soudure, réduisant ainsi les risques d'accidents et les coûts liés aux réparations et tests destructifs.
+Dans des secteurs critiques tels que l'aéronautique et l'industrie pétrolière, la qualité des soudures est essentielle pour la sécurité et la fiabilité des infrastructures \bcite{olympus,controle-visuel}. Un modèle prédictif permettrait de prévenir les défauts de soudure, réduisant ainsi les risques d'accidents et les coûts liés aux réparations et tests destructifs.
 
 \section{Analyse exploratoire des données et prétraitement}
 
@@ -92,7 +114,7 @@ Ainsi, les variables cibles utilisables pour estimer la qualité des soudures in
 
 \begin{itemize} \item \textit{Yield strength / MPa} \item \textit{Ultimate tensile strength / MPa} \item \textit{Elongation / \%} \item \textit{Reduction of Area / \%} \item \textit{Charpy impact toughness / J} \end{itemize}
 
-Nous avons également pris en compte la variable \textit{50 \% FATT} (température de transition fragile-ductile), mais elle présente un taux de valeurs manquantes de plus de 98 \%, la rendant inutilisable.
+Nous avons également pris en compte la variable \textit{50 \% FATT} (Fracture Appearance Transition Temperature)\bcite{ImpVis}, mais elle présente un taux de valeurs manquantes de plus de 98 \%, la rendant inutilisable.
 
 \subsection{Analyse des corrélations}
 
@@ -132,9 +154,9 @@ Nous avons identifié des valeurs aberrantes dans certaines variables. Par exemp
 Pour effectuer l'ACP et appliquer ensuite les modèles de Machine Learning, nous devons gérer les valeurs manquantes du dataset.
 Nous supprimons les colonnes contenant trop de valeurs manquantes (plus de 80\%, considérées inexploitables et imputer des données risque de trop fausser les résultats). Cela supprime des colonnes comme \textit{Hardness} ou \textit{Primary Ferrite}.
 
-D'autres variables présentent un taux de valeurs manquantes plus modéré, notamment des indicateurs clés de la qualité des soudures, tels que la \textit{Yield strength}, l'\textit{Ultimate tensile strength}, l'\textit{Elongation}, la \textit{Reduction of Area} et la \textit{Charpy impact toughness}. Comme vu dans l'analyse exploratoire des données, ces variables proviennent de tests destructifs ; par exemple, le test Charpy, qui mesure la \textit{Charpy impact toughness}, détruit la soudure, ce qui empêche de réaliser d'autres mesures comme la \textit{tensile strength} sur le même échantillon. De plus, nous avons remarqué que plusieurs tests étaient souvent réalisés sur des soudures identiques (ayant exactement les mêmes paramètres), avec un test de \textit{Yield strength} et \textit{UTS}, suivi de plusieurs tests Charpy à différentes températures. Pour traiter ces cas, nous avons regroupé les observations correspondant à une même soudure afin de combler les valeurs manquantes et d'éviter toute fuite de données (\textit{data leakage}) entre l'ensemble d'entraînement et les ensembles de test/validation.
+D'autres variables présentent un taux de valeurs manquantes plus modéré, notamment des indicateurs clés de la qualité des soudures, tels que la \textit{Yield strength}, l'\textit{Ultimate tensile strength}, l'\textit{Elongation}, la \textit{Reduction of Area} et la \textit{Charpy impact toughness}. Comme vu dans l'analyse exploratoire des données, ces variables proviennent de tests destructifs ; par exemple, le test Charpy, qui mesure la \textit{Charpy impact toughness}, détruit la soudure \bcite{charpy,science-direct}, ce qui empêche de réaliser d'autres mesures comme la \textit{tensile strength} sur le même échantillon. De plus, nous avons remarqué que plusieurs tests étaient souvent réalisés sur des soudures identiques (ayant exactement les mêmes paramètres), avec un test de \textit{Yield strength} et \textit{UTS}, suivi de plusieurs tests Charpy à différentes températures. Pour traiter ces cas, nous avons regroupé les observations correspondant à une même soudure afin de combler les valeurs manquantes et d'éviter toute fuite de données (\textit{data leakage}) entre l'ensemble d'entraînement et les ensembles de test/validation.
 
-Nous avons également comparé la distribution des cibles en fonction de la présence ou de l'absence de données pour chaque variable. Lorsque les distributions étaient similaires, nous avons considéré que les données manquaient de manière complètement aléatoire (MCAR) et avons imputé les valeurs manquantes avec la médiane. Pour les autres variables, où les données manquaient de manière conditionnelle (MAR), nous avons testé l'imputation par KNN, mais les meilleurs résultats ont été obtenus en imputant la médiane et en ajoutant une colonne binaire indiquant la présence ou non de données manquantes.
+Nous avons également comparé la distribution des cibles en fonction de la présence ou de l'absence de données pour chaque variable. Lorsque les distributions étaient similaires, nous avons considéré que les données manquaient de manière complètement aléatoire (MCAR) et avons imputé les valeurs manquantes avec la médiane. Pour les autres variables, où les données manquaient de manière conditionnelle (MAR), nous avons testé l'imputation par KNN, mais les meilleurs résultats ont été obtenus en imputant la médiane et en ajoutant une colonne binaire indiquant la présence ou non de données manquantes \bcite{medium}.
 
 \subsubsection{Standardisation des Variables}
 
@@ -142,7 +164,7 @@ Avant d'appliquer l'ACP et les modèles de Machine Learning, nous avons standard
 
 \subsubsection{Résultats de l'ACP}
 
-Appliquer une ACP sur les variables numériques standardisées permet de réduire la dimensionnalité des données tout en préservant autant que possible la variance.
+Appliquer une ACP sur les variables numériques standardisées permet de réduire la dimensionnalité des données tout en préservant autant que possible la variance \bcite{pca}.
 
 Nous avons examiné la variance expliquée cumulée en fonction du nombre de composantes principales. Nous avons choisi de conserver les 10 premières composantes, qui expliquent environ 80\,\% de la variance totale.
 
@@ -197,7 +219,7 @@ Après une phase d’expérimentation et d’optimisation des hyperparamètres v
     \label{fig:xgboost_feature_importance}
 \end{figure}
 
-Une partie exploratoire a été effectuée en parallèle, avec pour objectif de tester des prédictions multi-output en récupérant dynamiquement tous les modèles régressifs de scikit-learn. Cette exploration a permis de tester les modèles proposant nativement des prédictions multi-output ainsi que ceux compatibles avec l’implémentation \texttt{MultiOutputRegressor} de scikit-learn, qui permet de convertir un modèle single-output en modèle multi-output. Une cross-validation à 5 folds a été effectuée afin de mesurer la performance du modèle de régression tout en minimisant le risque de surajustement (overfitting). Cela a également permit de valider la généralisation des modèles. Des modèles externes usuels comme XGBoost ont également été intégrés à des fins de comparaison pour évaluer leurs performances dans un contexte multi-output. 
+Une partie exploratoire a été effectuée en parallèle, avec pour objectif de tester des prédictions multi-output en récupérant dynamiquement tous les modèles régressifs de \textit{Scikit-learn} \bcite{scikit-learn}. Cette exploration a permis de tester les modèles proposant nativement des prédictions multi-output ainsi que ceux compatibles avec l’implémentation \texttt{MultiOutputRegressor} de scikit-learn, qui permet de convertir un modèle single-output en modèle multi-output. Une cross-validation à 5 folds a été effectuée afin de mesurer la performance du modèle de régression tout en minimisant le risque de surajustement (overfitting). Cela a également permit de valider la généralisation des modèles. Des modèles externes usuels comme XGBoost ont également été intégrés à des fins de comparaison pour évaluer leurs performances dans un contexte multi-output. 
 
 \subsection{Évaluation des Modèles}
 
@@ -209,7 +231,7 @@ Initialement, nous avions envisagé l’utilisation d’une méthode d’apprent
 
 \subsection{Résultats}
 
-Le modèle final basé sur XGBoost a montré une précision élevée pour toutes les variables cibles sélectionnées, avec une bonne capacité de généralisation. La Figure~\ref{fig:predictions_vs_true} illustre la comparaison entre les valeurs prédites et les valeurs réelles pour la variable \textit{Yield strength / MPa}.
+Le modèle final basé sur XGBoost a montré une précision élevée pour toutes les variables cibles sélectionnées, avec une bonne capacité de généralisation. La Figure~\ref{fig:model_results} illustre la comparaison entre les valeurs prédites et les valeurs réelles pour la variable \textit{Yield strength / MPa}.
 
 \begin{figure}[H]
     \centering
@@ -224,10 +246,10 @@ Le modèle final basé sur XGBoost a montré une précision élevée pour toutes
         \centering
         \includegraphics[width=\textwidth, height=0.25\textheight]{images/model_R2_results.png}
         % \caption{Résultats du score R2 des modèles (les scores R2 négatifs sont tronqués à 0)}
-        \label{fig:second_image}
+        \label{fig:R2_results}
     \end{subfigure}
     \caption{(Gauche) Comparaison entre les valeurs prédites et les valeurs réelles de \textit{Yield strength / MPa}. (Droite) Classement des modèles en fonction de leur score R2 (validation), les scores R2 négatifs sont tronqués à 0.}
-    \label{fig:side_by_side}
+    \label{fig:model_results}
 \end{figure}
 
 \section{Développement d'une Interface Web}
@@ -248,6 +270,15 @@ En somme, ce travail illustre comment l’association de l’expertise métier e
 
 \newpage
 
+
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=\textwidth, height=0.35\textheight]{images/Diagramme_Gantt.png}
+    \caption{Diagramme de Gantt du projet}
+    \label{fig:gantt}
+\end{figure}
+
+
 \begin{thebibliography}{11}
 
 \bibitem{olympus}
@@ -256,35 +287,23 @@ Olympus IMS,
 [En ligne]. Disponible : 
 \url{https://www.olympus-ims.com/fr/applications/defect-sizing-pipe-welds/}
 
-\bibitem{scikit-learn}
-Scikit-learn, 
-\textit{Machine Learning in Python}, 
-[En ligne]. Disponible : 
-\url{https://scikit-learn.org/stable/index.html}
-
-\bibitem{pca}
-Wikipedia, 
-\textit{Analyse en Composantes Principales (PCA)}, 
-[En ligne]. Disponible : 
-\url{https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales}
-
-\bibitem{charpy}
-ZwickRoell, 
-\textit{Charpy Impact Test - Metals (ISO 148-1)}, 
-[En ligne]. Disponible : 
-\url{https://www.zwickroell.com/industries/materials-testing/impact-test/charpy-impact-test-metals-iso-148-1/#:~:text=This%20impact%20test%20is%20used%20to%20determine%20the...}
-
 \bibitem{controle-visuel}
 Contrôle Visuel, 
 \textit{Normes de contrôle visuel des soudures}, 
 [En ligne]. Disponible : 
 \url{https://www.controle-visuel.com/normes-controle-visuel-soudure/}
 
-\bibitem{eng-tips}
-Eng-Tips, 
-\textit{Thread : TOFD \& Weld Sizing}, 
+\bibitem{ImpVis}
+ImpVis,
+\textit{Virtual Materials Lab: Charpy Impact Test}, 
 [En ligne]. Disponible : 
-\url{https://www.eng-tips.com/viewthread.cfm?qid=402830}
+\url{https://impvis.co.uk/launch/virtual-materials-lab-charpy-impact-test-v2/charpy.html?collection=34}
+
+\bibitem{charpy}
+ZwickRoell, 
+\textit{Charpy Impact Test - Metals (ISO 148-1)}, 
+[En ligne]. Disponible : 
+\url{https://www.zwickroell.com/industries/materials-testing/impact-test/charpy-impact-test-metals-iso-148-1/#:~:text=This%20impact%20test%20is%20used%20to%20determine%20the...}
 
 \bibitem{science-direct}
 ScienceDirect, 
@@ -297,6 +316,18 @@ Hüseyin Coşgun,
 \textit{Dealing with Missing Data: From Zero to Advanced}, 
 [En ligne]. Disponible : 
 \url{https://medium.com/@hhuseyincosgun/dealing-with-missing-data-from-zero-to-advanced-4fb734ee5998}
+
+\bibitem{pca}
+Wikipedia, 
+\textit{Analyse en Composantes Principales (PCA)}, 
+[En ligne]. Disponible : 
+\url{https://fr.wikipedia.org/wiki/Analyse_en_composantes_principales}
+
+\bibitem{scikit-learn}
+Scikit-learn, 
+\textit{Machine Learning in Python}, 
+[En ligne]. Disponible : 
+\url{https://scikit-learn.org/stable/index.html}
 
 
 \end{thebibliography}
